@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../layout/responsive_page.dart';
 import '../theme/app_colors.dart';
@@ -20,23 +21,32 @@ class CinematicPage extends StatelessWidget {
     return Stack(
       children: [
         const Positioned.fill(child: CinematicBackdrop()),
-        ResponsivePage(
-          padding: padding ?? const EdgeInsets.fromLTRB(20, 18, 20, 24),
-          child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: 1),
-            duration: const Duration(milliseconds: 420),
-            curve: Curves.easeOutCubic,
-            builder: (context, value, child) {
-              return Opacity(
-                opacity: value,
-                child: Transform.translate(
-                  offset: Offset(0, 18 * (1 - value)),
+        CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
+          slivers: [
+            SliverToBoxAdapter(
+              child: ResponsivePage(
+                padding: padding ?? const EdgeInsets.fromLTRB(20, 18, 20, 24),
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: 1),
+                  duration: const Duration(milliseconds: 420),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Transform.translate(
+                        offset: Offset(0, 18 * (1 - value)),
+                        child: child,
+                      ),
+                    );
+                  },
                   child: child,
                 ),
-              );
-            },
-            child: child,
-          ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -144,7 +154,7 @@ class ScreenTopBar extends StatelessWidget {
           width: 42,
           child: showBack
               ? IconButton(
-                  onPressed: () {},
+                  onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
                 )
               : null,

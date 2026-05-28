@@ -27,7 +27,7 @@ class ResponsivePage extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxWidth),
             child: SafeArea(
-              child: SingleChildScrollView(padding: padding, child: child),
+              child: Padding(padding: padding, child: child),
             ),
           ),
         );

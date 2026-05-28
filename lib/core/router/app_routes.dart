@@ -36,7 +36,11 @@ abstract final class AppRoutes {
     icon: Icons.person_rounded,
   );
 
-  // Nested (not part of bottom navigation)
+  // Standalone (not part of bottom navigation)
+  static const votingPath = '/voting';
+  static const statisticsPath = '/statistics';
+
+  // Nested under profile (not part of bottom navigation)
   static const profileSettingsPath = '/profile/settings';
   static const profileSettingsAboutPath = '/profile/settings/about';
   static const profileSettingsPrivacyPath = '/profile/settings/privacy';

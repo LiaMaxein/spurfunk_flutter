@@ -21,6 +21,32 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     super.dispose();
   }
 
+  void _tryDelete(CommunityNotifier notifier, CommunityState state, CommunityComment comment) {
+    if (comment.name != state.currentUserName) return;
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Kommentar löschen?'),
+        content: const Text(
+          'Möchtest du diesen Kommentar wirklich entfernen?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Abbrechen'),
+          ),
+          TextButton(
+            onPressed: () {
+              notifier.deleteComment(comment.id);
+              Navigator.of(ctx).pop();
+            },
+            child: const Text('Löschen', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(communityProvider);
@@ -49,11 +75,16 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
           ),
           const SizedBox(height: 18),
           for (final comment in state.visibleComments)
-            _CommentTile(
-              comment: comment,
-              onLike: () => notifier.toggleLike(comment.id),
-              onReact: (emoji) => notifier.addReaction(id: comment.id, emoji: emoji),
-              emojiOptions: notifier.emojiOptions,
+            GestureDetector(
+              onLongPress: () => _tryDelete(notifier, state, comment),
+              child: _CommentTile(
+                comment: comment,
+                onLike: () => notifier.toggleLike(comment.id),
+                onReact: (emoji) =>
+                    notifier.addReaction(id: comment.id, emoji: emoji),
+                emojiOptions: notifier.emojiOptions,
+                isOwn: comment.name == state.currentUserName,
+              ),
             ),
           const SizedBox(height: 16),
           GlassCard(
@@ -129,12 +160,14 @@ class _CommentTile extends StatelessWidget {
     required this.onLike,
     required this.onReact,
     required this.emojiOptions,
+    this.isOwn = false,
   });
 
   final CommunityComment comment;
   final VoidCallback onLike;
   final ValueChanged<String> onReact;
   final List<String> emojiOptions;
+  final bool isOwn;
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +187,16 @@ class _CommentTile extends StatelessWidget {
                   Row(
                     children: [
                       Text(comment.name, style: Theme.of(context).textTheme.titleMedium),
+                      if (isOwn) ...[
+                        const SizedBox(width: 6),
+                        Text(
+                          'Du',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 11,
+                            color: AppColors.redSoft,
+                          ),
+                        ),
+                      ],
                       const Spacer(),
                       Text(
                         comment.timeLabel,
@@ -161,6 +204,17 @@ class _CommentTile extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (isOwn)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        'Lang drücken zum Löschen',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: 11,
+                          color: AppColors.textMuted,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 6),
                   Text(comment.text, style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: 10),

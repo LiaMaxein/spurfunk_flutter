@@ -11,6 +11,8 @@ import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/settings/presentation/about_app_screen.dart';
 import '../../features/settings/presentation/privacy_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/statistics/presentation/statistics_screen.dart';
+import '../../features/voting/presentation/voting_screen.dart';
 import '../layout/app_shell.dart';
 import 'app_routes.dart';
 import 'router_refresh.dart';
@@ -86,6 +88,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 ],
               ),
             ],
+          ),
+          GoRoute(
+            path: AppRoutes.votingPath,
+            builder: (context, state) => const VotingScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.statisticsPath,
+            builder: (context, state) => const StatisticsScreen(),
           ),
         ],
       ),

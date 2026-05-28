@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/cinematic_widgets.dart';
 import '../../voting/application/voting_state.dart';
@@ -227,7 +229,7 @@ class _LiveEpisodeScreenState extends ConsumerState<LiveEpisodeScreen> {
             ),
           const SizedBox(height: 18),
           GlassCard(
-            onTap: () {},
+            onTap: () => context.go(AppRoutes.votingPath),
             child: Row(
               children: [
                 const Icon(Icons.how_to_vote_rounded, color: AppColors.redSoft),
