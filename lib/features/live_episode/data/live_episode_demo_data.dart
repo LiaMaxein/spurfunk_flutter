@@ -48,6 +48,18 @@ class LiveActivityItem {
   final Color color;
 }
 
+class LiveTimelineItem {
+  const LiveTimelineItem({
+    required this.minute,
+    required this.label,
+    required this.highlighted,
+  });
+
+  final String minute;
+  final String label;
+  final bool highlighted;
+}
+
 const liveEpisodeDemo = LiveEpisodeInfo(
   title: 'Borowski und das Haupt der Medusa',
   station: 'ARD · Das Erste',
@@ -78,6 +90,17 @@ const liveReactionTrends = [
     deltaPercent: -4.8,
   ),
 ];
+
+const liveTimelineItems = [
+  LiveTimelineItem(minute: '20:15', label: 'Opener im Hafen', highlighted: false),
+  LiveTimelineItem(minute: '20:28', label: 'Erste Spur gesichert', highlighted: false),
+  LiveTimelineItem(minute: '20:43', label: 'Zeugin widerspricht', highlighted: true),
+  LiveTimelineItem(minute: '20:58', label: 'Tatwaffe gefunden', highlighted: false),
+  LiveTimelineItem(minute: '21:07', label: 'Verdächtiger flieht', highlighted: false),
+];
+
+const trendingTheory = 'Die Galerie war nur der Köder – die Spur führt ins Hafenamt.';
+const suspiciousCharacter = 'Verdächtigste Figur: Hanno Kessler (Nachbar)';
 
 const liveActivityFeed = [
   LiveActivityItem(
@@ -114,5 +137,82 @@ const liveActivityFeed = [
     timeAgo: '4 Min.',
     icon: Icons.timer_outlined,
     color: AppColors.yellow,
+  ),
+  LiveActivityItem(
+    user: 'NordNord',
+    message: 'Die Handschuhe am Tatort wirkten absichtlich platziert.',
+    timeAgo: '5 Min.',
+    icon: Icons.search_rounded,
+    color: AppColors.orange,
+  ),
+  LiveActivityItem(
+    user: 'TrueCrimeMia',
+    message: 'Diese Kamerafahrt war cineastisch brutal gut.',
+    timeAgo: '6 Min.',
+    icon: Icons.movie_creation_outlined,
+    color: AppColors.redSoft,
+  ),
+  LiveActivityItem(
+    user: 'Kompass',
+    message: 'Poll: Ich gehe auf „Gut“ – starke Dialoge heute.',
+    timeAgo: '7 Min.',
+    icon: Icons.poll_outlined,
+    color: AppColors.green,
+  ),
+  LiveActivityItem(
+    user: 'NoirNacht',
+    message: 'Der Kommissar wirkt heute ungewöhnlich nervös.',
+    timeAgo: '8 Min.',
+    icon: Icons.visibility_rounded,
+    color: AppColors.yellow,
+  ),
+  LiveActivityItem(
+    user: 'Spurensucher',
+    message: 'Die Uhrzeit im Protokoll passt nicht zur Szene.',
+    timeAgo: '9 Min.',
+    icon: Icons.schedule_rounded,
+    color: AppColors.greenSoft,
+  ),
+  LiveActivityItem(
+    user: 'KielKrimi',
+    message: 'Der Schnitt am Fensterrahmen war zu sauber.',
+    timeAgo: '10 Min.',
+    icon: Icons.content_cut_rounded,
+    color: AppColors.orange,
+  ),
+  LiveActivityItem(
+    user: 'Nora_17',
+    message: 'Ich feier den Soundtrack im Hintergrund gerade total.',
+    timeAgo: '11 Min.',
+    icon: Icons.graphic_eq_rounded,
+    color: AppColors.red,
+  ),
+  LiveActivityItem(
+    user: 'TatortMünster',
+    message: 'Theorie-Thread ist offen – wer macht mit?',
+    timeAgo: '12 Min.',
+    icon: Icons.forum_rounded,
+    color: AppColors.greenSoft,
+  ),
+  LiveActivityItem(
+    user: 'CaseClosed?',
+    message: 'Kessler wusste zu viel über den Ablauf.',
+    timeAgo: '13 Min.',
+    icon: Icons.person_search_rounded,
+    color: AppColors.redSoft,
+  ),
+  LiveActivityItem(
+    user: 'SabrinaK',
+    message: 'Die rote Mappe war schon in Minute 12 zu sehen.',
+    timeAgo: '14 Min.',
+    icon: Icons.folder_open_rounded,
+    color: AppColors.orange,
+  ),
+  LiveActivityItem(
+    user: 'Mordkommission',
+    message: 'Im Norden kippt die Abstimmung Richtung „Mega“.',
+    timeAgo: '15 Min.',
+    icon: Icons.trending_up_rounded,
+    color: AppColors.green,
   ),
 ];

@@ -91,6 +91,12 @@ class OnboardingCompletedNotifier extends Notifier<bool> {
     state = true;
     refreshAppRouterFromRef(ref);
   }
+
+  Future<void> reset() async {
+    await ref.read(userPreferencesProvider).setOnboardingCompleted(false);
+    state = false;
+    refreshAppRouterFromRef(ref);
+  }
 }
 
 class SelectedAvatarIdNotifier extends Notifier<String> {

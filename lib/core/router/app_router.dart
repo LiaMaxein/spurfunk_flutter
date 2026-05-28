@@ -8,9 +8,9 @@ import '../../features/live_episode/presentation/live_episode_screen.dart';
 import '../../features/onboarding/application/onboarding_state.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/settings/presentation/about_app_screen.dart';
+import '../../features/settings/presentation/privacy_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
-import '../../features/statistics/presentation/statistics_screen.dart';
-import '../../features/voting/presentation/voting_screen.dart';
 import '../layout/app_shell.dart';
 import 'app_routes.dart';
 import 'router_refresh.dart';
@@ -64,24 +64,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const LiveEpisodeScreen(),
           ),
           GoRoute(
-            path: AppRoutes.voting.path,
-            builder: (context, state) => const VotingScreen(),
-          ),
-          GoRoute(
             path: AppRoutes.community.path,
             builder: (context, state) => const CommunityScreen(),
           ),
           GoRoute(
-            path: AppRoutes.statistics.path,
-            builder: (context, state) => const StatisticsScreen(),
-          ),
-          GoRoute(
             path: AppRoutes.profile.path,
             builder: (context, state) => const ProfileScreen(),
-          ),
-          GoRoute(
-            path: AppRoutes.settings.path,
-            builder: (context, state) => const SettingsScreen(),
+            routes: [
+              GoRoute(
+                path: 'settings',
+                builder: (context, state) => const SettingsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'about',
+                    builder: (context, state) => const AboutAppScreen(),
+                  ),
+                  GoRoute(
+                    path: 'privacy',
+                    builder: (context, state) => const PrivacyScreen(),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

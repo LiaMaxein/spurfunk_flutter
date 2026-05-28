@@ -105,4 +105,17 @@ abstract final class AppTheme {
       dividerTheme: const DividerThemeData(color: AppColors.divider),
     );
   }
+
+  static ThemeData get light {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: AppColors.red,
+      brightness: Brightness.light,
+    );
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      colorScheme: colorScheme,
+      fontFamily: 'SF Pro Display',
+    );
+  }
 }

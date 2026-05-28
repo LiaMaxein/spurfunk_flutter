@@ -44,12 +44,14 @@ class _LiveEpisodeScreenState extends ConsumerState<LiveEpisodeScreen> {
   @override
   Widget build(BuildContext context) {
     final voting = ref.watch(votingProvider);
+    final votingNotifier = ref.read(votingProvider.notifier);
+    final ratings = VoteRating.values.reversed.toList();
 
     return CinematicPage(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ScreenTopBar(title: 'Live Episode'),
+          const ScreenTopBar(title: 'Live'),
           const SizedBox(height: 14),
           _LiveHeroCard(
             episode: liveEpisodeDemo,
@@ -76,6 +78,70 @@ class _LiveEpisodeScreenState extends ConsumerState<LiveEpisodeScreen> {
             ],
           ),
           const SizedBox(height: 18),
+          _SectionTitle(
+            title: 'Aktive Umfrage',
+            subtitle: 'Direkt im Live-Bereich abstimmen',
+          ),
+          const SizedBox(height: 10),
+          GlassCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for (final rating in VoteRating.values) ...[
+                        EmojiVoteButton(
+                          emoji: rating.emoji,
+                          label: rating.label,
+                          color: rating.color,
+                          selected: voting.selected == rating,
+                          onTap: () => votingNotifier.selectVote(rating),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                _FilterRow<VotingRegion>(
+                  title: 'Region',
+                  values: VotingRegion.values,
+                  selected: voting.region,
+                  labelBuilder: (value) => value.label,
+                  onSelected: votingNotifier.setRegion,
+                ),
+                const SizedBox(height: 10),
+                _FilterRow<VotingAgeGroup>(
+                  title: 'Alter',
+                  values: VotingAgeGroup.values,
+                  selected: voting.ageGroup,
+                  labelBuilder: (value) => value.label,
+                  onSelected: votingNotifier.setAgeGroup,
+                ),
+                const SizedBox(height: 10),
+                _FilterRow<VotingGender>(
+                  title: 'Geschlecht',
+                  values: VotingGender.values,
+                  selected: voting.gender,
+                  labelBuilder: (value) => value.label,
+                  onSelected: votingNotifier.setGender,
+                ),
+                const SizedBox(height: 14),
+                for (final rating in ratings)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: ResultBar(
+                      label: rating.label,
+                      value: (voting.counts[rating] ?? 0) / voting.totalVotes,
+                      color: rating.color,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
           Text(
             'Trending Reaktionen',
             style: Theme.of(context).textTheme.titleMedium,
@@ -91,6 +157,58 @@ class _LiveEpisodeScreenState extends ConsumerState<LiveEpisodeScreen> {
                   _TrendingReactionCard(trend: liveReactionTrends[i]),
                 ],
               ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          _SectionTitle(
+            title: 'Episode-Timeline',
+            subtitle: 'Wichtige Momente im Verlauf',
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 90,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: liveTimelineItems.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 10),
+              itemBuilder: (context, index) {
+                final item = liveTimelineItems[index];
+                return SizedBox(
+                  width: 188,
+                  child: GlassCard(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(item.minute, style: Theme.of(context).textTheme.labelLarge),
+                        Text(
+                          item.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: item.highlighted ? AppColors.redSoft : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 18),
+          _SectionTitle(
+            title: 'Trendende Theorie',
+            subtitle: trendingTheory,
+          ),
+          const SizedBox(height: 10),
+          GlassCard(
+            child: Text(
+              suspiciousCharacter,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: AppColors.redSoft,
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -119,14 +237,14 @@ class _LiveEpisodeScreenState extends ConsumerState<LiveEpisodeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Jetzt abstimmen',
+                        'Reaktionsstatus',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         voting.userHasVoted
                             ? 'Deine Stimme: ${voting.selected?.label ?? '–'}'
-                            : 'Wie läuft der Fall für dich?',
+                            : 'Noch keine Stimme – was ist dein Eindruck?',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -150,6 +268,69 @@ class _LiveHeroCard extends StatefulWidget {
 
   @override
   State<_LiveHeroCard> createState() => _LiveHeroCardState();
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 4),
+        Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+      ],
+    );
+  }
+}
+
+class _FilterRow<T> extends StatelessWidget {
+  const _FilterRow({
+    required this.title,
+    required this.values,
+    required this.selected,
+    required this.labelBuilder,
+    required this.onSelected,
+  });
+
+  final String title;
+  final List<T> values;
+  final T selected;
+  final String Function(T value) labelBuilder;
+  final ValueChanged<T> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(height: 6),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final value in values) ...[
+                GestureDetector(
+                  onTap: () => onSelected(value),
+                  child: RedPill(
+                    label: labelBuilder(value),
+                    selected: value == selected,
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _LiveHeroCardState extends State<_LiveHeroCard>

@@ -66,9 +66,11 @@ class AppShell extends StatelessWidget {
 
   int _selectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
-    final index = AppRoutes.navigationRoutes.indexWhere(
-      (route) => route.path == location,
-    );
+    final index = AppRoutes.navigationRoutes.indexWhere((route) {
+      // Keep correct tab selected for nested routes, e.g. /profile/settings.
+      if (route.path == '/') return location == '/';
+      return location.startsWith(route.path);
+    });
 
     return index < 0 ? 0 : index;
   }

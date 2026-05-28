@@ -11,6 +11,12 @@ enum VoteRating {
   mega,
 }
 
+enum VotingRegion { gesamt, nord, sued, ost, west }
+
+enum VotingAgeGroup { alle, u25, a25bis39, a40bis59, a60plus }
+
+enum VotingGender { alle, weiblich, maennlich, divers }
+
 extension VoteRatingX on VoteRating {
   String get emoji => switch (this) {
     VoteRating.schlecht => '😡',
@@ -37,17 +43,52 @@ extension VoteRatingX on VoteRating {
   };
 }
 
+extension VotingRegionX on VotingRegion {
+  String get label => switch (this) {
+    VotingRegion.gesamt => 'Gesamt',
+    VotingRegion.nord => 'Nord',
+    VotingRegion.sued => 'Süd',
+    VotingRegion.ost => 'Ost',
+    VotingRegion.west => 'West',
+  };
+}
+
+extension VotingAgeGroupX on VotingAgeGroup {
+  String get label => switch (this) {
+    VotingAgeGroup.alle => 'Alle',
+    VotingAgeGroup.u25 => 'U25',
+    VotingAgeGroup.a25bis39 => '25–39',
+    VotingAgeGroup.a40bis59 => '40–59',
+    VotingAgeGroup.a60plus => '60+',
+  };
+}
+
+extension VotingGenderX on VotingGender {
+  String get label => switch (this) {
+    VotingGender.alle => 'Alle',
+    VotingGender.weiblich => 'Weiblich',
+    VotingGender.maennlich => 'Männlich',
+    VotingGender.divers => 'Divers',
+  };
+}
+
 /// Demo vote totals (session-local; your vote shifts counts once).
 class VotingState {
   const VotingState({
     required this.counts,
     required this.selected,
     required this.userHasVoted,
+    required this.region,
+    required this.ageGroup,
+    required this.gender,
   });
 
   final Map<VoteRating, int> counts;
   final VoteRating? selected;
   final bool userHasVoted;
+  final VotingRegion region;
+  final VotingAgeGroup ageGroup;
+  final VotingGender gender;
 
   static const _baseCounts = {
     VoteRating.mega: 5232,
@@ -61,6 +102,9 @@ class VotingState {
     counts: Map<VoteRating, int>.from(_baseCounts),
     selected: null,
     userHasVoted: false,
+    region: VotingRegion.gesamt,
+    ageGroup: VotingAgeGroup.alle,
+    gender: VotingGender.alle,
   );
 
   int get totalVotes => counts.values.fold(0, (sum, count) => sum + count);
@@ -88,11 +132,17 @@ class VotingState {
     VoteRating? selected,
     bool clearSelected = false,
     bool? userHasVoted,
+    VotingRegion? region,
+    VotingAgeGroup? ageGroup,
+    VotingGender? gender,
   }) {
     return VotingState(
       counts: counts ?? this.counts,
       selected: clearSelected ? null : (selected ?? this.selected),
       userHasVoted: userHasVoted ?? this.userHasVoted,
+      region: region ?? this.region,
+      ageGroup: ageGroup ?? this.ageGroup,
+      gender: gender ?? this.gender,
     );
   }
 }
@@ -102,6 +152,37 @@ final votingProvider = NotifierProvider<VotingNotifier, VotingState>(
 );
 
 class VotingNotifier extends Notifier<VotingState> {
+  static const _regionMultiplier = {
+    VotingRegion.gesamt: 1.0,
+    VotingRegion.nord: 1.06,
+    VotingRegion.sued: 0.94,
+    VotingRegion.ost: 0.9,
+    VotingRegion.west: 1.03,
+  };
+
+  static const _ageMultiplier = {
+    VotingAgeGroup.alle: 1.0,
+    VotingAgeGroup.u25: 1.08,
+    VotingAgeGroup.a25bis39: 1.04,
+    VotingAgeGroup.a40bis59: 0.98,
+    VotingAgeGroup.a60plus: 0.92,
+  };
+
+  static const _genderMultiplier = {
+    VotingGender.alle: 1.0,
+    VotingGender.weiblich: 1.04,
+    VotingGender.maennlich: 0.97,
+    VotingGender.divers: 0.95,
+  };
+
+  static const _ratingBias = {
+    VoteRating.mega: 1.02,
+    VoteRating.gut: 1.0,
+    VoteRating.okay: 0.98,
+    VoteRating.nichtGut: 1.01,
+    VoteRating.schlecht: 1.04,
+  };
+
   @override
   VotingState build() => VotingState.initial();
 
@@ -120,5 +201,37 @@ class VotingNotifier extends Notifier<VotingState> {
       selected: rating,
       userHasVoted: true,
     );
+  }
+
+  void setRegion(VotingRegion region) {
+    state = _recalculate(state.copyWith(region: region));
+  }
+
+  void setAgeGroup(VotingAgeGroup ageGroup) {
+    state = _recalculate(state.copyWith(ageGroup: ageGroup));
+  }
+
+  void setGender(VotingGender gender) {
+    state = _recalculate(state.copyWith(gender: gender));
+  }
+
+  VotingState _recalculate(VotingState current) {
+    final regionFactor = _regionMultiplier[current.region]!;
+    final ageFactor = _ageMultiplier[current.ageGroup]!;
+    final genderFactor = _genderMultiplier[current.gender]!;
+
+    final recalculated = <VoteRating, int>{};
+    for (final rating in VoteRating.values) {
+      final base = VotingState._baseCounts[rating]!;
+      final biased = base * _ratingBias[rating]!;
+      final value = (biased * regionFactor * ageFactor * genderFactor).round();
+      recalculated[rating] = value.clamp(50, 50000);
+    }
+
+    if (current.userHasVoted && current.selected != null) {
+      recalculated[current.selected!] = (recalculated[current.selected!] ?? 0) + 1;
+    }
+
+    return current.copyWith(counts: recalculated);
   }
 }

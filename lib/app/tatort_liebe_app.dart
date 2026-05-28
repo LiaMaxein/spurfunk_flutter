@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/router/app_router.dart';
 import '../core/startup/app_startup_provider.dart';
 import '../core/theme/app_theme.dart';
+import '../features/settings/application/settings_state.dart';
 import '../features/startup/presentation/splash_screen.dart';
 
 class TatortLiebeApp extends ConsumerWidget {
@@ -12,18 +13,23 @@ class TatortLiebeApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bootstrap = ref.watch(appBootstrapProvider);
+    final darkModeEnabled = ref.watch(darkModeEnabledProvider);
 
     return bootstrap.when(
       loading: () => MaterialApp(
         title: 'Tatort Liebe',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
         home: const SplashScreen(),
       ),
       error: (error, _) => MaterialApp(
         title: 'Tatort Liebe',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
         home: Scaffold(
           body: Center(child: Text('Start fehlgeschlagen: $error')),
         ),
@@ -33,7 +39,9 @@ class TatortLiebeApp extends ConsumerWidget {
         return MaterialApp.router(
           title: 'Tatort Liebe',
           debugShowCheckedModeBanner: false,
-          theme: AppTheme.dark,
+          themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
           routerConfig: router,
         );
       },

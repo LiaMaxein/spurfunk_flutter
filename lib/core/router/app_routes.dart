@@ -25,39 +25,26 @@ abstract final class AppRoutes {
     label: 'Live',
     icon: Icons.live_tv_rounded,
   );
-  static const voting = AppRouteData(
-    path: '/voting',
-    label: 'Voting',
-    icon: Icons.how_to_vote_rounded,
-  );
   static const community = AppRouteData(
     path: '/community',
     label: 'Community',
     icon: Icons.forum_rounded,
   );
-  static const statistics = AppRouteData(
-    path: '/statistics',
-    label: 'Stats',
-    icon: Icons.analytics_rounded,
-  );
   static const profile = AppRouteData(
     path: '/profile',
-    label: 'Profile',
+    label: 'Profil',
     icon: Icons.person_rounded,
   );
-  static const settings = AppRouteData(
-    path: '/settings',
-    label: 'Settings',
-    icon: Icons.settings_rounded,
-  );
+
+  // Nested (not part of bottom navigation)
+  static const profileSettingsPath = '/profile/settings';
+  static const profileSettingsAboutPath = '/profile/settings/about';
+  static const profileSettingsPrivacyPath = '/profile/settings/privacy';
 
   static const navigationRoutes = [
     home,
     liveEpisode,
-    voting,
     community,
-    statistics,
     profile,
-    settings,
   ];
 }

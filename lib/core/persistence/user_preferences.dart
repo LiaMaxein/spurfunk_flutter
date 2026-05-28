@@ -13,6 +13,8 @@ class UserPreferences {
   static const _avatarId = 'avatar_id';
   static const _username = 'username';
   static const _anonymousMode = 'anonymous_mode';
+  static const _notificationsEnabled = 'notifications_enabled';
+  static const _darkModeEnabled = 'dark_mode_enabled';
 
   bool get onboardingCompleted =>
       _prefs.getBool(_onboardingCompleted) ?? false;
@@ -22,6 +24,8 @@ class UserPreferences {
   String get username => _prefs.getString(_username) ?? '';
 
   bool get anonymousMode => _prefs.getBool(_anonymousMode) ?? true;
+  bool get notificationsEnabled => _prefs.getBool(_notificationsEnabled) ?? true;
+  bool get darkModeEnabled => _prefs.getBool(_darkModeEnabled) ?? true;
 
   Future<void> setOnboardingCompleted(bool value) =>
       _prefs.setBool(_onboardingCompleted, value);
@@ -32,6 +36,12 @@ class UserPreferences {
 
   Future<void> setAnonymousMode(bool value) =>
       _prefs.setBool(_anonymousMode, value);
+
+  Future<void> setNotificationsEnabled(bool value) =>
+      _prefs.setBool(_notificationsEnabled, value);
+
+  Future<void> setDarkModeEnabled(bool value) =>
+      _prefs.setBool(_darkModeEnabled, value);
 }
 
 final userPreferencesProvider = Provider<UserPreferences>((ref) {
