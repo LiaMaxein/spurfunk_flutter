@@ -2,20 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/router/app_router.dart';
+import '../core/startup/app_startup_provider.dart';
 import '../core/theme/app_theme.dart';
+import '../features/startup/presentation/splash_screen.dart';
 
 class TatortLiebeApp extends ConsumerWidget {
   const TatortLiebeApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(appRouterProvider);
+    final bootstrap = ref.watch(appBootstrapProvider);
 
-    return MaterialApp.router(
-      title: 'Tatort Liebe',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
-      routerConfig: router,
+    return bootstrap.when(
+      loading: () => MaterialApp(
+        title: 'Tatort Liebe',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.dark,
+        home: const SplashScreen(),
+      ),
+      error: (error, _) => MaterialApp(
+        title: 'Tatort Liebe',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.dark,
+        home: Scaffold(
+          body: Center(child: Text('Start fehlgeschlagen: $error')),
+        ),
+      ),
+      data: (_) {
+        final router = ref.watch(appRouterProvider);
+        return MaterialApp.router(
+          title: 'Tatort Liebe',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.dark,
+          routerConfig: router,
+        );
+      },
     );
   }
 }

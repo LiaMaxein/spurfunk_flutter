@@ -13,6 +13,8 @@ class AppRouteData {
 }
 
 abstract final class AppRoutes {
+  static const onboardingPath = '/onboarding';
+
   static const home = AppRouteData(
     path: '/',
     label: 'Home',
