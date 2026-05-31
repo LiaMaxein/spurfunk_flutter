@@ -54,6 +54,46 @@ class StatisticsScreen extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
           const SizedBox(height: 12),
+          const _NewsCard(
+            icon: Icons.emoji_events_rounded,
+            eyebrow: 'Community-Meilenstein',
+            title: '100.000 Gesamtreaktionen',
+            subtitle: 'Geknackt um 20:42 Uhr',
+            color: AppColors.yellow,
+          ),
+          const SizedBox(height: 12),
+          const _NewsCard(
+            icon: Icons.people_rounded,
+            eyebrow: 'Zuschauerrekord',
+            title: '24.810 gleichzeitige User live',
+            subtitle: 'Neuer Rekord für diese Staffel',
+            color: AppColors.greenSoft,
+          ),
+          const SizedBox(height: 12),
+          const _NewsCard(
+            icon: Icons.trending_up_rounded,
+            eyebrow: 'Top-Abstimmung',
+            title: 'Mega führt mit 42 %',
+            subtitle: 'Gut 31 %, Okay 18 %, Nicht gut 9 %',
+            color: AppColors.green,
+          ),
+          const SizedBox(height: 12),
+          const _NewsCard(
+            icon: Icons.quiz_rounded,
+            eyebrow: 'Theorien-Update',
+            title: 'Der Nachbar ist der Favorit',
+            subtitle: '34 % der Community tippt auf Kessler',
+            color: AppColors.orange,
+          ),
+          const SizedBox(height: 12),
+          const _NewsCard(
+            icon: Icons.podcasts_rounded,
+            eyebrow: 'Podcast',
+            title: 'Tatort-Cast – Jetzt Folge 42 hören',
+            subtitle: 'Exklusiv für die Community',
+            color: AppColors.red,
+          ),
+          const SizedBox(height: 18),
           GlassCard(
             child: Row(
               children: [
@@ -88,6 +128,38 @@ class StatisticsScreen extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 18),
+          Text('Community-Statistiken', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 12),
+          _StatRow(label: 'Gesamte Nutzer', value: '5.420'),
+          const SizedBox(height: 8),
+          _StatRow(label: 'Kommentare heute', value: '847'),
+          const SizedBox(height: 8),
+          _StatRow(label: 'Aktive Diskussionen', value: '23'),
+          const SizedBox(height: 8),
+          _StatRow(label: 'Durchschnittsbewertung', value: '4.2 ★'),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatRow extends StatelessWidget {
+  const _StatRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      radius: 14,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: Theme.of(context).textTheme.titleMedium),
+          Text(value, style: Theme.of(context).textTheme.labelLarge),
         ],
       ),
     );

@@ -171,6 +171,121 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             icon: const Icon(Icons.save_outlined),
             label: const Text('Änderungen lokal speichern'),
           ),
+          const SizedBox(height: 28),
+          Text('Aktivität', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 10),
+          _ActivityRow(
+            icon: Icons.how_to_vote_rounded,
+            label: 'Abgestimmt bei "Haupt der Medusa"',
+            subtitle: 'vor 2 Tagen',
+          ),
+          const SizedBox(height: 8),
+          _ActivityRow(
+            icon: Icons.forum_rounded,
+            label: 'Kommentiert in der Community',
+            subtitle: 'vor 3 Tagen',
+          ),
+          const SizedBox(height: 8),
+          _ActivityRow(
+            icon: Icons.emoji_events_rounded,
+            label: 'Abzeichen "Top-Kommentator" erhalten',
+            subtitle: 'vor 5 Tagen',
+          ),
+          const SizedBox(height: 28),
+          Text('Lieblingsfolgen', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 10),
+          const _FavoriteEpisodeCard(
+            title: 'Borowski und das Haupt der Medusa',
+            subtitle: 'ARD · 20:15 Uhr',
+          ),
+          const SizedBox(height: 8),
+          const _FavoriteEpisodeCard(
+            title: 'Tatort: Die Nacht der Kommissare',
+            subtitle: 'WDR · Wiederholung',
+          ),
+          const SizedBox(height: 8),
+          const _FavoriteEpisodeCard(
+            title: 'München: Die letzte Zeugin',
+            subtitle: 'BR · 21:45 Uhr',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActivityRow extends StatelessWidget {
+  const _ActivityRow({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+  });
+
+  final IconData icon;
+  final String label;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      radius: 14,
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: AppColors.redSoft),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 2),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FavoriteEpisodeCard extends StatelessWidget {
+  const _FavoriteEpisodeCard({
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      radius: 14,
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppColors.red.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.favorite_rounded, color: AppColors.redSoft, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 2),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ),
+          ),
         ],
       ),
     );

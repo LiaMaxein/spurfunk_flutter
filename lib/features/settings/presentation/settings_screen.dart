@@ -45,7 +45,42 @@ class SettingsScreen extends ConsumerWidget {
             title: 'Über Tatort-Liebe',
             onTap: () => context.go(AppRoutes.profileSettingsAboutPath),
           ),
+          _SwitchTile(
+            icon: Icons.subtitles_outlined,
+            title: 'Untertitel standardmäßig aktiv',
+            value: true,
+            onChanged: (_) {},
+          ),
+          _SwitchTile(
+            icon: Icons.volume_up_outlined,
+            title: 'Sound-Effekte',
+            value: true,
+            onChanged: (_) {},
+          ),
           const SizedBox(height: 14),
+          Text('Daten & Speicher', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 10),
+          _ActionTile(
+            icon: Icons.download_outlined,
+            title: 'Cache leeren',
+            subtitle: '12.4 MB belegt',
+            onTap: () {},
+          ),
+          _ActionTile(
+            icon: Icons.delete_outline_rounded,
+            title: 'Alle lokalen Daten löschen',
+            subtitle: 'Einstellungen, Profil und Verlauf',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+          Text('Info', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 10),
+          _InfoRow(label: 'App-Version', value: '1.0.0 (Build 42)'),
+          const SizedBox(height: 6),
+          _InfoRow(label: 'Umgebung', value: 'Prototyp (lokal)'),
+          const SizedBox(height: 6),
+          _InfoRow(label: 'Datenhaltung', value: 'Nur lokal · SharedPreferences'),
+          const SizedBox(height: 18),
           FilledButton.icon(
             onPressed: () async {
               await ref.read(onboardingCompletedProvider.notifier).reset();
@@ -56,7 +91,8 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 22),
           Text(
-            'Alle Einstellungen werden nur lokal gespeichert.',
+            'Alle Einstellungen werden nur lokal gespeichert. '
+            'Es werden keine Daten an Server übermittelt.',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
@@ -97,6 +133,70 @@ class _SettingsTile extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ActionTile extends StatelessWidget {
+  const _ActionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: GlassCard(
+        onTap: onTap,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        radius: 14,
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 23),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 2),
+                  Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 24),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: Theme.of(context).textTheme.bodyMedium),
+          Text(value, style: Theme.of(context).textTheme.labelLarge),
+        ],
       ),
     );
   }

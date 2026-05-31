@@ -21,32 +21,29 @@ class CinematicPage extends StatelessWidget {
     return Stack(
       children: [
         const Positioned.fill(child: CinematicBackdrop()),
-        CustomScrollView(
+        SingleChildScrollView(
+          padding: EdgeInsets.zero,
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
-          slivers: [
-            SliverToBoxAdapter(
-              child: ResponsivePage(
-                padding: padding ?? const EdgeInsets.fromLTRB(20, 18, 20, 24),
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: 1),
-                  duration: const Duration(milliseconds: 420),
-                  curve: Curves.easeOutCubic,
-                  builder: (context, value, child) {
-                    return Opacity(
-                      opacity: value,
-                      child: Transform.translate(
-                        offset: Offset(0, 18 * (1 - value)),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: child,
-                ),
-              ),
+          child: ResponsivePage(
+            padding: padding ?? const EdgeInsets.fromLTRB(20, 18, 20, 24),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: 1),
+              duration: const Duration(milliseconds: 420),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, child) {
+                return Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, 18 * (1 - value)),
+                    child: child,
+                  ),
+                );
+              },
+              child: child,
             ),
-          ],
+          ),
         ),
       ],
     );
@@ -152,12 +149,13 @@ class ScreenTopBar extends StatelessWidget {
       children: [
         SizedBox(
           width: 42,
+          height: 42,
           child: showBack
               ? IconButton(
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
                 )
-              : null,
+              : const SizedBox.shrink(),
         ),
         Expanded(
           child: Text(
@@ -168,7 +166,11 @@ class ScreenTopBar extends StatelessWidget {
             ).textTheme.titleMedium?.copyWith(fontSize: 18),
           ),
         ),
-        SizedBox(width: 42, child: trailing),
+        SizedBox(
+          width: 42,
+          height: 42,
+          child: trailing ?? const SizedBox.shrink(),
+        ),
       ],
     );
   }

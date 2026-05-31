@@ -215,6 +215,7 @@ class _TickerSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
@@ -228,11 +229,32 @@ class _TickerSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          for (final ticker in items)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: Text('• ${ticker.text}', style: Theme.of(context).textTheme.bodyLarge),
+          SizedBox(
+            height: 24,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: items.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 24),
+              itemBuilder: (context, index) {
+                final ticker = items[index];
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: isLive ? AppColors.redSoft : AppColors.textMuted,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(ticker.text, style: Theme.of(context).textTheme.bodyLarge),
+                  ],
+                );
+              },
             ),
+          ),
         ],
       ),
     );

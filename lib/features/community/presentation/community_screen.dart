@@ -51,43 +51,53 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(communityProvider);
     final notifier = ref.read(communityProvider.notifier);
+    final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CinematicPage(
-      child: Column(
-        children: [
-          const ScreenTopBar(title: 'Community'),
-          const SizedBox(height: 16),
-          GlassCard(
-            padding: const EdgeInsets.all(4),
-            radius: 16,
-            child: Row(
-              children: [
-                for (final tab in CommunityTab.values)
-                  Expanded(
-                    child: _Segment(
-                      label: tab.label,
-                      selected: state.selectedTab == tab,
-                      onTap: () => notifier.setTab(tab),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 18),
-          for (final comment in state.visibleComments)
-            GestureDetector(
-              onLongPress: () => _tryDelete(notifier, state, comment),
-              child: _CommentTile(
-                comment: comment,
-                onLike: () => notifier.toggleLike(comment.id),
-                onReact: (emoji) =>
-                    notifier.addReaction(id: comment.id, emoji: emoji),
-                emojiOptions: notifier.emojiOptions,
-                isOwn: comment.name == state.currentUserName,
+    return Stack(
+      children: [
+        CinematicPage(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 90),
+          child: Column(
+            children: [
+              const ScreenTopBar(title: 'Community'),
+              const SizedBox(height: 16),
+              GlassCard(
+                padding: const EdgeInsets.all(4),
+                radius: 16,
+                child: Row(
+                  children: [
+                    for (final tab in CommunityTab.values)
+                      Expanded(
+                        child: _Segment(
+                          label: tab.label,
+                          selected: state.selectedTab == tab,
+                          onTap: () => notifier.setTab(tab),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          const SizedBox(height: 16),
-          GlassCard(
+              const SizedBox(height: 18),
+              for (final comment in state.visibleComments)
+                GestureDetector(
+                  onLongPress: () => _tryDelete(notifier, state, comment),
+                  child: _CommentTile(
+                    comment: comment,
+                    onLike: () => notifier.toggleLike(comment.id),
+                    onReact: (emoji) =>
+                        notifier.addReaction(id: comment.id, emoji: emoji),
+                    emojiOptions: notifier.emojiOptions,
+                    isOwn: comment.name == state.currentUserName,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Positioned(
+          left: 20,
+          right: 20,
+          bottom: bottomInset + 16,
+          child: GlassCard(
             padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
             radius: 16,
             child: Row(
@@ -118,8 +128,8 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

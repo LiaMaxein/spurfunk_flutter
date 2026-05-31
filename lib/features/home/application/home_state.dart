@@ -102,22 +102,49 @@ const homeNewsItems = [
     icon: Icons.bolt_rounded,
     color: AppColors.greenSoft,
   ),
+  HomeNewsItem(
+    title: 'Ermittlerteam-Podcast',
+    subtitle: 'Münsteraner blicken hinter die Kulissen.',
+    icon: Icons.podcasts_rounded,
+    color: AppColors.yellow,
+  ),
+  HomeNewsItem(
+    title: 'Fan-Event in Hamburg',
+    subtitle: 'Live dabei am 12. Juni – Jetzt anmelden!',
+    icon: Icons.event_rounded,
+    color: AppColors.green,
+  ),
 ];
 
 const homeUpcomingEpisodes = [
   HomeEpisodePreview(
-    day: 'So',
+    day: 'So 08.06.',
     title: 'Das Mädchen am Strand',
     time: '20:15 · ARD',
   ),
   HomeEpisodePreview(
-    day: 'So',
+    day: 'So 15.06.',
     title: 'Mord im Schattenpark',
     time: '20:15 · ARD',
   ),
   HomeEpisodePreview(
-    day: 'So',
+    day: 'So 22.06.',
     title: 'Kalte Spuren',
+    time: '20:15 · ARD',
+  ),
+  HomeEpisodePreview(
+    day: 'So 29.06.',
+    title: 'Blutige Ernte',
+    time: '20:15 · ARD',
+  ),
+  HomeEpisodePreview(
+    day: 'So 06.07.',
+    title: 'Der letzte Zeuge',
+    time: '20:15 · ARD',
+  ),
+  HomeEpisodePreview(
+    day: 'So 13.07.',
+    title: 'Tod in der Nacht',
     time: '20:15 · ARD',
   ),
 ];
@@ -144,6 +171,21 @@ const homeDiscussions = [
     title: 'Beste Tatort-Folge 2026 bisher?',
     replies: 211,
     lastActivity: 'vor 6 Min.',
+  ),
+  HomeDiscussion(
+    title: 'Welcher Ermittler hat die besten Dialoge?',
+    replies: 67,
+    lastActivity: 'vor 12 Min.',
+  ),
+  HomeDiscussion(
+    title: 'Theorie: Der Gärtner ist der Mörder!',
+    replies: 312,
+    lastActivity: 'vor 1 Min.',
+  ),
+  HomeDiscussion(
+    title: 'Musikuntermalung – unterbewertet oder overrated?',
+    replies: 45,
+    lastActivity: 'vor 25 Min.',
   ),
 ];
 

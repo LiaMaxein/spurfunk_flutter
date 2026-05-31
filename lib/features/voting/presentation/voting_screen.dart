@@ -144,6 +144,68 @@ class VotingScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: 18),
+          Text('Demografische Aufschlüsselung', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 12),
+          GlassCard(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            radius: 14,
+            child: _DemographicRow(
+              label: 'Alter 18–29',
+              percent: 38,
+              color: AppColors.redSoft,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GlassCard(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            radius: 14,
+            child: _DemographicRow(
+              label: 'Alter 30–44',
+              percent: 42,
+              color: AppColors.orange,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GlassCard(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            radius: 14,
+            child: _DemographicRow(
+              label: 'Alter 45+',
+              percent: 20,
+              color: AppColors.greenSoft,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GlassCard(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            radius: 14,
+            child: _DemographicRow(
+              label: 'Aus dem Norden (Kiel/Umland)',
+              percent: 34,
+              color: AppColors.red,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text('Top-Community-Theorien', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 12),
+          _TheoryCard(
+            author: 'Nordlicht_09',
+            text: 'Das Opfer kannte den Täter aus der Galerie.',
+            votes: 342,
+          ),
+          const SizedBox(height: 8),
+          _TheoryCard(
+            author: 'CaseClosed?',
+            text: 'Kessler wusste zu viel über den Ablauf – er war es.',
+            votes: 289,
+          ),
+          const SizedBox(height: 8),
+          _TheoryCard(
+            author: 'Spurensucher',
+            text: 'Die Uhrzeit im Protokoll passt nicht zur Szene – ein Vertuschungsversuch.',
+            votes: 156,
+          ),
         ],
       ),
     );
@@ -158,6 +220,85 @@ class VotingScreen extends ConsumerWidget {
       if (fromEnd > 1 && fromEnd % 3 == 1) buffer.write('.');
     }
     return buffer.toString();
+  }
+}
+
+class _DemographicRow extends StatelessWidget {
+  const _DemographicRow({
+    required this.label,
+    required this.percent,
+    required this.color,
+  });
+
+  final String label;
+  final int percent;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 140,
+          child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+        ),
+        const Spacer(),
+        Text(
+          '$percent%',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: color),
+        ),
+      ],
+    );
+  }
+}
+
+class _TheoryCard extends StatelessWidget {
+  const _TheoryCard({
+    required this.author,
+    required this.text,
+    required this.votes,
+  });
+
+  final String author;
+  final String text;
+  final int votes;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      radius: 14,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AvatarBubble(color: _colorForAuthor(author), icon: Icons.psychology_alt_outlined, size: 40),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(author, style: Theme.of(context).textTheme.labelLarge),
+                const SizedBox(height: 4),
+                Text(text, style: Theme.of(context).textTheme.bodyLarge),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(Icons.thumb_up_outlined, size: 14, color: AppColors.textMuted),
+                    const SizedBox(width: 4),
+                    Text('$votes', style: Theme.of(context).textTheme.bodyMedium),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _colorForAuthor(String name) {
+    final colors = [AppColors.redSoft, AppColors.orange, AppColors.greenSoft, AppColors.red, AppColors.yellow];
+    return colors[name.hashCode.abs() % colors.length];
   }
 }
 
