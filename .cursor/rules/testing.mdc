@@ -1,0 +1,12 @@
+---
+description: Testing requirements
+globs: test/**
+alwaysApply: false
+---
+
+# Testing
+
+- Unit tests for business logic (voting aggregation, filters)
+- Widget tests for key UI components and onboarding flow
+- Streams must be disposed in tests
+- Definition of Done: dark theme, all states, navigation works

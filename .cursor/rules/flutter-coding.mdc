@@ -1,0 +1,14 @@
+---
+description: Flutter coding standards for Spurfunk
+globs: lib/**
+alwaysApply: false
+---
+
+# Flutter Coding
+
+- Match existing conventions in `lib/core/` and feature folders
+- Use `ConsumerWidget` / `ConsumerStatefulWidget` with Riverpod
+- Prefer const constructors where possible
+- Accessibility: semantic labels on interactive elements
+- German UI copy
+- Minimize scope: focused diffs, no unrelated refactors

@@ -1,0 +1,15 @@
+---
+description: Flutter architecture for Spurfunk
+globs: lib/**
+alwaysApply: false
+---
+
+# Architecture
+
+- Flutter + Riverpod + GoRouter
+- Feature structure: `features/<name>/data|domain|presentation`
+- Shared: `shared/models`, `shared/repositories`, `shared/mock_data`
+- Mock-first, backend-ready: Repository interfaces, Mock implementations first
+- No business logic in widgets; use Notifiers/Repositories
+- Realtime-ready: Voting/Chat as Streams with proper dispose
+- Local storage: SharedPreferences; tokens later via Flutter Secure Storage

@@ -1,0 +1,13 @@
+---
+description: Data privacy and security rules
+globs: lib/**
+alwaysApply: false
+---
+
+# Data & Security
+
+- Datenminimierung: kein Klarname-Zwang, keine Echtfotos, keine GPS
+- Rate limits: 1 Vote/Episode, max 3 Chat-Nachrichten / 5s
+- Kleine Filtergruppen nicht deanonymisierend anzeigen
+- Keine offiziellen Logos/Pressebilder
+- HTTPS/WSS when backend connected

@@ -99,13 +99,13 @@ class _IntroStep extends StatelessWidget {
             const OnboardingBrand(large: true),
           const SizedBox(height: 28),
           Text(
-            'Gemeinsam schauen. Gemeinsam fühlen.',
+            'Gemeinschaft schauen. Gemeinsam rätseln.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 14),
           Text(
-            'Dein anonymes Second-Screen-Erlebnis für Live-Abstimmungen, Theorien, Emotionen und die spannendsten Tatort-Momente.',
+            'Deine App für den Sonntagabend-Kultkrimi: Sei live dabei, rede und rätsel mit.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
@@ -163,10 +163,10 @@ class _AvatarStep extends ConsumerWidget {
               padding: EdgeInsets.zero,
               itemCount: avatarPresets.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.88,
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.78,
               ),
               itemBuilder: (context, index) {
                 final avatar = avatarPresets[index];
@@ -181,7 +181,7 @@ class _AvatarStep extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 18),
-          NoirButton(label: 'Avatar übernehmen', onPressed: onContinue),
+            NoirButton(label: 'Weiter', onPressed: onContinue),
         ],
       ),
     );
@@ -361,7 +361,7 @@ class _CompletionStepState extends ConsumerState<_CompletionStep> {
           ),
           const SizedBox(height: 28),
             NoirButton(
-              label: _isLoading ? 'Fall wird geöffnet …' : 'In die App starten',
+              label: _isLoading ? 'Wird gestartet …' : 'Spurfunk starten!',
               icon: _isLoading ? null : Icons.play_arrow_rounded,
               isLoading: _isLoading,
               onPressed: _isLoading ? null : _enterApp,

@@ -100,7 +100,7 @@ class StatisticsScreen extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
-                    AppAssets.mockupIntro,
+                    AppAssets.heroEpisode,
                     width: 72,
                     height: 54,
                     fit: BoxFit.cover,

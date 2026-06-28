@@ -1,0 +1,17 @@
+---
+description: Spurfunk design system
+globs: lib/**
+alwaysApply: false
+---
+
+# Design System
+
+Colors: `#E30613` (primary), `#0A0A0A` (bg), `#1A1A1A` (cards), `#B3B3B3` (muted), `#FFFFFF` (text)
+Fonts: Bebas Neue (headlines), Inter (body/buttons) via google_fonts
+Cards: radius 18px, padding 16px
+Primary button: red, white text, min height 48px, radius 16px
+Tab bar: 5 icons ohne Label, flach, aktiver Tab rot mit rotem Unterstrich
+Icons: outline only, inactive gray, active red
+Animations: 250–300ms, sparsam
+Every screen: loading, empty, error states
+UI reference: `assets/mockups/`

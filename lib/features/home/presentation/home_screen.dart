@@ -1,181 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-import '../../../core/router/app_routes.dart';
 import '../../../core/assets/app_assets.dart';
+import '../../../core/layout/app_shell.dart';
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/cinematic_widgets.dart';
-import '../application/home_state.dart';
+import '../../../core/widgets/app_components.dart';
+import '../../../core/widgets/voting_widgets.dart';
+import '../../../shared/models/models.dart';
+import '../application/home_notifier.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeState = ref.watch(homeStateProvider);
+    final homeAsync = ref.watch(homeNotifierProvider);
 
-    return CinematicPage(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ScreenTopBar(
-            title: 'Tatort Liebe',
-            showBack: false,
-            trailing: IconButton(
-              onPressed: () => ref.read(homeStateProvider.notifier).toggleLiveActive(),
-              icon: Icon(
-                homeState.liveActive ? Icons.live_tv_rounded : Icons.pause_circle_outline,
-              ),
-            ),
-          ),
-          const SizedBox(height: 18),
-          _TickerSection(items: homeTickerItems, isLive: homeState.liveActive),
-          const SizedBox(height: 16),
-          if (homeState.liveActive) const _ContinueWatchingCard(),
-          const SizedBox(height: 16),
-          if (!homeState.liveActive)
-            _SectionTitle(
-              title: 'Heute ohne Live-Fall',
-              subtitle: 'News und kommende Episoden für deinen Abend.',
-            ),
-          if (!homeState.liveActive) const SizedBox(height: 10),
-          _SectionTitle(
-            title: 'News',
-            subtitle: 'Aktuelle Updates rund um Tatort und Community',
-          ),
-          const SizedBox(height: 10),
-          for (final item in homeNewsItems) ...[
-            _NewsCard(item: item),
-            const SizedBox(height: 10),
-          ],
-          const SizedBox(height: 14),
-          _SectionTitle(
-            title: 'Kommende Episoden',
-            subtitle: 'Vormerken und Erinnerungen planen',
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 120,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: homeUpcomingEpisodes.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 10),
-              itemBuilder: (context, index) =>
-                  _EpisodeCard(item: homeUpcomingEpisodes[index]),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SectionTitle(
-            title: 'Tatort-Teams',
-            subtitle: 'Wähle dein Ermittlerteam',
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 96,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: homeTeams.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 10),
-              itemBuilder: (context, index) => _TeamChip(
-                team: homeTeams[index],
-                selected: homeState.selectedTeam == index,
-                onTap: () => ref.read(homeStateProvider.notifier).selectTeam(index),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SectionTitle(
-            title: 'Trendende Diskussionen',
-            subtitle: 'Direkt in die Community springen',
-          ),
-          const SizedBox(height: 10),
-          for (var i = 0; i < homeDiscussions.length; i++) ...[
-            _DiscussionCard(
-              item: homeDiscussions[i],
-              selected: homeState.selectedDiscussion == i,
-              onTap: () => ref.read(homeStateProvider.notifier).selectDiscussion(i),
-            ),
-            const SizedBox(height: 10),
-          ],
-          const SizedBox(height: 12),
-          const _HeroEpisodeCard(),
-          const SizedBox(height: 18),
-          FilledButton.icon(
-            onPressed: () => context.go(AppRoutes.liveEpisode.path),
-            icon: const Icon(Icons.live_tv_rounded),
-            label: const Text('Zum Live-Bereich'),
-          ),
-        ],
+    return homeAsync.when(
+      loading: () => const AppScaffold(child: LoadingSkeleton(height: 200)),
+      error: (e, _) => AppScaffold(
+        child: ErrorState(
+          message: e.toString(),
+          onRetry: () => ref.invalidate(homeNotifierProvider),
+        ),
       ),
-    );
-  }
-}
-
-class _HeroEpisodeCard extends StatelessWidget {
-  const _HeroEpisodeCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: SizedBox(
-        height: 280,
-        width: double.infinity,
-        child: Stack(
-          fit: StackFit.expand,
+      data: (home) => AppScaffold(
+        header: SpurfunkHeader(
+          trailing: IconButton(
+            onPressed: () {},
+            icon: const Badge(
+              smallSize: 8,
+              child: Icon(Icons.notifications_outlined),
+            ),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              AppAssets.mockupIntro,
-              fit: BoxFit.cover,
+            if (home.isLive)
+              _LiveBanner(episode: home.currentEpisode!)
+            else
+              _CountdownCard(episode: home.nextEpisode),
+            const SizedBox(height: 16),
+            if (home.lastVoteAggregate != null)
+              _PollSummaryCard(aggregate: home.lastVoteAggregate!),
+            const SizedBox(height: 16),
+            Text(
+              'POLIZEIFUNK – NEWS',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: AppColors.red,
+                letterSpacing: 1,
+              ),
             ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.black.withValues(alpha: 0.12),
-                    AppColors.black.withValues(alpha: 0.38),
-                    AppColors.black.withValues(alpha: 0.92),
-                  ],
+            const SizedBox(height: 10),
+            for (final item in home.news) ...[
+              _NewsCard(item: item),
+              const SizedBox(height: 8),
+            ],
+            const SizedBox(height: 16),
+            Text('ENTDECKE MEHR', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 10),
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1.4,
+              children: [
+                _QuickLink(
+                  icon: Icons.forum_outlined,
+                  label: 'Community',
+                  subtitle: 'Jetzt diskutieren',
+                  onTap: () => context.go(AppRoutes.community.path),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const RedPill(
-                    label: 'LIVE',
-                    icon: Icons.circle,
-                    selected: true,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Borowski und das Haupt der Medusa',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text(
-                        'ARD',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.public_rounded, size: 17),
-                      const SizedBox(width: 14),
-                      Text(
-                        'Noch 32 Min.',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                _QuickLink(
+                  icon: Icons.folder_outlined,
+                  label: 'Fakten',
+                  subtitle: 'Wissen entdecken',
+                  onTap: () => context.go(AppRoutes.facts.path),
+                ),
+                _QuickLink(
+                  icon: Icons.bar_chart_outlined,
+                  label: 'Statistiken',
+                  subtitle: 'Zahlen & Fakten',
+                  onTap: () => context.go(AppRoutes.community.path),
+                ),
+                _QuickLink(
+                  icon: Icons.live_tv_outlined,
+                  label: 'Live',
+                  subtitle: 'Mitwisser-Chat',
+                  onTap: () => context.go(AppRoutes.liveEpisode.path),
+                ),
+              ],
             ),
           ],
         ),
@@ -184,76 +104,41 @@ class _HeroEpisodeCard extends StatelessWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title, required this.subtitle});
+class _LiveBanner extends StatelessWidget {
+  const _LiveBanner({required this.episode});
 
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 4),
-        Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-      ],
-    );
-  }
-}
-
-class _TickerSection extends StatelessWidget {
-  const _TickerSection({required this.items, required this.isLive});
-
-  final List<HomeTickerItem> items;
-  final bool isLive;
+  final Episode episode;
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+    return AppCard(
+      onTap: () => context.go(AppRoutes.liveEpisode.path),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
+          const Row(
             children: [
-              RedPill(
-                label: isLive ? 'Live-Ticker aktiv' : 'Live-Ticker pausiert',
-                icon: Icons.circle,
-                selected: isLive,
-              ),
-              const Spacer(),
-              Text('Heute', style: Theme.of(context).textTheme.bodyMedium),
+              LiveBadge(),
+              SizedBox(width: 8),
+              Text('LIVE JETZT'),
             ],
           ),
           const SizedBox(height: 12),
-          SizedBox(
-            height: 24,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: items.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 24),
-              itemBuilder: (context, index) {
-                final ticker = items[index];
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: isLive ? AppColors.redSoft : AppColors.textMuted,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(ticker.text, style: Theme.of(context).textTheme.bodyLarge),
-                  ],
-                );
-              },
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              AppAssets.heroEpisode,
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
+          ),
+          const SizedBox(height: 12),
+          Text(episode.title, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 4),
+          Text(
+            '${episode.sender} · seit ${DateFormat.Hm().format(episode.startsAt)}',
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),
@@ -261,38 +146,124 @@ class _TickerSection extends StatelessWidget {
   }
 }
 
-class _ContinueWatchingCard extends StatelessWidget {
-  const _ContinueWatchingCard();
+class _CountdownCard extends StatelessWidget {
+  const _CountdownCard({required this.episode});
+
+  final Episode? episode;
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
-      child: Row(
+    if (episode == null) {
+      return const EmptyState(
+        title: 'Keine Sendung geplant',
+        subtitle: 'Momentan keine Neuigkeiten zur nächsten Folge.',
+      );
+    }
+
+    final diff = episode!.startsAt.difference(DateTime.now());
+    final days = diff.inDays;
+    final hours = diff.inHours % 24;
+    final minutes = diff.inMinutes % 60;
+
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'KEIN LIVE – NÄCHSTER TATORT',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: AppColors.red,
+            ),
+          ),
+          const SizedBox(height: 12),
           ClipRRect(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             child: Image.asset(
-              AppAssets.mockupIntro,
-              width: 86,
-              height: 66,
+              AppAssets.homeNoLive,
+              height: 100,
+              width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Weitersehen', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 4),
-                Text(
-                  'Borowski und das Haupt der Medusa · 58%',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
+          const SizedBox(height: 12),
+          Text(episode!.title, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _CountdownBox(value: days, label: 'Tage'),
+              const SizedBox(width: 8),
+              _CountdownBox(value: hours, label: 'Std'),
+              const SizedBox(width: 8),
+              _CountdownBox(value: minutes, label: 'Min'),
+            ],
           ),
-          const Icon(Icons.play_circle_fill_rounded, size: 34, color: AppColors.redSoft),
+        ],
+      ),
+    );
+  }
+}
+
+class _CountdownBox extends StatelessWidget {
+  const _CountdownBox({required this.value, required this.label});
+
+  final int value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.black,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.red.withValues(alpha: 0.4)),
+        ),
+        child: Column(
+          children: [
+            Text(
+              value.toString().padLeft(2, '0'),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: AppColors.red,
+              ),
+            ),
+            Text(label, style: Theme.of(context).textTheme.bodyMedium),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PollSummaryCard extends StatelessWidget {
+  const _PollSummaryCard({required this.aggregate});
+
+  final VoteAggregate aggregate;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Letzte Abstimmung',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${aggregate.total} Stimmen',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 12),
+          for (final value in VoteValue.values.reversed)
+            StatBar(
+              label: value.label,
+              emoji: value.emoji,
+              fraction: aggregate.fractionFor(value),
+              color: value.color,
+              count: aggregate.countFor(value),
+            ),
         ],
       ),
     );
@@ -301,30 +272,22 @@ class _ContinueWatchingCard extends StatelessWidget {
 
 class _NewsCard extends StatelessWidget {
   const _NewsCard({required this.item});
-  final HomeNewsItem item;
+
+  final NewsItem item;
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
+    return AppCard(
       child: Row(
         children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: item.color.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(item.icon, color: item.color),
-          ),
+          const Icon(Icons.campaign_outlined, color: AppColors.red),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(item.title, style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 4),
-                Text(item.subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                Text(item.teaser, style: Theme.of(context).textTheme.bodyMedium),
               ],
             ),
           ),
@@ -334,101 +297,31 @@ class _NewsCard extends StatelessWidget {
   }
 }
 
-class _EpisodeCard extends StatelessWidget {
-  const _EpisodeCard({required this.item});
-  final HomeEpisodePreview item;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 220,
-      child: GlassCard(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(item.day, style: Theme.of(context).textTheme.labelLarge),
-            Text(item.title, style: Theme.of(context).textTheme.titleMedium),
-            Text(item.time, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TeamChip extends StatelessWidget {
-  const _TeamChip({
-    required this.team,
-    required this.selected,
+class _QuickLink extends StatelessWidget {
+  const _QuickLink({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
     required this.onTap,
   });
 
-  final HomeTeam team;
-  final bool selected;
+  final IconData icon;
+  final String label;
+  final String subtitle;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GlassCard(
+    return AppCard(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AvatarBubble(color: team.color, icon: Icons.shield_rounded, selected: selected),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(team.name, style: Theme.of(context).textTheme.titleMedium),
-              Text(team.city, style: Theme.of(context).textTheme.bodyMedium),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DiscussionCard extends StatelessWidget {
-  const _DiscussionCard({
-    required this.item,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final HomeDiscussion item;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      onTap: onTap,
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: selected ? AppColors.redSoft : null,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '${item.replies} Antworten · ${item.lastActivity}',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right_rounded),
+          Icon(icon, color: AppColors.red),
+          const SizedBox(height: 8),
+          Text(label, style: Theme.of(context).textTheme.titleMedium),
+          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
         ],
       ),
     );

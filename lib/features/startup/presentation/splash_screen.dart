@@ -37,7 +37,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 18),
                   Text(
-                    'Fall wird vorbereitet …',
+                    'Spurfunk lädt …',
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 14,

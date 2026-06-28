@@ -1,5 +1,5 @@
-name: tatort_liebe_flutter
-description: "A new Flutter project."
+name: spurfunk_flutter
+description: "Spurfunk – Der stille Gast schaut mit. Second-Screen-App für Krimifans."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -35,6 +35,8 @@ dependencies:
   flutter_riverpod: ^3.0.3
   go_router: ^16.3.0
   shared_preferences: ^2.5.3
+  google_fonts: ^6.2.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

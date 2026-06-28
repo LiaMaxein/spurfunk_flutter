@@ -7,8 +7,8 @@ import '../core/theme/app_theme.dart';
 import '../features/settings/application/settings_state.dart';
 import '../features/startup/presentation/splash_screen.dart';
 
-class TatortLiebeApp extends ConsumerWidget {
-  const TatortLiebeApp({super.key});
+class SpurfunkApp extends ConsumerWidget {
+  const SpurfunkApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +17,7 @@ class TatortLiebeApp extends ConsumerWidget {
 
     return bootstrap.when(
       loading: () => MaterialApp(
-        title: 'Tatort Liebe',
+        title: 'Spurfunk',
         debugShowCheckedModeBanner: false,
         themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
         theme: AppTheme.light,
@@ -25,7 +25,7 @@ class TatortLiebeApp extends ConsumerWidget {
         home: const SplashScreen(),
       ),
       error: (error, _) => MaterialApp(
-        title: 'Tatort Liebe',
+        title: 'Spurfunk',
         debugShowCheckedModeBanner: false,
         themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
         theme: AppTheme.light,
@@ -37,7 +37,7 @@ class TatortLiebeApp extends ConsumerWidget {
       data: (_) {
         final router = ref.watch(appRouterProvider);
         return MaterialApp.router(
-          title: 'Tatort Liebe',
+          title: 'Spurfunk',
           debugShowCheckedModeBanner: false,
           themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
           theme: AppTheme.light,

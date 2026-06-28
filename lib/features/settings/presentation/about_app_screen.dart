@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/widgets/app_components.dart';
 import '../../../core/widgets/cinematic_widgets.dart';
 
 class AboutAppScreen extends StatelessWidget {
@@ -11,18 +12,25 @@ class AboutAppScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ScreenTopBar(title: 'Über die App'),
+          const ScreenTopBar(title: 'Über Spurfunk'),
           const SizedBox(height: 18),
-          GlassCard(
+          AppCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Tatort Liebe', style: Theme.of(context).textTheme.titleLarge),
+                Text('Spurfunk', style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 10),
                 Text(
-                  'Ein interaktiver Second-Screen-Prototyp für Live-Krimis. '
-                  'Der Fokus liegt auf Community, Reaktionen und Echtzeitgefühl.',
+                  'Inoffizielles Fan-Projekt. Diese Anwendung steht in keinerlei '
+                  'rechtlicher oder geschäftlicher Verbindung zur ARD oder '
+                  'angeschlossenen Rundfunkanstalten.',
                   style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Second-Screen-Begleiter für Live-Abstimmungen, Community-Chat '
+                  'und Krimi-Noir-Atmosphäre.',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),

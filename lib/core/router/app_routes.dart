@@ -18,37 +18,42 @@ abstract final class AppRoutes {
   static const home = AppRouteData(
     path: '/',
     label: 'Home',
-    icon: Icons.home_rounded,
-  );
-  static const liveEpisode = AppRouteData(
-    path: '/live',
-    label: 'Live',
-    icon: Icons.live_tv_rounded,
+    icon: Icons.home_outlined,
   );
   static const community = AppRouteData(
     path: '/community',
     label: 'Community',
-    icon: Icons.forum_rounded,
+    icon: Icons.groups_outlined,
+  );
+  static const liveEpisode = AppRouteData(
+    path: '/live',
+    label: 'Live',
+    icon: Icons.sensors_outlined,
+  );
+  static const facts = AppRouteData(
+    path: '/facts',
+    label: 'Fakten',
+    icon: Icons.folder_outlined,
   );
   static const profile = AppRouteData(
     path: '/profile',
     label: 'Profil',
-    icon: Icons.person_rounded,
+    icon: Icons.person_outline,
   );
 
-  // Standalone (not part of bottom navigation)
   static const votingPath = '/voting';
   static const statisticsPath = '/statistics';
+  static const liveCasePath = '/live/case';
 
-  // Nested under profile (not part of bottom navigation)
   static const profileSettingsPath = '/profile/settings';
   static const profileSettingsAboutPath = '/profile/settings/about';
   static const profileSettingsPrivacyPath = '/profile/settings/privacy';
 
   static const navigationRoutes = [
     home,
-    liveEpisode,
     community,
+    liveEpisode,
+    facts,
     profile,
   ];
 }

@@ -15,6 +15,9 @@ class UserPreferences {
   static const _anonymousMode = 'anonymous_mode';
   static const _notificationsEnabled = 'notifications_enabled';
   static const _darkModeEnabled = 'dark_mode_enabled';
+  static const _reducedMotion = 'reduced_motion';
+  static const _highContrast = 'high_contrast';
+  static const _largeText = 'large_text';
 
   bool get onboardingCompleted =>
       _prefs.getBool(_onboardingCompleted) ?? false;
@@ -26,6 +29,9 @@ class UserPreferences {
   bool get anonymousMode => _prefs.getBool(_anonymousMode) ?? true;
   bool get notificationsEnabled => _prefs.getBool(_notificationsEnabled) ?? true;
   bool get darkModeEnabled => _prefs.getBool(_darkModeEnabled) ?? true;
+  bool get reducedMotion => _prefs.getBool(_reducedMotion) ?? false;
+  bool get highContrast => _prefs.getBool(_highContrast) ?? false;
+  bool get largeText => _prefs.getBool(_largeText) ?? false;
 
   Future<void> setOnboardingCompleted(bool value) =>
       _prefs.setBool(_onboardingCompleted, value);
@@ -42,6 +48,14 @@ class UserPreferences {
 
   Future<void> setDarkModeEnabled(bool value) =>
       _prefs.setBool(_darkModeEnabled, value);
+
+  Future<void> setReducedMotion(bool value) =>
+      _prefs.setBool(_reducedMotion, value);
+
+  Future<void> setHighContrast(bool value) =>
+      _prefs.setBool(_highContrast, value);
+
+  Future<void> setLargeText(bool value) => _prefs.setBool(_largeText, value);
 }
 
 final userPreferencesProvider = Provider<UserPreferences>((ref) {

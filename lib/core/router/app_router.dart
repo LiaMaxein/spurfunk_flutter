@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/community/presentation/community_screen.dart';
+import '../../features/facts/presentation/facts_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/live_episode/presentation/live_episode_screen.dart';
 import '../../features/onboarding/application/onboarding_state.dart';
@@ -62,12 +63,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
+            path: AppRoutes.community.path,
+            builder: (context, state) => const CommunityScreen(),
+          ),
+          GoRoute(
             path: AppRoutes.liveEpisode.path,
             builder: (context, state) => const LiveEpisodeScreen(),
           ),
           GoRoute(
-            path: AppRoutes.community.path,
-            builder: (context, state) => const CommunityScreen(),
+            path: AppRoutes.facts.path,
+            builder: (context, state) => const FactsScreen(),
           ),
           GoRoute(
             path: AppRoutes.profile.path,

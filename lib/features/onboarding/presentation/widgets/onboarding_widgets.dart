@@ -84,14 +84,20 @@ class OnboardingBrand extends StatelessWidget {
               context,
             ).textTheme.headlineLarge?.copyWith(fontSize: large ? 46 : 30),
             children: const [
-              TextSpan(text: 'Tatort-'),
-              TextSpan(
-                text: 'Liebe',
-                style: TextStyle(color: AppColors.redSoft),
-              ),
+              TextSpan(text: 'SPURFUNK'),
             ],
           ),
         ),
+        if (large)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              'Der stille Gast schaut mit.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.red,
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -155,7 +161,7 @@ class AvatarCaseCard extends StatefulWidget {
     super.key,
   });
 
-  final TatortAvatarPreset avatar;
+  final RoleAvatarPreset avatar;
   final bool selected;
   final VoidCallback onTap;
 
@@ -236,11 +242,7 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
               Text(
                 widget.avatar.name,
                 style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                widget.avatar.role,
-                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
               ),
             ],
           ),

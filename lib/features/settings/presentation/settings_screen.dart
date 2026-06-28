@@ -14,6 +14,9 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifications = ref.watch(notificationsEnabledProvider);
     final darkMode = ref.watch(darkModeEnabledProvider);
+    final reducedMotion = ref.watch(reducedMotionProvider);
+    final highContrast = ref.watch(highContrastProvider);
+    final largeText = ref.watch(largeTextProvider);
 
     return CinematicPage(
       child: Column(
@@ -30,10 +33,31 @@ class SettingsScreen extends ConsumerWidget {
           ),
           _SwitchTile(
             icon: Icons.brightness_6_outlined,
-            title: 'App-Design',
+            title: 'Dunkles Design',
             value: darkMode,
             onChanged: (value) =>
                 ref.read(darkModeEnabledProvider.notifier).setValue(value),
+          ),
+          _SwitchTile(
+            icon: Icons.animation_outlined,
+            title: 'Animationen reduzieren',
+            value: reducedMotion,
+            onChanged: (value) =>
+                ref.read(reducedMotionProvider.notifier).setValue(value),
+          ),
+          _SwitchTile(
+            icon: Icons.contrast_outlined,
+            title: 'Erhöhter Kontrast',
+            value: highContrast,
+            onChanged: (value) =>
+                ref.read(highContrastProvider.notifier).setValue(value),
+          ),
+          _SwitchTile(
+            icon: Icons.text_fields_outlined,
+            title: 'Größere Schrift',
+            value: largeText,
+            onChanged: (value) =>
+                ref.read(largeTextProvider.notifier).setValue(value),
           ),
           _SettingsTile(
             icon: Icons.lock_outline_rounded,
@@ -42,7 +66,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           _SettingsTile(
             icon: Icons.info_outline_rounded,
-            title: 'Über Tatort-Liebe',
+            title: 'Über Spurfunk',
             onTap: () => context.go(AppRoutes.profileSettingsAboutPath),
           ),
           _SwitchTile(

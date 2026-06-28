@@ -64,7 +64,7 @@ const liveEpisodeDemo = LiveEpisodeInfo(
   title: 'Borowski und das Haupt der Medusa',
   station: 'ARD · Das Erste',
   subtitle: 'Krimi im Norden – Live mit der Community',
-  heroAsset: AppAssets.mockupIntro,
+  heroAsset: AppAssets.heroEpisode,
   remainingMinutes: 32,
 );
 

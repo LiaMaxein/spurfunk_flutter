@@ -3,68 +3,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/persistence/user_preferences.dart';
 import '../../../core/router/router_refresh.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../shared/mock_data/mock_data.dart';
 
-class TatortAvatarPreset {
-  const TatortAvatarPreset({
+class RoleAvatarPreset {
+  const RoleAvatarPreset({
     required this.id,
     required this.name,
-    required this.role,
     required this.icon,
     required this.colors,
   });
 
   final String id;
   final String name;
-  final String role;
   final IconData icon;
   final List<Color> colors;
 }
 
-const avatarPresets = [
-  TatortAvatarPreset(
-    id: 'kommissarin',
-    name: 'Die Kommissarin',
-    role: 'Analytisch · ruhig · messerscharf',
-    icon: Icons.manage_search_rounded,
-    colors: [AppColors.red, AppColors.redDark],
-  ),
-  TatortAvatarPreset(
-    id: 'profiler',
-    name: 'Der Profiler',
-    role: 'True-Crime-Instinkt mit Herz',
-    icon: Icons.psychology_alt_rounded,
-    colors: [Color(0xFF6B4BCE), Color(0xFF241B55)],
-  ),
-  TatortAvatarPreset(
-    id: 'spurensicherung',
-    name: 'Spurensicherung',
-    role: 'Sieht Details, die andere verpassen',
-    icon: Icons.fingerprint_rounded,
-    colors: [Color(0xFF1F8AAE), Color(0xFF082E47)],
-  ),
-  TatortAvatarPreset(
-    id: 'nachtfalke',
-    name: 'Nachtfalke',
-    role: 'Noir-Vibes, leise Beobachtung',
-    icon: Icons.visibility_rounded,
-    colors: [Color(0xFF293241), Color(0xFF070B12)],
-  ),
-  TatortAvatarPreset(
-    id: 'herzzeuge',
-    name: 'Herzzeuge',
-    role: 'Emotional, loyal, immer live dabei',
-    icon: Icons.favorite_rounded,
-    colors: [AppColors.redSoft, Color(0xFF5D0B22)],
-  ),
-  TatortAvatarPreset(
-    id: 'aktenkind',
-    name: 'Aktenkind',
-    role: 'Verspielt, neugierig, spoilerfrei',
-    icon: Icons.folder_special_rounded,
-    colors: [AppColors.orange, Color(0xFF4B2108)],
-  ),
-];
+List<RoleAvatarPreset> get avatarPresets => roleAvatarPresets
+    .map(
+      (r) => RoleAvatarPreset(
+        id: r.id,
+        name: r.name,
+        icon: r.icon,
+        colors: r.colors,
+      ),
+    )
+    .toList();
 
 final onboardingCompletedProvider =
     NotifierProvider<OnboardingCompletedNotifier, bool>(
@@ -135,7 +99,7 @@ class AnonymousModeNotifier extends Notifier<bool> {
   }
 }
 
-final selectedAvatarProvider = Provider<TatortAvatarPreset>((ref) {
+final selectedAvatarProvider = Provider<RoleAvatarPreset>((ref) {
   final selectedId = ref.watch(selectedAvatarIdProvider);
   return avatarPresets.firstWhere(
     (avatar) => avatar.id == selectedId,
@@ -148,8 +112,13 @@ final displayNameProvider = Provider<String>((ref) {
   final username = ref.watch(usernameProvider).trim();
 
   if (anonymous || username.isEmpty) {
-    return 'TatortFan_22';
+    return 'Mitwisser';
   }
 
   return username;
+});
+
+final symbolicAvatarProvider = Provider((ref) {
+  final roleId = ref.watch(selectedAvatarIdProvider);
+  return symbolicAvatarForRole(roleId);
 });
