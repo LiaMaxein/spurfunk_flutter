@@ -14,10 +14,12 @@ abstract class EpisodeRepository {
 }
 
 abstract class VoteRepository {
-  Future<void> submitVote(String episodeId, VoteValue value);
+  Future<bool> submitVote(String episodeId, VoteValue value);
   Stream<VoteAggregate> watchVoteAggregate(String episodeId);
   Future<VoteAggregate> getVoteAggregate(String episodeId, VoteFilter filter);
   Future<bool> hasVoted(String episodeId);
+  Future<Duration?> voteCooldownRemaining(String episodeId);
+  Future<VoteValue?> lastVote(String episodeId);
 }
 
 abstract class ChatRepository {

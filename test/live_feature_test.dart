@@ -159,7 +159,13 @@ class _FakeVoteRepository implements VoteRepository {
   Future<bool> hasVoted(String episodeId) async => false;
 
   @override
-  Future<void> submitVote(String episodeId, VoteValue value) async {}
+  Future<bool> submitVote(String episodeId, VoteValue value) async => true;
+
+  @override
+  Future<Duration?> voteCooldownRemaining(String episodeId) async => null;
+
+  @override
+  Future<VoteValue?> lastVote(String episodeId) async => null;
 
   @override
   Stream<VoteAggregate> watchVoteAggregate(String episodeId) async* {

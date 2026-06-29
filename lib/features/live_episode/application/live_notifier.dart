@@ -146,9 +146,23 @@ class LiveNotifier extends Notifier<LiveUiState> {
 
   Future<void> submitVote(VoteValue value) async {
     final id = _episodeId;
-    if (id == null || state.hasVoted || !state.votingOpen) return;
-    await ref.read(voteRepositoryProvider).submitVote(id, value);
-    state = state.copyWith(hasVoted: true, selectedVote: value);
+    if (id == null || !state.votingOpen) return;
+    final remaining = await ref.read(voteRepositoryProvider).voteCooldownRemaining(id);
+    if (remaining != null) {
+      final minutes = remaining.inMinutes.clamp(1, 30);
+      state = state.copyWith(
+        rateLimitHint:
+            'Du hast vor Kurzem abgestimmt. Nächste Stimme in ca. $minutes Min.',
+      );
+      return;
+    }
+    final ok = await ref.read(voteRepositoryProvider).submitVote(id, value);
+    if (!ok) return;
+    state = state.copyWith(
+      hasVoted: true,
+      selectedVote: value,
+      rateLimitHint: null,
+    );
   }
 
   Future<void> sendMessage(String text) async {

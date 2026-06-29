@@ -5,6 +5,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/spurfunk_branding_widgets.dart';
 import '../../data/profile_models.dart';
 
+const _heroTextStroke = <Shadow>[
+  Shadow(color: Colors.black, offset: Offset(-1, -1)),
+  Shadow(color: Colors.black, offset: Offset(1, -1)),
+  Shadow(color: Colors.black, offset: Offset(-1, 1)),
+  Shadow(color: Colors.black, offset: Offset(1, 1)),
+  Shadow(color: Colors.black, blurRadius: 8),
+];
+
 class ProfileIdentityRow extends StatelessWidget {
   const ProfileIdentityRow({
     required this.avatarAssetPath,
@@ -80,6 +88,7 @@ class ProfileIdentityRow extends StatelessWidget {
                   fontSize: 28,
                   color: AppColors.textPrimary,
                   letterSpacing: 0.8,
+                  shadows: _heroTextStroke,
                 ),
               ),
               const SizedBox(height: 4),
@@ -87,6 +96,8 @@ class ProfileIdentityRow extends StatelessWidget {
                 progress.title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppColors.red,
+                  fontWeight: FontWeight.w600,
+                  shadows: _heroTextStroke,
                 ),
               ),
               const SizedBox(height: 8),

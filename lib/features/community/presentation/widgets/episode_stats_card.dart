@@ -152,6 +152,17 @@ class EpisodeStatsCard extends StatelessWidget {
   }
 }
 
+/// Maps live episode ids to the matching community stats entry.
+String communityStatsEpisodeIdFor(String episodeId) {
+  switch (episodeId) {
+    case 'ep-live-demo':
+    case 'ep-live':
+      return 'ep-past-3';
+    default:
+      return episodeId;
+  }
+}
+
 void openEpisodeStatsDetail(BuildContext context, String episodeId) {
   context.push('/community/stats/$episodeId');
 }

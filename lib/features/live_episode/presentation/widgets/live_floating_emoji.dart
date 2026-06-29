@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
+
 class LiveFloatingEmoji extends StatefulWidget {
   const LiveFloatingEmoji({
     required this.emoji,
@@ -45,7 +47,13 @@ class _LiveFloatingEmojiState extends State<LiveFloatingEmoji>
           bottom: 144 + t * (media.height * 0.35),
           child: Opacity(
             opacity: 1 - t,
-            child: Text(widget.emoji, style: const TextStyle(fontSize: 28)),
+            child: widget.emoji == '❤️'
+                ? const Icon(
+                    Icons.favorite,
+                    color: AppColors.red,
+                    size: 28,
+                  )
+                : Text(widget.emoji, style: const TextStyle(fontSize: 28)),
           ),
         );
       },

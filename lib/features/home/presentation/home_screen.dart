@@ -14,7 +14,9 @@ import '../../../core/widgets/app_components.dart';
 import '../../../core/widgets/episode_countdown.dart';
 import '../../../core/widgets/voting_widgets.dart';
 import '../../../shared/models/models.dart';
+import '../../community/presentation/widgets/episode_stats_card.dart';
 import '../application/home_notifier.dart';
+import '../../../shared/repositories/repository_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -33,6 +35,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       data: (home) => AppScaffold(
         header: SpurfunkHeader(
+          logoHeight: 52,
           trailing: IconButton(
             onPressed: () {},
             icon: const Badge(
@@ -52,6 +55,7 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             if (home.isLive && home.liveVoteAggregate != null)
               _ActivePollCard(
+                episodeId: home.currentEpisode!.id,
                 aggregate: home.liveVoteAggregate!,
                 pollEndsAt: home.pollEndsAt,
               )
@@ -180,7 +184,7 @@ class _LiveHeroBannerState extends State<_LiveHeroBanner> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: SizedBox(
-          height: 248,
+          height: 158,
           width: double.infinity,
           child: Stack(
             fit: StackFit.expand,
@@ -188,6 +192,7 @@ class _LiveHeroBannerState extends State<_LiveHeroBanner> {
               Image.asset(
                 AppAssets.homeLiveHero,
                 fit: BoxFit.cover,
+                alignment: const Alignment(0, -0.35),
               ),
               DecoratedBox(
                 decoration: BoxDecoration(
@@ -203,60 +208,65 @@ class _LiveHeroBannerState extends State<_LiveHeroBanner> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
+                        horizontal: 8,
+                        vertical: 3,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.red,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        'LIVE JETZT',
+                        'JETZT LIVE',
                         style: GoogleFonts.inter(
-                          fontSize: 11,
+                          fontSize: 10,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
-                          letterSpacing: 0.6,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 4),
                     Text(
                       widget.episode.title,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontSize: 20,
+                        fontSize: 16,
                         color: Colors.white,
+                        height: 1.15,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       '${widget.episode.sender} · seit '
                       '${DateFormat.Hm().format(widget.episode.startsAt)} Uhr',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 12,
+                      ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 4),
                     Text(
                       'Verbleibende Zeit',
                       style: GoogleFonts.inter(
-                        fontSize: 12,
+                        fontSize: 9,
                         fontWeight: FontWeight.w600,
                         color: AppColors.red,
+                        height: 1,
                       ),
                     ),
                     Text(
                       _formatCountdown(_remaining),
                       style: GoogleFonts.bebasNeue(
-                        fontSize: 36,
+                        fontSize: 20,
                         color: Colors.white,
-                        letterSpacing: 2,
+                        letterSpacing: 1.2,
+                        height: 0.95,
                       ),
                     ),
                   ],
@@ -380,28 +390,45 @@ class _NextEpisodeCountdownCardState extends State<_NextEpisodeCountdownCard> {
   }
 }
 
-class _ActivePollCard extends StatefulWidget {
+class _ActivePollCard extends ConsumerStatefulWidget {
   const _ActivePollCard({
+    required this.episodeId,
     required this.aggregate,
     this.pollEndsAt,
   });
 
+  final String episodeId;
   final VoteAggregate aggregate;
   final DateTime? pollEndsAt;
 
   @override
-  State<_ActivePollCard> createState() => _ActivePollCardState();
+  ConsumerState<_ActivePollCard> createState() => _ActivePollCardState();
 }
 
-class _ActivePollCardState extends State<_ActivePollCard> {
+class _ActivePollCardState extends ConsumerState<_ActivePollCard> {
   late Timer _timer;
   Duration _pollRemaining = Duration.zero;
+  VoteValue? _selectedVote;
+  String? _feedback;
+  String? _hint;
+  bool _loadingVote = true;
 
   @override
   void initState() {
     super.initState();
     _tick();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadVoteState());
+  }
+
+  Future<void> _loadVoteState() async {
+    final repo = ref.read(voteRepositoryProvider);
+    final last = await repo.lastVote(widget.episodeId);
+    if (!mounted) return;
+    setState(() {
+      _selectedVote = last;
+      _loadingVote = false;
+    });
   }
 
   void _tick() {
@@ -420,6 +447,30 @@ class _ActivePollCardState extends State<_ActivePollCard> {
     final m = d.inMinutes;
     final s = d.inSeconds % 60;
     return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> _onVote(VoteValue value) async {
+    final repo = ref.read(voteRepositoryProvider);
+    final cooldown = await repo.voteCooldownRemaining(widget.episodeId);
+    if (cooldown != null) {
+      final minutes = cooldown.inMinutes.clamp(1, 30);
+      setState(() {
+        _hint =
+            'Du hast vor Kurzem abgestimmt. Nächste Stimme in ca. $minutes Min.';
+        _feedback = null;
+      });
+      return;
+    }
+
+    final ok = await repo.submitVote(widget.episodeId, value);
+    if (!ok || !mounted) return;
+
+    setState(() {
+      _selectedVote = value;
+      _feedback = 'Deine Stimme wurde gezählt: ${value.label} ${value.emoji}';
+      _hint = null;
+    });
+    ref.invalidate(homeNotifierProvider);
   }
 
   @override
@@ -441,65 +492,204 @@ class _ActivePollCardState extends State<_ActivePollCard> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Text(
             'Wie gefällt dir der aktuelle Tatort?',
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontSize: 15,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 4),
+          Text(
+            'Tippe ein Emoji – du kannst alle 30 Minuten einmal abstimmen.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 11,
+              color: AppColors.textMuted,
+            ),
+          ),
+          const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               for (final value in VoteValue.values)
                 Expanded(
-                  child: Column(
-                    children: [
-                      Text(value.emoji, style: const TextStyle(fontSize: 26)),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${(widget.aggregate.fractionFor(value) * 100).round()}%',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 11,
-                        ),
-                      ),
-                      Text(
-                        value.label,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 9,
-                          color: AppColors.textMuted,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  child: _LiveVoteOption(
+                    value: value,
+                    percent: widget.aggregate.fractionFor(value),
+                    selected: _selectedVote == value,
+                    enabled: !_loadingVote,
+                    onTap: () => _onVote(value),
                   ),
                 ),
             ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              const Icon(Icons.groups_outlined, color: AppColors.red, size: 18),
-              const SizedBox(width: 6),
-              Text(
-                'LIVE-ERGEBNISSE',
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.red,
+          if (_feedback != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.green.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColors.green.withValues(alpha: 0.35),
                 ),
               ),
-              const Spacer(),
-              Text(
-                '${widget.aggregate.total} haben abgestimmt',
-                style: Theme.of(context).textTheme.bodyMedium,
+              child: Row(
+                children: [
+                  const Icon(Icons.check_circle_outline, color: AppColors.green, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _feedback!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
+          ],
+          if (_hint != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceHigh,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.divider),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.info_outline, color: AppColors.red, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _hint!,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          const SizedBox(height: 10),
+          InkWell(
+            onTap: () => openEpisodeStatsDetail(
+              context,
+              communityStatsEpisodeIdFor(widget.episodeId),
+            ),
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Row(
+                children: [
+                  const Icon(Icons.groups_outlined, color: AppColors.red, size: 18),
+                  const SizedBox(width: 6),
+                  Text(
+                    'LIVE-ERGEBNISSE',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.red,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${widget.aggregate.total} haben abgestimmt',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.textMuted,
+                    size: 18,
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           VoteSegmentBar(aggregate: widget.aggregate),
         ],
+      ),
+    );
+  }
+}
+
+class _LiveVoteOption extends StatelessWidget {
+  const _LiveVoteOption({
+    required this.value,
+    required this.percent,
+    required this.selected,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final VoteValue value;
+  final double percent;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: '${value.label} bewerten',
+      button: true,
+      child: GestureDetector(
+        onTap: enabled ? onTap : null,
+        child: Opacity(
+          opacity: enabled ? 1 : 0.5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  width: 46,
+                  height: 46,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? value.color.withValues(alpha: 0.18)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: selected ? value.color : Colors.transparent,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Text(value.emoji, style: const TextStyle(fontSize: 30)),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  value.label,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontSize: 10,
+                    color: AppColors.textPrimary,
+                    height: 1.1,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  '${(percent * 100).round()}%',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 10,
+                    color: AppColors.textMuted,
+                    height: 1.1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

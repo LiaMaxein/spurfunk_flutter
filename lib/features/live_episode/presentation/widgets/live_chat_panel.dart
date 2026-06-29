@@ -25,6 +25,7 @@ class LiveChatPanel extends StatelessWidget {
   final VoidCallback onClearHint;
 
   static const quickEmojis = ['❤️', '😂', '😮', '😢', '😡', '🔥'];
+  static const heartReaction = '❤️';
 
   @override
   Widget build(BuildContext context) {
@@ -59,28 +60,31 @@ class LiveChatPanel extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
-              child: Row(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  const LiveBadge(pulsing: true),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Mitwisser-Chat',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text(
-                          '${state.onlineCount} online',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: LiveBadge(pulsing: true),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.group_add_outlined),
-                    color: AppColors.textPrimary,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Mitwisser-Chat',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        '${state.onlineCount} online',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -108,24 +112,27 @@ class LiveChatPanel extends StatelessWidget {
                           final msg = state.messages[index];
                           final avatar = avatarForMessage(msg);
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.only(bottom: 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SpurfunkAvatar(
                                   assetPath: avatar.assetPath,
-                                  size: 38,
-                                  padding: 4,
+                                  size: 32,
+                                  padding: 3,
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: Container(
-                                    padding: const EdgeInsets.all(12),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: AppColors.surface.withValues(
                                         alpha: 0.92,
                                       ),
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
@@ -139,7 +146,9 @@ class LiveChatPanel extends StatelessWidget {
                                                 style:
                                                     Theme.of(
                                                       context,
-                                                    ).textTheme.titleMedium,
+                                                    ).textTheme.titleMedium?.copyWith(
+                                                      fontSize: 12,
+                                                    ),
                                               ),
                                             ),
                                             Text(
@@ -147,17 +156,20 @@ class LiveChatPanel extends StatelessWidget {
                                               style:
                                                   Theme.of(
                                                     context,
-                                                  ).textTheme.bodyMedium,
+                                                  ).textTheme.bodyMedium?.copyWith(
+                                                    fontSize: 11,
+                                                  ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 4),
+                                        const SizedBox(height: 3),
                                         Text(
                                           msg.content,
                                           style:
                                               Theme.of(
                                                 context,
-                                              ).textTheme.bodyLarge?.copyWith(
+                                              ).textTheme.bodyMedium?.copyWith(
+                                                fontSize: 13,
                                                 color: AppColors.textPrimary,
                                               ),
                                         ),
@@ -200,7 +212,29 @@ class LiveChatPanel extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (final emoji in quickEmojis)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: InkWell(
+                        onTap: () => onReaction(heartReaction),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          width: 48,
+                          height: 42,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: AppColors.divider),
+                          ),
+                          child: const Icon(
+                            Icons.favorite,
+                            color: AppColors.red,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                    ),
+                    for (final emoji in quickEmojis.skip(1))
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: InkWell(

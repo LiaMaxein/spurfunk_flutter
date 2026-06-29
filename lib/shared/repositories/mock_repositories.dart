@@ -99,12 +99,42 @@ class MockVoteRepository implements VoteRepository {
   final SharedPreferences _prefs;
   final _controllers = <String, StreamController<VoteAggregate>>{};
 
+  static const voteCooldown = Duration(minutes: 30);
+
+  String _voteKey(String episodeId) => 'vote_$episodeId';
+  String _voteAtKey(String episodeId) => 'vote_${episodeId}_at';
+
   @override
-  Future<void> submitVote(String episodeId, VoteValue value) async {
-    final key = 'vote_$episodeId';
-    if (_prefs.containsKey(key)) return;
-    await _prefs.setString(key, value.name);
+  Future<bool> submitVote(String episodeId, VoteValue value) async {
+    if (await voteCooldownRemaining(episodeId) != null) return false;
+    await _prefs.setString(_voteKey(episodeId), value.name);
+    await _prefs.setInt(
+      _voteAtKey(episodeId),
+      DateTime.now().millisecondsSinceEpoch,
+    );
     _emit(episodeId);
+    return true;
+  }
+
+  @override
+  Future<Duration?> voteCooldownRemaining(String episodeId) async {
+    final atMs = _prefs.getInt(_voteAtKey(episodeId));
+    if (atMs == null) return null;
+    final elapsed = DateTime.now().difference(
+      DateTime.fromMillisecondsSinceEpoch(atMs),
+    );
+    if (elapsed >= voteCooldown) return null;
+    return voteCooldown - elapsed;
+  }
+
+  @override
+  Future<VoteValue?> lastVote(String episodeId) async {
+    final name = _prefs.getString(_voteKey(episodeId));
+    if (name == null) return null;
+    for (final value in VoteValue.values) {
+      if (value.name == name) return value;
+    }
+    return null;
   }
 
   @override
@@ -125,8 +155,9 @@ class MockVoteRepository implements VoteRepository {
       mockAggregateFor(episodeId, filter: filter);
 
   @override
-  Future<bool> hasVoted(String episodeId) async =>
-      _prefs.containsKey('vote_$episodeId');
+  Future<bool> hasVoted(String episodeId) async {
+    return await voteCooldownRemaining(episodeId) != null;
+  }
 
   void _emit(String episodeId) {
     final aggregate = mockAggregateFor(episodeId);
