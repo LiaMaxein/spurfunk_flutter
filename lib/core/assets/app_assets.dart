@@ -8,6 +8,7 @@ abstract final class AppAssets {
   static const splashNoirCouple = '$_photos/splash_noir_couple.png';
   static const communityNoirHero = '$_photos/community_noir_hero.png';
   static const homeLiveHero = '$_photos/home_live_hero.png';
+  static const factsPageHero = homeLiveHero;
   static const communityHero = communityNoirHero;
   static const liveCaseKielNoirHero = '$_photos/live_case_kiel_noir_hero.png';
   static const episodeSchattenUeberKiel = '$_photos/episode_schatten_ueber_kiel.png';

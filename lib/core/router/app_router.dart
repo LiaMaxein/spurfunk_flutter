@@ -7,6 +7,7 @@ import '../../features/community/presentation/episode_stats_detail_screen.dart';
 import '../../features/facts/presentation/facts_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/live_episode/presentation/investigator_detail_screen.dart';
+import '../../features/live_episode/presentation/team_detail_screen.dart';
 import '../../features/live_episode/presentation/live_episode_screen.dart';
 import '../../features/onboarding/application/onboarding_state.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
@@ -87,11 +88,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       investigatorId: state.pathParameters['investigatorId']!,
                     ),
               ),
+              GoRoute(
+                path: 'team-detail/:teamId',
+                builder: (context, state) => TeamDetailScreen(
+                  teamId: state.pathParameters['teamId']!,
+                ),
+              ),
             ],
           ),
           GoRoute(
             path: AppRoutes.facts.path,
-            builder: (context, state) => const FactsScreen(),
+            builder: (context, state) => FactsScreen(
+              initialTab: state.uri.queryParameters['tab'],
+            ),
           ),
           GoRoute(
             path: AppRoutes.profile.path,
