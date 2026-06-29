@@ -1,51 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/assets/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/cinematic_widgets.dart';
-import '../../onboarding/presentation/widgets/onboarding_widgets.dart';
+import '../../../core/widgets/spurfunk_branding_widgets.dart';
+import '../../../core/widgets/spurfunk_loader.dart';
 
-/// Shown while [appBootstrapProvider] hydrates local preferences.
+/// Shown while [appBootstrapProvider] hydrates local preferences (min. 5s).
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: AppColors.black,
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          const Positioned.fill(child: CinematicBackdrop()),
-          Center(
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.85, end: 1),
-              duration: const Duration(milliseconds: 680),
-              curve: Curves.easeOutCubic,
-              builder: (context, scale, child) {
-                return Transform.scale(scale: scale, child: child);
-              },
-              child: const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  OnboardingBrand(large: true),
-                  SizedBox(height: 36),
-                  SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.4,
-                      color: AppColors.redSoft,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: MediaQuery.sizeOf(context).height * 0.42,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  AppAssets.splashNoirCouple,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.bottomCenter,
+                ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppColors.black,
+                        AppColors.black.withValues(alpha: 0.85),
+                        Colors.transparent,
+                      ],
+                      stops: const [0, 0.35, 0.7],
                     ),
                   ),
-                  SizedBox(height: 18),
-                  Text(
-                    'Spurfunk lädt …',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14,
-                      letterSpacing: 0.2,
-                    ),
+                ),
+              ],
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 48),
+                const SpurfunkLogo(
+                  variant: SpurfunkLogoVariant.withClaim,
+                  height: 132,
+                ),
+                const SizedBox(height: 28),
+                Text(
+                  'Gemeinsam schauen.\nGemeinsam rätseln.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.textPrimary,
+                    height: 1.45,
                   ),
-                ],
-              ),
+                ),
+                const Spacer(),
+                const SpurfunkArcLoader(),
+                const SizedBox(height: 36),
+              ],
             ),
           ),
         ],

@@ -6,6 +6,7 @@ import '../../../core/layout/app_shell.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_components.dart';
+import '../../../core/widgets/spurfunk_branding_widgets.dart';
 import '../../../shared/mock_data/mock_data.dart';
 import '../../onboarding/application/onboarding_state.dart';
 
@@ -15,7 +16,6 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final role = ref.watch(selectedAvatarProvider);
-    final symbolic = ref.watch(symbolicAvatarProvider);
     final displayName = ref.watch(displayNameProvider);
     final anonymous = ref.watch(anonymousModeProvider);
 
@@ -33,10 +33,10 @@ class ProfileScreen extends ConsumerWidget {
           Center(
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 48,
-                  backgroundColor: symbolic.color,
-                  child: Icon(symbolic.icon, size: 40, color: Colors.white),
+                SpurfunkAvatar(
+                  assetPath: role.assetPath,
+                  size: 96,
+                  padding: 12,
                 ),
                 const SizedBox(height: 12),
                 Text(displayName, style: Theme.of(context).textTheme.headlineMedium),
@@ -93,11 +93,13 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
+            runSpacing: 8,
             children: [
               for (final avatar in symbolicAvatars)
-                CircleAvatar(
-                  backgroundColor: avatar.color,
-                  child: Icon(avatar.icon, color: Colors.white, size: 18),
+                SpurfunkAvatar(
+                  assetPath: avatar.assetPath,
+                  size: 40,
+                  padding: 4,
                 ),
             ],
           ),

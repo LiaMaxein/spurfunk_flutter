@@ -35,7 +35,7 @@ class MockAuthRepository implements AuthRepository {
   @override
   Future<UserProfile?> getCurrentProfile() async {
     final alias = _prefs.getString('username');
-    final avatarId = _prefs.getString('avatar_id') ?? 'kommissar';
+    final avatarId = _prefs.getString('avatar_id') ?? 'laterne';
     final anonymous = _prefs.getBool('anonymous_mode') ?? true;
     if (!(_prefs.getBool('onboarding_completed') ?? false)) return null;
     return UserProfile(
@@ -288,7 +288,7 @@ class MockCommunityStatsRepository implements CommunityStatsRepository {
       return PastEpisodeStats(
         episode: ep,
         aggregate: agg,
-        averageLabel: 'Gut',
+        averageLabel: averageLabelForAggregate(agg),
       );
     }).toList();
   }

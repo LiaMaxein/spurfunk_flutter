@@ -36,7 +36,7 @@ void main() {
     );
 
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 900));
+    await tester.pump(const Duration(seconds: 6));
 
     expect(find.text('Los geht’s'), findsOneWidget);
   });

@@ -11,5 +11,5 @@ final appBootstrapProvider = FutureProvider<void>((ref) async {
   ref.read(anonymousModeProvider);
   ref.read(notificationsEnabledProvider);
   ref.read(darkModeEnabledProvider);
-  await Future<void>.delayed(const Duration(milliseconds: 520));
+  await Future<void>.delayed(const Duration(seconds: 5));
 });

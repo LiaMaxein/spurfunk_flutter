@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cinematic_widgets.dart';
-import '../../application/onboarding_state.dart';
+import '../../../../core/widgets/spurfunk_branding_widgets.dart';
+import '../../../../shared/mock_data/mock_data.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   const OnboardingScaffold({required this.child, super.key});
@@ -43,62 +44,11 @@ class OnboardingBrand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: large ? 92 : 62,
-          height: large ? 92 : 62,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              colors: [AppColors.red, AppColors.redDark],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.red.withValues(alpha: 0.42),
-                blurRadius: 34,
-                spreadRadius: 3,
-              ),
-            ],
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(
-                Icons.gps_fixed_rounded,
-                color: Colors.white,
-                size: large ? 58 : 40,
-              ),
-              Icon(
-                Icons.favorite_rounded,
-                color: Colors.white,
-                size: large ? 30 : 20,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-        RichText(
-          text: TextSpan(
-            style: Theme.of(
-              context,
-            ).textTheme.headlineLarge?.copyWith(fontSize: large ? 46 : 30),
-            children: const [
-              TextSpan(text: 'SPURFUNK'),
-            ],
-          ),
-        ),
-        if (large)
-          Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Text(
-              'Der stille Gast schaut mit.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.red,
-              ),
-            ),
-          ),
-      ],
+    return SpurfunkLogo(
+      variant: large
+          ? SpurfunkLogoVariant.withClaim
+          : SpurfunkLogoVariant.horizontal,
+      height: large ? 120 : 48,
     );
   }
 }
@@ -187,7 +137,7 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
         curve: Curves.easeOutCubic,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 240),
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: AppColors.surfaceHigh.withValues(
               alpha: selected ? 0.92 : 0.7,
@@ -210,39 +160,56 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
                 : kEmptyBoxShadow,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 58,
-                    height: 58,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(colors: widget.avatar.colors),
+              SizedBox(
+                height: 48,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Align(
+                      child: SpurfunkAvatar(
+                        assetPath: widget.avatar.assetPath,
+                        size: 46,
+                        padding: 5,
+                      ),
                     ),
-                    child: Icon(
-                      widget.avatar.icon,
-                      color: Colors.white,
-                      size: 31,
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: AnimatedOpacity(
+                        opacity: selected ? 1 : 0,
+                        duration: const Duration(milliseconds: 180),
+                        child: const Icon(
+                          Icons.check_circle_rounded,
+                          color: AppColors.redSoft,
+                          size: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  AnimatedOpacity(
-                    opacity: selected ? 1 : 0,
-                    duration: const Duration(milliseconds: 180),
-                    child: const Icon(
-                      Icons.check_circle_rounded,
-                      color: AppColors.redSoft,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Text(
                 widget.avatar.name,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: 13,
+                    ),
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                widget.avatar.description,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 10,
+                      height: 1.25,
+                    ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

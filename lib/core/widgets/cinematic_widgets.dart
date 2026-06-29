@@ -55,30 +55,7 @@ class CinematicBackdrop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: RadialGradient(
-          center: Alignment.topCenter,
-          radius: 1.2,
-          colors: [Color(0xFF123047), AppColors.midnight, AppColors.black],
-          stops: [0, 0.42, 1],
-        ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: -120,
-            right: -80,
-            child: _Glow(size: 260, color: AppColors.red),
-          ),
-          Positioned(
-            bottom: 120,
-            left: -110,
-            child: _Glow(size: 240, color: const Color(0xFF1A6D9E)),
-          ),
-        ],
-      ),
-    );
+    return const ColoredBox(color: AppColors.black);
   }
 }
 
@@ -452,28 +429,6 @@ class Sparkline extends StatelessWidget {
       height: 150,
       width: double.infinity,
       child: CustomPaint(painter: _SparklinePainter(color: color)),
-    );
-  }
-}
-
-class _Glow extends StatelessWidget {
-  const _Glow({required this.size, required this.color});
-
-  final double size;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color.withValues(alpha: 0.12),
-        boxShadow: [
-          BoxShadow(color: color.withValues(alpha: 0.18), blurRadius: size / 2),
-        ],
-      ),
     );
   }
 }

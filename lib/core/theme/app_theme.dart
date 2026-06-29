@@ -38,10 +38,11 @@ abstract final class AppTheme {
         fontWeight: FontWeight.w400,
         color: AppColors.textSecondary,
       ),
-      labelLarge: GoogleFonts.inter(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+      labelLarge: GoogleFonts.bebasNeue(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: AppColors.red,
+        letterSpacing: 1.4,
       ),
     );
   }

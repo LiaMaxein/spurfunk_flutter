@@ -56,6 +56,7 @@ class Episode {
     required this.endsAt,
     required this.description,
     required this.location,
+    this.investigatorIds = const [],
     this.imageAssetPath,
   });
 
@@ -66,6 +67,7 @@ class Episode {
   final DateTime endsAt;
   final String description;
   final String location;
+  final List<String> investigatorIds;
   final String? imageAssetPath;
 
   bool isLiveAt(DateTime now) => !now.isBefore(startsAt) && now.isBefore(endsAt);
@@ -182,6 +184,80 @@ class PastEpisodeStats {
   final Episode episode;
   final VoteAggregate aggregate;
   final String averageLabel;
+}
+
+class PopularTeam {
+  const PopularTeam({
+    required this.rank,
+    required this.name,
+    required this.portraitAssetPath,
+    required this.favoriteCount,
+  });
+
+  final int rank;
+  final String name;
+  final String portraitAssetPath;
+  final int favoriteCount;
+}
+
+class PopularEpisode {
+  const PopularEpisode({
+    required this.id,
+    required this.title,
+    required this.airedAt,
+    required this.rating,
+    this.thumbnailAssetPath,
+  });
+
+  final String id;
+  final String title;
+  final DateTime airedAt;
+  final double rating;
+  final String? thumbnailAssetPath;
+}
+
+class Investigator {
+  const Investigator({
+    required this.id,
+    required this.name,
+    required this.role,
+    required this.bio,
+    required this.portraitAssetPath,
+    required this.teamMemberCount,
+    required this.episodeCount,
+    required this.averageRating,
+    this.teamName,
+    this.isFavorite = false,
+    this.popularEpisodes = const [],
+  });
+
+  final String id;
+  final String name;
+  final String role;
+  final String bio;
+  final String portraitAssetPath;
+  final int teamMemberCount;
+  final int episodeCount;
+  final double averageRating;
+  final String? teamName;
+  final bool isFavorite;
+  final List<PopularEpisode> popularEpisodes;
+
+  Investigator copyWith({bool? isFavorite}) {
+    return Investigator(
+      id: id,
+      name: name,
+      role: role,
+      bio: bio,
+      portraitAssetPath: portraitAssetPath,
+      teamMemberCount: teamMemberCount,
+      episodeCount: episodeCount,
+      averageRating: averageRating,
+      teamName: teamName,
+      isFavorite: isFavorite ?? this.isFavorite,
+      popularEpisodes: popularEpisodes,
+    );
+  }
 }
 
 class CreateProfileInput {

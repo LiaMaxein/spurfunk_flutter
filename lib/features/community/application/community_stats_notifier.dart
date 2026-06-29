@@ -74,6 +74,18 @@ class CommunityStatsNotifier extends Notifier<CommunityStatsState> {
     );
     await _load();
   }
+
+  Future<void> clearFilters() async {
+    state = const CommunityStatsState(isLoading: true);
+    await _load();
+  }
+
+  PastEpisodeStats? episodeStatsById(String episodeId) {
+    for (final item in state.episodes) {
+      if (item.episode.id == episodeId) return item;
+    }
+    return null;
+  }
 }
 
 final communityStatsProvider =

@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/community/presentation/community_screen.dart';
+import '../../features/community/presentation/episode_stats_detail_screen.dart';
 import '../../features/facts/presentation/facts_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/live_episode/presentation/investigator_detail_screen.dart';
 import '../../features/live_episode/presentation/live_episode_screen.dart';
 import '../../features/onboarding/application/onboarding_state.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
@@ -65,10 +67,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.community.path,
             builder: (context, state) => const CommunityScreen(),
+            routes: [
+              GoRoute(
+                path: 'stats/:episodeId',
+                builder: (context, state) => EpisodeStatsDetailScreen(
+                  episodeId: state.pathParameters['episodeId']!,
+                ),
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.liveEpisode.path,
             builder: (context, state) => const LiveEpisodeScreen(),
+            routes: [
+              GoRoute(
+                path: 'team/:investigatorId',
+                builder:
+                    (context, state) => InvestigatorDetailScreen(
+                      investigatorId: state.pathParameters['investigatorId']!,
+                    ),
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.facts.path,

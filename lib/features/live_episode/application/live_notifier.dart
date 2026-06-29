@@ -9,25 +9,36 @@ import '../../../shared/repositories/mock_repositories.dart';
 class LiveUiState {
   const LiveUiState({
     this.episode,
+    this.currentTime,
     this.messages = const [],
     this.onlineCount = 0,
     this.aggregate,
+    this.lastEpisodeStats,
     this.hasVoted = false,
     this.selectedVote,
     this.votingOpen = false,
+    this.rateLimitHint,
+    this.messageTick = 0,
     this.isLoading = true,
   });
 
   final Episode? episode;
+  final DateTime? currentTime;
   final List<ChatMessage> messages;
   final int onlineCount;
   final VoteAggregate? aggregate;
+  final PastEpisodeStats? lastEpisodeStats;
   final bool hasVoted;
   final VoteValue? selectedVote;
   final bool votingOpen;
+  final String? rateLimitHint;
+  final int messageTick;
   final bool isLoading;
 
-  bool get isLive => episode != null && episode!.isLiveAt(DateTime.now());
+  DateTime get now => currentTime ?? DateTime.now();
+
+  bool get isLive => episode != null && episode!.isLiveAt(now);
+  bool get chatOpen => isLive;
 }
 
 class LiveNotifier extends Notifier<LiveUiState> {
@@ -35,37 +46,94 @@ class LiveNotifier extends Notifier<LiveUiState> {
   StreamSubscription<EmojiReaction>? _reactionSub;
   StreamSubscription<int>? _onlineSub;
   StreamSubscription<VoteAggregate>? _voteSub;
+  Timer? _ticker;
   String? _episodeId;
+  DateTime? _lastMessageAt;
+  final List<DateTime> _reactionTimes = [];
+
+  static const _messageCooldown = Duration(seconds: 3);
+  static const _reactionWindow = Duration(seconds: 10);
+  static const _maxReactionsPerWindow = 5;
 
   @override
   LiveUiState build() {
     ref.onDispose(_dispose);
-    _init();
+    unawaited(_init());
     return const LiveUiState();
   }
 
   Future<void> _init() async {
+    _startTicker();
+    await _reloadEpisode();
+  }
+
+  Future<void> _reloadEpisode() async {
+    await _chatSub?.cancel();
+    await _reactionSub?.cancel();
+    await _onlineSub?.cancel();
+    await _voteSub?.cancel();
+    _chatSub = null;
+    _reactionSub = null;
+    _onlineSub = null;
+    _voteSub = null;
+
     final episodeRepo = ref.read(episodeRepositoryProvider);
     final current = await episodeRepo.getCurrentEpisode();
     final next = await episodeRepo.getNextEpisode();
     final episode = current ?? next;
+    final voteRepo = ref.read(voteRepositoryProvider);
+    final pastEpisodes = await episodeRepo.getPastEpisodes();
+    PastEpisodeStats? lastEpisodeStats;
+
+    if (pastEpisodes.isNotEmpty) {
+      final latestPast = pastEpisodes.first;
+      lastEpisodeStats = PastEpisodeStats(
+        episode: latestPast,
+        aggregate: await voteRepo.getVoteAggregate(
+          latestPast.id,
+          const VoteFilter(),
+        ),
+        averageLabel: 'Gut',
+      );
+    }
+
     if (episode == null) {
-      state = const LiveUiState(isLoading: false);
+      state = LiveUiState(
+        currentTime: DateTime.now(),
+        lastEpisodeStats: lastEpisodeStats,
+        isLoading: false,
+      );
       return;
     }
 
     _episodeId = episode.id;
-    final voteRepo = ref.read(voteRepositoryProvider);
-    final chatRepo = ref.read(chatRepositoryProvider);
     final hasVoted = await voteRepo.hasVoted(episode.id);
     final aggregate = await voteRepo.getVoteAggregate(
       episode.id,
       const VoteFilter(),
     );
-    final votingOpen = episode.isVotingOpenAt(DateTime.now());
+    final now = DateTime.now();
+    final votingOpen = episode.isVotingOpenAt(now);
 
+    state = LiveUiState(
+      episode: episode,
+      currentTime: now,
+      messages: state.messages,
+      onlineCount: state.onlineCount,
+      aggregate: aggregate,
+      lastEpisodeStats: lastEpisodeStats,
+      hasVoted: hasVoted,
+      votingOpen: votingOpen,
+      rateLimitHint: state.rateLimitHint,
+      messageTick: state.messageTick,
+      isLoading: false,
+    );
+
+    if (!episode.isLiveAt(now)) return;
+
+    final chatRepo = ref.read(chatRepositoryProvider);
     _chatSub = chatRepo.watchMessages(episode.id).listen((messages) {
-      state = state.copyWith(messages: messages);
+      state = state.copyWith(messages: messages, messageTick: state.messageTick + 1);
     });
     _onlineSub = chatRepo.watchOnlineCount(episode.id).listen((count) {
       state = state.copyWith(onlineCount: count);
@@ -74,14 +142,6 @@ class LiveNotifier extends Notifier<LiveUiState> {
       state = state.copyWith(aggregate: agg);
     });
     _reactionSub = chatRepo.watchEmojiReactions(episode.id).listen((_) {});
-
-    state = LiveUiState(
-      episode: episode,
-      aggregate: aggregate,
-      hasVoted: hasVoted,
-      votingOpen: votingOpen,
-      isLoading: false,
-    );
   }
 
   Future<void> submitVote(VoteValue value) async {
@@ -93,17 +153,70 @@ class LiveNotifier extends Notifier<LiveUiState> {
 
   Future<void> sendMessage(String text) async {
     final id = _episodeId;
-    if (id == null || text.trim().isEmpty) return;
-    await ref.read(chatRepositoryProvider).sendMessage(id, text.trim());
+    final trimmed = text.trim();
+    if (id == null || trimmed.isEmpty || !state.chatOpen) return;
+    final now = DateTime.now();
+    if (_lastMessageAt != null &&
+        now.difference(_lastMessageAt!) < _messageCooldown) {
+      state = state.copyWith(
+        rateLimitHint: 'Bitte warte kurz, bevor du erneut schreibst.',
+      );
+      return;
+    }
+    _lastMessageAt = now;
+    state = state.copyWith(rateLimitHint: null);
+    await ref.read(chatRepositoryProvider).sendMessage(id, trimmed);
   }
 
   Future<void> sendReaction(String emoji) async {
     final id = _episodeId;
-    if (id == null) return;
+    if (id == null || !state.chatOpen) return;
+    final now = DateTime.now();
+    _reactionTimes.removeWhere((time) => now.difference(time) > _reactionWindow);
+    if (_reactionTimes.length >= _maxReactionsPerWindow) {
+      state = state.copyWith(
+        rateLimitHint: 'Zu viele Reaktionen auf einmal. Versuch es gleich erneut.',
+      );
+      return;
+    }
+    _reactionTimes.add(now);
+    state = state.copyWith(rateLimitHint: null);
     await ref.read(chatRepositoryProvider).sendEmojiReaction(id, emoji);
   }
 
+  void clearRateLimitHint() {
+    if (state.rateLimitHint == null) return;
+    state = state.copyWith(rateLimitHint: null);
+  }
+
+  void _startTicker() {
+    _ticker?.cancel();
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) => _onTick());
+  }
+
+  void _onTick() {
+    if (state.isLoading) return;
+    final now = DateTime.now();
+    final wasLive = state.isLive;
+    final isLive = state.episode?.isLiveAt(now) ?? false;
+
+    state = state.copyWith(
+      currentTime: now,
+      votingOpen: state.episode?.isVotingOpenAt(now) ?? false,
+    );
+
+    final shouldReload =
+        state.episode == null ||
+        wasLive != isLive ||
+        (!isLive && state.episode != null && now.isAfter(state.episode!.endsAt));
+
+    if (shouldReload) {
+      unawaited(_reloadEpisode());
+    }
+  }
+
   void _dispose() {
+    _ticker?.cancel();
     _chatSub?.cancel();
     _reactionSub?.cancel();
     _onlineSub?.cancel();
@@ -112,24 +225,37 @@ class LiveNotifier extends Notifier<LiveUiState> {
 }
 
 extension on LiveUiState {
+  static const _unset = Object();
+
   LiveUiState copyWith({
     Episode? episode,
+    DateTime? currentTime,
     List<ChatMessage>? messages,
     int? onlineCount,
     VoteAggregate? aggregate,
+    PastEpisodeStats? lastEpisodeStats,
     bool? hasVoted,
     VoteValue? selectedVote,
     bool? votingOpen,
+    Object? rateLimitHint = _unset,
+    int? messageTick,
     bool? isLoading,
   }) {
     return LiveUiState(
       episode: episode ?? this.episode,
+      currentTime: currentTime ?? this.currentTime,
       messages: messages ?? this.messages,
       onlineCount: onlineCount ?? this.onlineCount,
       aggregate: aggregate ?? this.aggregate,
+      lastEpisodeStats: lastEpisodeStats ?? this.lastEpisodeStats,
       hasVoted: hasVoted ?? this.hasVoted,
       selectedVote: selectedVote ?? this.selectedVote,
       votingOpen: votingOpen ?? this.votingOpen,
+      rateLimitHint:
+          identical(rateLimitHint, _unset)
+              ? this.rateLimitHint
+              : rateLimitHint as String?,
+      messageTick: messageTick ?? this.messageTick,
       isLoading: isLoading ?? this.isLoading,
     );
   }
@@ -158,13 +284,17 @@ class FloatingReaction {
 
 class FloatingReactionsNotifier extends Notifier<List<FloatingReaction>> {
   StreamSubscription<EmojiReaction>? _sub;
+  String? _episodeId;
 
   @override
   List<FloatingReaction> build() {
     ref.onDispose(() => _sub?.cancel());
     ref.listen(liveNotifierProvider, (prev, next) {
       final id = next.episode?.id;
-      if (id != null && _sub == null) {
+      if (id != null && id != _episodeId) {
+        _episodeId = id;
+        state = [];
+        _sub?.cancel();
         _sub = ref.read(chatRepositoryProvider).watchEmojiReactions(id).listen(
           (reaction) {
             final list = [
@@ -185,9 +315,6 @@ class FloatingReactionsNotifier extends Notifier<List<FloatingReaction>> {
   }
 }
 
-SymbolicAvatar avatarForMessage(ChatMessage msg) {
-  return symbolicAvatars.firstWhere(
-    (a) => a.id == msg.avatarId,
-    orElse: () => symbolicAvatars.first,
-  );
+RoleAvatarPreset avatarForMessage(ChatMessage msg) {
+  return avatarPresetForId(msg.avatarId);
 }

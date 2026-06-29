@@ -1,34 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/persistence/user_preferences.dart';
 import '../../../core/router/router_refresh.dart';
 import '../../../shared/mock_data/mock_data.dart';
 
-class RoleAvatarPreset {
-  const RoleAvatarPreset({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.colors,
-  });
-
-  final String id;
-  final String name;
-  final IconData icon;
-  final List<Color> colors;
-}
-
-List<RoleAvatarPreset> get avatarPresets => roleAvatarPresets
-    .map(
-      (r) => RoleAvatarPreset(
-        id: r.id,
-        name: r.name,
-        icon: r.icon,
-        colors: r.colors,
-      ),
-    )
-    .toList();
+List<RoleAvatarPreset> get avatarPresets => roleAvatarPresets;
 
 final onboardingCompletedProvider =
     NotifierProvider<OnboardingCompletedNotifier, bool>(
@@ -118,7 +94,7 @@ final displayNameProvider = Provider<String>((ref) {
   return username;
 });
 
-final symbolicAvatarProvider = Provider((ref) {
+final symbolicAvatarProvider = Provider<RoleAvatarPreset>((ref) {
   final roleId = ref.watch(selectedAvatarIdProvider);
-  return symbolicAvatarForRole(roleId);
+  return avatarPresetForId(roleId);
 });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'spurfunk_branding_widgets.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -262,29 +263,39 @@ class SpurfunkHeader extends StatelessWidget {
     super.key,
     this.title,
     this.showLogo = true,
+    this.logoHeight = 40,
     this.trailing,
   });
 
   final String? title;
   final bool showLogo;
+  final double logoHeight;
   final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
+    final trailingWidth = trailing != null ? 48.0 : 0.0;
+
     return Row(
       children: [
-        if (showLogo)
-          Expanded(
-            child: Text(
-              title ?? 'SPURFUNK',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          )
-        else
-          Expanded(
-            child: Text(title ?? '', style: Theme.of(context).textTheme.titleLarge),
-          ),
-        ?trailing,
+        SizedBox(width: trailingWidth),
+        Expanded(
+          child: showLogo && title == null
+              ? Center(
+                  child: SpurfunkLogo(
+                    variant: SpurfunkLogoVariant.horizontal,
+                    height: logoHeight,
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    title ?? '',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+        ),
+        if (trailing != null) SizedBox(width: trailingWidth, child: trailing),
       ],
     );
   }

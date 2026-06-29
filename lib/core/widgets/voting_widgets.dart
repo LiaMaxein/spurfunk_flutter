@@ -6,10 +6,20 @@ import '../../shared/models/models.dart';
 extension VoteValueUi on VoteValue {
   String get emoji => switch (this) {
     VoteValue.schlecht => '😡',
-    VoteValue.langweilig => '🙁',
+    VoteValue.langweilig => '🥱',
     VoteValue.okay => '😐',
-    VoteValue.gut => '🙂',
+    VoteValue.gut => '😊',
     VoteValue.mega => '😍',
+  };
+
+  String get liveEmoji => emoji;
+
+  Color? get liveEmojiTint => switch (this) {
+    VoteValue.schlecht => AppColors.red,
+    VoteValue.langweilig => AppColors.orange,
+    VoteValue.okay => null,
+    VoteValue.gut => AppColors.blue,
+    VoteValue.mega => const Color(0xFF81C784),
   };
 
   String get label => switch (this) {
@@ -85,6 +95,36 @@ class VoteOptionButton extends StatelessWidget {
   }
 }
 
+class VoteSegmentBar extends StatelessWidget {
+  const VoteSegmentBar({required this.aggregate, super.key});
+
+  final VoteAggregate aggregate;
+
+  @override
+  Widget build(BuildContext context) {
+    if (aggregate.total == 0) {
+      return const SizedBox.shrink();
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: SizedBox(
+        height: 8,
+        child: Row(
+          children: [
+            for (final value in VoteValue.values)
+              if (aggregate.fractionFor(value) > 0)
+                Expanded(
+                  flex: (aggregate.fractionFor(value) * 1000).round().clamp(1, 1000),
+                  child: ColoredBox(color: value.color),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class StatBar extends StatelessWidget {
   const StatBar({
     required this.label,
@@ -116,9 +156,21 @@ class StatBar extends StatelessWidget {
               Text(label, style: Theme.of(context).textTheme.labelLarge),
               const Spacer(),
               Text(
-                '$percent%${count != null ? ' · $count' : ''}',
+                '$percent%',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
+              if (count != null) ...[
+                Text(
+                  ' · ',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  '$count',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ],
             ],
           ),
           const SizedBox(height: 6),

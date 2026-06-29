@@ -1,17 +1,21 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
 import '../../core/assets/app_assets.dart';
+import '../../features/live_episode/data/live_case_mock_data.dart';
+import '../../core/widgets/voting_widgets.dart';
 import '../models/models.dart';
 
 final _rng = Random(42);
 
 Episode get mockCurrentEpisode {
   final now = DateTime.now();
-  final sunday = now.weekday == DateTime.sunday ? now : now.add(Duration(days: (7 - now.weekday) % 7));
-  final start = DateTime(sunday.year, sunday.month, sunday.day, 20, 15);
-  if (now.isAfter(start) && now.hour < 22) {
+  final currentSunday =
+      now.weekday == DateTime.sunday
+          ? now
+          : now.add(Duration(days: (7 - now.weekday) % 7));
+  var start = DateTime(currentSunday.year, currentSunday.month, currentSunday.day, 20, 15);
+  final end = start.add(const Duration(minutes: 90));
+  if (now.isAfter(start) && now.isBefore(end)) {
     return Episode(
       id: 'ep-live',
       title: 'Borowski und das Haupt der Medusa',
@@ -21,8 +25,12 @@ Episode get mockCurrentEpisode {
       description:
           'Ein mysteriöser Fund führt Borowski und Sahin in die Welt antiker Mythen.',
       location: 'Kiel',
-      imageAssetPath: AppAssets.homeLive,
+      investigatorIds: liveCaseInvestigatorIds,
+      imageAssetPath: AppAssets.liveCaseKielNoirHero,
     );
+  }
+  if (now.isAfter(end)) {
+    start = start.add(const Duration(days: 7));
   }
   return Episode(
     id: 'ep-next',
@@ -32,11 +40,34 @@ Episode get mockCurrentEpisode {
     endsAt: start.add(const Duration(minutes: 90)),
     description: 'Nächster Sonntagskrimi – gemeinsam miträtseln.',
     location: 'Kiel',
-    imageAssetPath: AppAssets.homeNoLive,
+    investigatorIds: liveCaseInvestigatorIds,
+    imageAssetPath: AppAssets.liveCaseKielNoirHero,
   );
 }
 
 final mockPastEpisodes = [
+  Episode(
+    id: 'ep-past-3',
+    title: 'Tatort: Borowski und das Haupt der Medusa',
+    sender: 'Das Erste',
+    startsAt: DateTime(2025, 5, 4, 20, 15),
+    endsAt: DateTime(2025, 5, 4, 21, 45),
+    description: 'Ein mysteriöser Fund in Kiel.',
+    location: 'Kiel',
+    investigatorIds: liveCaseInvestigatorIds,
+    imageAssetPath: AppAssets.episodeMedusaKiel,
+  ),
+  Episode(
+    id: 'ep-past-2',
+    title: 'Tatort: Schatten über Kiel',
+    sender: 'Das Erste',
+    startsAt: DateTime(2025, 5, 18, 20, 15),
+    endsAt: DateTime(2025, 5, 18, 21, 45),
+    description: 'Borowski ermittelt in seinem Heimatrevier.',
+    location: 'Kiel',
+    investigatorIds: liveCaseInvestigatorIds,
+    imageAssetPath: AppAssets.episodeSchattenUeberKiel,
+  ),
   Episode(
     id: 'ep-past-1',
     title: 'Tatort: Rebellen',
@@ -45,15 +76,8 @@ final mockPastEpisodes = [
     endsAt: DateTime(2025, 5, 11, 21, 45),
     description: 'Ein Fall voller Spannung in Hamburg.',
     location: 'Hamburg',
-  ),
-  Episode(
-    id: 'ep-past-2',
-    title: 'Tatort: Schatten über Kiel',
-    sender: 'Das Erste',
-    startsAt: DateTime(2025, 5, 4, 20, 15),
-    endsAt: DateTime(2025, 5, 4, 21, 45),
-    description: 'Borowski ermittelt in seinem Heimatrevier.',
-    location: 'Kiel',
+    investigatorIds: const ['frank_thiel', 'sarah_brandt'],
+    imageAssetPath: AppAssets.episodeRebellenHamburg,
   ),
 ];
 
@@ -93,13 +117,19 @@ const mockChatSeed = [
 ];
 
 VoteAggregate mockAggregateFor(String episodeId, {VoteFilter? filter}) {
+  final seeds = {
+    'ep-past-1': (210, 348, 837, 1395, 697),
+    'ep-past-2': (180, 420, 910, 1280, 820),
+    'ep-past-3': (240, 310, 760, 1510, 940),
+  };
+  final values = seeds[episodeId] ?? (210, 348, 837, 1395, 697);
   final base = VoteAggregate(
     episodeId: episodeId,
-    schlecht: 210,
-    langweilig: 348,
-    okay: 837,
-    gut: 1395,
-    mega: 697,
+    schlecht: values.$1,
+    langweilig: values.$2,
+    okay: values.$3,
+    gut: values.$4,
+    mega: values.$5,
   );
   if (filter == null ||
       (filter.region == null &&
@@ -118,152 +148,110 @@ VoteAggregate mockAggregateFor(String episodeId, {VoteFilter? filter}) {
   );
 }
 
-/// Role portraits for onboarding (12 roles).
+String averageLabelForAggregate(VoteAggregate aggregate) {
+  if (aggregate.total == 0) return '–';
+  final top = VoteValue.values.reduce(
+    (a, b) =>
+        aggregate.fractionFor(a) >= aggregate.fractionFor(b) ? a : b,
+  );
+  return top.label;
+}
+
+/// Noir avatar motifs for onboarding, chat and profile.
 class RoleAvatarPreset {
   const RoleAvatarPreset({
     required this.id,
     required this.name,
-    required this.icon,
-    required this.colors,
+    required this.description,
+    required this.assetPath,
   });
 
   final String id;
   final String name;
-  final IconData icon;
-  final List<Color> colors;
+  final String description;
+  final String assetPath;
 }
 
 const roleAvatarPresets = [
   RoleAvatarPreset(
-    id: 'kommissar',
-    name: 'Kommissar:in',
-    icon: Icons.local_police_outlined,
-    colors: [Color(0xFF8B4513), Color(0xFF3D2314)],
+    id: 'laterne',
+    name: 'Der einsame Ermittler',
+    description: 'Geduld, Ausdauer und die Suche nach der Wahrheit.',
+    assetPath: AppAssets.avatarLaterne,
   ),
   RoleAvatarPreset(
-    id: 'profiler',
-    name: 'Profiler:in',
-    icon: Icons.psychology_outlined,
-    colors: [Color(0xFF6B4BCE), Color(0xFF241B55)],
+    id: 'frau_profil',
+    name: 'Die Analytikerin',
+    description: 'Beobachtungsgabe, Intuition und analytisches Denken.',
+    assetPath: AppAssets.avatarFrauProfil,
   ),
   RoleAvatarPreset(
-    id: 'spurensicherung',
-    name: 'Spurensicherung',
-    icon: Icons.fingerprint,
-    colors: [Color(0xFF556B2F), Color(0xFF2A3518)],
-  ),
-  RoleAvatarPreset(
-    id: 'nachtfalke',
-    name: 'Nachtfalke',
-    icon: Icons.nightlight_round,
-    colors: [Color(0xFF293241), Color(0xFF070B12)],
-  ),
-  RoleAvatarPreset(
-    id: 'coldcase',
-    name: 'Cold Case',
-    icon: Icons.ac_unit_outlined,
-    colors: [Color(0xFF4A6FA5), Color(0xFF1A2F4A)],
-  ),
-  RoleAvatarPreset(
-    id: 'taeter',
-    name: 'Täter:in',
-    icon: Icons.theater_comedy_outlined,
-    colors: [Color(0xFF5C4033), Color(0xFF2A1A14)],
-  ),
-  RoleAvatarPreset(
-    id: 'reporter',
-    name: 'Reporter:in',
-    icon: Icons.mic_outlined,
-    colors: [Color(0xFFB22222), Color(0xFF4A0E0E)],
-  ),
-  RoleAvatarPreset(
-    id: 'rechercheur',
-    name: 'Rechercheur:in',
-    icon: Icons.search,
-    colors: [Color(0xFF2F4F4F), Color(0xFF0F1A1A)],
-  ),
-  RoleAvatarPreset(
-    id: 'staatsanwalt',
-    name: 'Staatsanwalt:in',
-    icon: Icons.gavel_outlined,
-    colors: [Color(0xFF4B0082), Color(0xFF1A0030)],
-  ),
-  RoleAvatarPreset(
-    id: 'fan_erste_stunde',
-    name: 'Fan der ersten Stunde',
-    icon: Icons.star_outline,
-    colors: [Color(0xFFDAA520), Color(0xFF5C4A10)],
-  ),
-  RoleAvatarPreset(
-    id: 'beobachter',
-    name: 'Beobachter:in',
-    icon: Icons.visibility_outlined,
-    colors: [Color(0xFF708090), Color(0xFF2A3038)],
-  ),
-  RoleAvatarPreset(
-    id: 'taxifahrer',
-    name: 'Taxifahrer:in',
-    icon: Icons.local_taxi_outlined,
-    colors: [Color(0xFFFFD700), Color(0xFF5C4A00)],
-  ),
-];
-
-/// Symbolic noir icons for chat/profile display.
-class SymbolicAvatar {
-  const SymbolicAvatar({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.color,
-  });
-
-  final String id;
-  final String name;
-  final IconData icon;
-  final Color color;
-}
-
-const symbolicAvatars = [
-  SymbolicAvatar(
-    id: 'ermittler',
-    name: 'Einsamer Ermittler',
-    icon: Icons.person_outline,
-    color: Color(0xFF4A6FA5),
-  ),
-  SymbolicAvatar(
-    id: 'analytikerin',
-    name: 'Analytikerin',
-    icon: Icons.face_3_outlined,
-    color: Color(0xFF8B6B61),
-  ),
-  SymbolicAvatar(
     id: 'fingerabdruck',
-    name: 'Fingerabdruck',
-    icon: Icons.fingerprint,
-    color: Color(0xFF556B2F),
+    name: 'Der Fingerabdruck',
+    description: 'Identität, Spuren und kriminalistische Beweisführung.',
+    assetPath: AppAssets.avatarFingerabdruck,
   ),
-  SymbolicAvatar(
-    id: 'verdeckt',
-    name: 'Verdeckter Ermittler',
-    icon: Icons.dark_mode_outlined,
-    color: Color(0xFF293241),
+  RoleAvatarPreset(
+    id: 'detektiv_hut',
+    name: 'Der verdeckte Ermittler',
+    description: 'Klassische Detektivarbeit und Undercover-Ermittlungen.',
+    assetPath: AppAssets.avatarDetektivHut,
   ),
-  SymbolicAvatar(
-    id: 'spurensicherung_icon',
-    name: 'Spurensicherung',
-    icon: Icons.science_outlined,
-    color: Color(0xFF2E8B57),
+  RoleAvatarPreset(
+    id: 'lupe',
+    name: 'Die Spurensicherung',
+    description: 'Forensik, Detailgenauigkeit und entscheidende Hinweise.',
+    assetPath: AppAssets.avatarLupe,
   ),
-  SymbolicAvatar(
-    id: 'beobachter_icon',
-    name: 'Beobachter',
-    icon: Icons.remove_red_eye_outlined,
-    color: Color(0xFF708090),
+  RoleAvatarPreset(
+    id: 'mann_profil',
+    name: 'Der Beobachter',
+    description: 'Neutralität und objektive Analyse.',
+    assetPath: AppAssets.avatarMannProfil,
+  ),
+  RoleAvatarPreset(
+    id: 'aktenordner',
+    name: 'Die Ermittlungsakte',
+    description: 'Wissen, Hintergrundinformationen und Indizien.',
+    assetPath: AppAssets.avatarAktenordner,
+  ),
+  RoleAvatarPreset(
+    id: 'fussabdruecke',
+    name: 'Die Fußspuren',
+    description: 'Tatorte, Ermittlungswege und Spurenverfolgung.',
+    assetPath: AppAssets.avatarFussabdruecke,
+  ),
+  RoleAvatarPreset(
+    id: 'frau_ruecken',
+    name: 'Die Zeugin',
+    description: 'Perspektiven, Beobachtungen und Aussagen.',
+    assetPath: AppAssets.avatarFrauRuecken,
+  ),
+  RoleAvatarPreset(
+    id: 'pistole',
+    name: 'Die Dienstwaffe',
+    description: 'Polizeiarbeit und Ernsthaftigkeit der Ermittlung.',
+    assetPath: AppAssets.avatarPistole,
+  ),
+  RoleAvatarPreset(
+    id: 'beweisbeutel',
+    name: 'Der Laborfund',
+    description: 'Spurensicherung und kriminaltechnische Untersuchungen.',
+    assetPath: AppAssets.avatarBeweisbeutel,
+  ),
+  RoleAvatarPreset(
+    id: 'lampe',
+    name: 'Der Tatort',
+    description: 'Spannung, Schatten und ungelöste Fälle.',
+    assetPath: AppAssets.avatarLampe,
   ),
 ];
 
-SymbolicAvatar symbolicAvatarForRole(String roleId) {
-  final index = roleAvatarPresets.indexWhere((r) => r.id == roleId);
-  if (index < 0) return symbolicAvatars.first;
-  return symbolicAvatars[index % symbolicAvatars.length];
+const symbolicAvatars = roleAvatarPresets;
+
+RoleAvatarPreset avatarPresetForId(String id) {
+  return roleAvatarPresets.firstWhere(
+    (avatar) => avatar.id == id,
+    orElse: () => roleAvatarPresets.first,
+  );
 }
