@@ -57,6 +57,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               children: [
                 _IntroStep(onContinue: _next),
                 _AvatarStep(onContinue: _next),
+                _GenderStep(onContinue: _next),
                 _UsernameStep(
                   controller: _usernameController,
                   onContinue: _next,
@@ -187,6 +188,54 @@ class _AvatarStep extends ConsumerWidget {
           const SizedBox(height: 18),
           NoirButton(label: 'Weiter', onPressed: onContinue),
         ],
+      ),
+    );
+  }
+}
+
+class _GenderStep extends ConsumerWidget {
+  const _GenderStep({required this.onContinue});
+
+  final VoidCallback onContinue;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(profileGenderProvider);
+
+    return OnboardingPageBody(
+      child: AnimatedOnboardingStep(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const OnboardingBrand(),
+            const SizedBox(height: 28),
+            Text(
+              'Wie möchtest du angegeben werden?',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Diese Angabe hilft uns bei Statistiken und personalisierten Inhalten. Du kannst sie später ändern.',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            const SizedBox(height: 28),
+            for (final gender in ProfileGender.values) ...[
+              GenderOptionCard(
+                gender: gender,
+                selected: selected == gender,
+                onTap: () =>
+                    ref.read(profileGenderProvider.notifier).select(gender),
+              ),
+              const SizedBox(height: 12),
+            ],
+            const SizedBox(height: 20),
+            NoirButton(
+              label: 'Weiter',
+              onPressed: selected == null ? null : onContinue,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -11,6 +11,7 @@ class UserPreferences {
 
   static const _onboardingCompleted = 'onboarding_completed';
   static const _avatarId = 'avatar_id';
+  static const _gender = 'gender';
   static const _username = 'username';
   static const _anonymousMode = 'anonymous_mode';
   static const _notificationsEnabled = 'notifications_enabled';
@@ -23,6 +24,8 @@ class UserPreferences {
       _prefs.getBool(_onboardingCompleted) ?? false;
 
   String? get avatarId => _prefs.getString(_avatarId);
+
+  String? get gender => _prefs.getString(_gender);
 
   String get username => _prefs.getString(_username) ?? '';
 
@@ -37,6 +40,8 @@ class UserPreferences {
       _prefs.setBool(_onboardingCompleted, value);
 
   Future<void> setAvatarId(String id) => _prefs.setString(_avatarId, id);
+
+  Future<void> setGender(String id) => _prefs.setString(_gender, id);
 
   Future<void> setUsername(String value) => _prefs.setString(_username, value);
 

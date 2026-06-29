@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cinematic_widgets.dart';
 import '../../../../core/widgets/spurfunk_branding_widgets.dart';
 import '../../../../shared/mock_data/mock_data.dart';
+import '../../application/onboarding_state.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   const OnboardingScaffold({required this.child, super.key});
@@ -76,15 +77,20 @@ class OnboardingPageBody extends StatelessWidget {
 }
 
 class OnboardingStepDots extends StatelessWidget {
-  const OnboardingStepDots({required this.index, super.key});
+  const OnboardingStepDots({
+    required this.index,
+    this.count = 5,
+    super.key,
+  });
 
   final int index;
+  final int count;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(4, (dotIndex) {
+      children: List.generate(count, (dotIndex) {
         final selected = dotIndex == index;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 240),
@@ -99,6 +105,81 @@ class OnboardingStepDots extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class GenderOptionCard extends StatefulWidget {
+  const GenderOptionCard({
+    required this.gender,
+    required this.selected,
+    required this.onTap,
+    super.key,
+  });
+
+  final ProfileGender gender;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  State<GenderOptionCard> createState() => _GenderOptionCardState();
+}
+
+class _GenderOptionCardState extends State<GenderOptionCard> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = widget.selected;
+
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapCancel: () => setState(() => _pressed = false),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTap: widget.onTap,
+      child: AnimatedScale(
+        scale: selected ? 1.02 : (_pressed ? 0.98 : 1),
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 240),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceHigh.withValues(
+              alpha: selected ? 0.92 : 0.7,
+            ),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: selected
+                  ? AppColors.redSoft
+                  : Colors.white.withValues(alpha: 0.06),
+              width: selected ? 2 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                widget.gender.icon,
+                color: selected ? AppColors.redSoft : AppColors.textSecondary,
+                size: 28,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  widget.gender.label,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              if (selected)
+                const Icon(
+                  Icons.check_circle_rounded,
+                  color: AppColors.redSoft,
+                  size: 22,
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

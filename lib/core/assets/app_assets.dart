@@ -11,6 +11,19 @@ abstract final class AppAssets {
   static const factsPageHero = homeLiveHero;
   static const communityHero = communityNoirHero;
   static const liveCaseKielNoirHero = '$_photos/live_case_kiel_noir_hero.png';
+
+  static const profileHeroBackgrounds = [
+    '$_photos/profile_hero_01.png',
+    '$_photos/profile_hero_02.png',
+    '$_photos/profile_hero_03.png',
+    '$_photos/profile_hero_04.png',
+    '$_photos/profile_hero_05.png',
+    '$_photos/profile_hero_06.png',
+    '$_photos/profile_hero_07.png',
+    '$_photos/profile_hero_08.png',
+    '$_photos/profile_hero_09.png',
+    '$_photos/profile_hero_10.png',
+  ];
   static const episodeSchattenUeberKiel = '$_photos/episode_schatten_ueber_kiel.png';
   static const episodeRebellenHamburg = '$_photos/episode_rebellen_hamburg.png';
   static const episodeMedusaKiel = '$_photos/episode_medusa_kiel.png';

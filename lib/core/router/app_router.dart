@@ -12,6 +12,7 @@ import '../../features/live_episode/presentation/live_episode_screen.dart';
 import '../../features/onboarding/application/onboarding_state.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/profile/presentation/profile_subscreens.dart';
 import '../../features/settings/presentation/about_app_screen.dart';
 import '../../features/settings/presentation/privacy_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
@@ -106,6 +107,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.profile.path,
             builder: (context, state) => const ProfileScreen(),
             routes: [
+              GoRoute(
+                path: 'stats',
+                builder: (context, state) => const ProfileStatsScreen(),
+              ),
+              GoRoute(
+                path: 'activity',
+                builder: (context, state) => const ProfileActivityScreen(),
+              ),
+              GoRoute(
+                path: 'badges',
+                builder: (context, state) => const ProfileBadgesScreen(),
+              ),
               GoRoute(
                 path: 'settings',
                 builder: (context, state) => const SettingsScreen(),

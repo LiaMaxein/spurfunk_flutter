@@ -37,7 +37,7 @@ abstract final class AppRoutes {
   );
   static const profile = AppRouteData(
     path: '/profile',
-    label: 'Profil',
+    label: 'Meine Akte',
     icon: Icons.person_outline,
   );
 
@@ -46,6 +46,9 @@ abstract final class AppRoutes {
   static const liveCasePath = '/live/case';
 
   static const profileSettingsPath = '/profile/settings';
+  static const profileStatsPath = '/profile/stats';
+  static const profileActivityPath = '/profile/activity';
+  static const profileBadgesPath = '/profile/badges';
   static const profileSettingsAboutPath = '/profile/settings/about';
   static const profileSettingsPrivacyPath = '/profile/settings/privacy';
 
