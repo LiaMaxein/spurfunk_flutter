@@ -21,13 +21,13 @@ class TeamMemberSummary {
     required this.name,
     required this.role,
     required this.portraitAssetPath,
-    this.investigatorId,
+    required this.investigatorId,
   });
 
   final String name;
   final String role;
   final String portraitAssetPath;
-  final String? investigatorId;
+  final String investigatorId;
 }
 
 class InvestigatorTeamSummary {

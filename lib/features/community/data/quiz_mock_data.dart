@@ -35,8 +35,8 @@ const mockQuizQuestions = [
   QuizQuestion(
     id: 'q-04',
     category: QuizCategory.teams,
-    question: 'Wer ist Borowskis langjährige Partnerin in Kiel?',
-    options: ['Sarah Brandt', 'Nina Rubin', 'Maja Thiel', 'Fritz Fuchs'],
+    question: 'Wer gehört zum Kieler Borowski-Team?',
+    options: ['Mila Sahin', 'Frank Thiel', 'Ivo Batic', 'Bibi Fellner'],
     correctIndex: 0,
   ),
   QuizQuestion(
@@ -49,15 +49,15 @@ const mockQuizQuestions = [
   QuizQuestion(
     id: 'q-06',
     category: QuizCategory.drehorte,
-    question: 'Das Team „Thiel & Brandt“ ermittelt in welcher Stadt?',
-    options: ['Kiel', 'Lübeck', 'Hamburg', 'Bremen'],
+    question: 'Das Team „Thiel & Boerne“ ermittelt in welcher Stadt?',
+    options: ['Kiel', 'Lübeck', 'Münster', 'Bremen'],
     correctIndex: 2,
   ),
   QuizQuestion(
     id: 'q-07',
     category: QuizCategory.schauspieler,
     question: 'Wer spielt Klaus Borowski?',
-    options: ['Axel Prahl', 'Jan Josef Liefers', 'Götz George', 'Ulrich Tukur'],
+    options: ['Axel Milberg', 'Axel Prahl', 'Götz George', 'Ulrich Tukur'],
     correctIndex: 0,
   ),
   QuizQuestion(
@@ -134,10 +134,10 @@ const mockQuizQuestions = [
     category: QuizCategory.teams,
     question: 'Welches Team ermittelt in Wien?',
     options: [
-      'Fellner & Nowak',
+      'Eisner & Fellner',
       'Ballauf & Schenk',
       'Borowski & Sahin',
-      'Thiel & Brandt',
+      'Thiel & Boerne',
     ],
     correctIndex: 0,
   ),
@@ -216,7 +216,7 @@ const mockQuizQuestions = [
     id: 'q-24',
     category: QuizCategory.drehorte,
     question: 'Welche Stadt hat ein Team mit dem Namen „Lannert & Bootz“?',
-    options: ['Ludwigshafen', 'Kiel', 'Zürich', 'Graz'],
+    options: ['Stuttgart', 'Kiel', 'Zürich', 'Graz'],
     correctIndex: 0,
   ),
   QuizQuestion(
@@ -356,15 +356,15 @@ const mockQuizQuestions = [
     id: 't-05',
     category: QuizCategory.teams,
     question: 'Wer gehört zum Team Münster?',
-    options: ['Boerne & Hastigs', 'Borowski & Brandt', 'Thiel & Brandt', 'Fellner & Nowak'],
+    options: ['Thiel & Boerne', 'Borowski & Brandt', 'Falke & Grosz', 'Eisner & Fellner'],
     correctIndex: 0,
   ),
   QuizQuestion(
     id: 't-06',
     category: QuizCategory.teams,
-    question: 'In welcher Stadt ermitteln Thiel und Brandt?',
-    options: ['Hamburg', 'Kiel', 'Köln', 'Wien'],
-    correctIndex: 0,
+    question: 'In welcher Stadt ermitteln Thiel und Boerne?',
+    options: ['Hamburg', 'Kiel', 'Münster', 'Wien'],
+    correctIndex: 2,
   ),
   QuizQuestion(
     id: 't-07',
@@ -383,7 +383,7 @@ const mockQuizQuestions = [
   QuizQuestion(
     id: 't-09',
     category: QuizCategory.teams,
-    question: 'Fellner und Nowak ermitteln in …',
+    question: 'Eisner und Fellner ermitteln in …',
     options: ['Wien', 'Hamburg', 'Köln', 'Lübeck'],
     correctIndex: 0,
   ),
@@ -391,7 +391,7 @@ const mockQuizQuestions = [
     id: 't-10',
     category: QuizCategory.teams,
     question: 'Lannert und Bootz sind ein Team aus …',
-    options: ['Ludwigshafen', 'Kiel', 'Zürich', 'Berlin'],
+    options: ['Stuttgart', 'Kiel', 'Zürich', 'Berlin'],
     correctIndex: 0,
   ),
   QuizQuestion(
@@ -405,7 +405,7 @@ const mockQuizQuestions = [
     id: 't-12',
     category: QuizCategory.teams,
     question: 'Prof. Boerne arbeitet als …',
-    options: ['Rechtsmediziner', 'Feuerwehrmann', 'Koch', 'Pilot'],
+    options: ['Pathologe', 'Feuerwehrmann', 'Koch', 'Pilot'],
     correctIndex: 0,
   ),
   QuizQuestion(
@@ -413,10 +413,10 @@ const mockQuizQuestions = [
     category: QuizCategory.teams,
     question: 'Welche Kombination passt?',
     options: [
-      'Team Hamburg – Thiel & Brandt',
+      'Team Hamburg – Falke & Grosz',
       'Team Hamburg – Borowski & Sahin',
       'Team Kiel – Ballauf & Schenk',
-      'Team Wien – Thiel & Brandt',
+      'Team Wien – Thiel & Boerne',
     ],
     correctIndex: 0,
   ),
@@ -438,7 +438,7 @@ const mockQuizQuestions = [
     id: 't-16',
     category: QuizCategory.teams,
     question: 'Welches Team ist nicht aus Deutschland?',
-    options: ['Fellner & Nowak (Wien)', 'Ballauf & Schenk', 'Borowski & Brandt', 'Thiel & Brandt'],
+    options: ['Eisner & Fellner (Wien)', 'Ballauf & Schenk', 'Borowski & Brandt', 'Thiel & Boerne'],
     correctIndex: 0,
   ),
   // —— Kriminalistik (15) ——

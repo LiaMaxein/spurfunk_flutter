@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/investigator_name_format.dart';
 import '../../../../core/widgets/investigator_portrait.dart';
 import '../../../../core/widgets/app_components.dart';
 import '../../../../shared/models/models.dart';
@@ -118,22 +119,39 @@ class LiveCurrentCaseTab extends StatelessWidget {
                                     size: 72,
                                   ),
                                   const SizedBox(height: 8),
-                                  Text(
-                                    investigator.name,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                  SizedBox(
+                                    height: 38,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        formatInvestigatorNameForCard(
+                                          investigator.name,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(height: 1.15),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    investigator.role,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                  SizedBox(
+                                    height: 18,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        investigator.role,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),

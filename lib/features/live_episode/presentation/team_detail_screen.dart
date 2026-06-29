@@ -59,8 +59,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
 
     final leadInvestigator = investigatorById(team.leadInvestigatorId);
     final episodeCount = team.members
-        .where((member) => member.investigatorId != null)
-        .map((member) => investigatorById(member.investigatorId!).episodeCount)
+        .map((member) => investigatorById(member.investigatorId).episodeCount)
         .fold<int>(
           leadInvestigator.episodeCount,
           (max, count) => count > max ? count : max,
@@ -118,11 +117,9 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           for (var i = 0; i < team.members.length; i++) ...[
             _TeamMemberRow(
               member: team.members[i],
-              onTap: team.members[i].investigatorId == null
-                  ? null
-                  : () => context.push(
-                      '/live/team/${team.members[i].investigatorId}',
-                    ),
+              onTap: () => context.push(
+                '/live/team/${team.members[i].investigatorId}',
+              ),
             ),
             if (i < team.members.length - 1) const SizedBox(height: 10),
           ],
