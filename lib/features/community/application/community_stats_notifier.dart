@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/models/models.dart';
-import '../../../shared/repositories/mock_repositories.dart';
+import '../../../shared/repositories/repository_providers.dart';
 
 class CommunityStatsState {
   const CommunityStatsState({

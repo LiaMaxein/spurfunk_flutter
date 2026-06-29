@@ -9,7 +9,7 @@ import 'package:spurfunk_flutter/features/live_episode/application/live_notifier
 import 'package:spurfunk_flutter/features/live_episode/presentation/investigator_detail_screen.dart';
 import 'package:spurfunk_flutter/features/live_episode/presentation/live_episode_screen.dart';
 import 'package:spurfunk_flutter/shared/models/models.dart';
-import 'package:spurfunk_flutter/shared/repositories/mock_repositories.dart';
+import 'package:spurfunk_flutter/shared/repositories/repository_providers.dart';
 import 'package:spurfunk_flutter/shared/repositories/repositories.dart';
 
 void main() {

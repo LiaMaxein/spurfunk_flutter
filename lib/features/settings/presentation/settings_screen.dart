@@ -2,264 +2,176 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/demo/force_live_demo_provider.dart';
 import '../../../core/router/app_routes.dart';
-import '../../../core/widgets/cinematic_widgets.dart';
-import '../../onboarding/application/onboarding_state.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../home/application/home_notifier.dart';
+import '../../live_episode/application/live_notifier.dart';
 import '../application/settings_state.dart';
+import 'widgets/settings_widgets.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifications = ref.watch(notificationsEnabledProvider);
-    final darkMode = ref.watch(darkModeEnabledProvider);
-    final reducedMotion = ref.watch(reducedMotionProvider);
-    final highContrast = ref.watch(highContrastProvider);
-    final largeText = ref.watch(largeTextProvider);
+    final forceLiveDemo = ref.watch(forceLiveDemoProvider);
 
-    return CinematicPage(
+    return SettingsScaffold(
+      title: 'EINSTELLUNGEN',
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const ScreenTopBar(title: 'Einstellungen'),
-          const SizedBox(height: 18),
-          _SwitchTile(
+          SettingsNavRow(
             icon: Icons.notifications_none_rounded,
             title: 'Benachrichtigungen',
-            value: notifications,
-            onChanged: (value) =>
-                ref.read(notificationsEnabledProvider.notifier).setValue(value),
+            onTap: () => context.push(AppRoutes.profileSettingsNotificationsPath),
           ),
-          _SwitchTile(
-            icon: Icons.brightness_6_outlined,
-            title: 'Dunkles Design',
-            value: darkMode,
-            onChanged: (value) =>
-                ref.read(darkModeEnabledProvider.notifier).setValue(value),
+          SettingsNavRow(
+            icon: Icons.palette_outlined,
+            title: 'App-Design',
+            onTap: () => context.push(AppRoutes.profileSettingsDesignPath),
           ),
-          _SwitchTile(
-            icon: Icons.animation_outlined,
-            title: 'Animationen reduzieren',
-            value: reducedMotion,
-            onChanged: (value) =>
-                ref.read(reducedMotionProvider.notifier).setValue(value),
+          SettingsNavRow(
+            icon: Icons.person_outline,
+            title: 'Profil & Identität',
+            onTap: () => context.push(AppRoutes.profileSettingsProfilePath),
           ),
-          _SwitchTile(
-            icon: Icons.contrast_outlined,
-            title: 'Erhöhter Kontrast',
-            value: highContrast,
-            onChanged: (value) =>
-                ref.read(highContrastProvider.notifier).setValue(value),
-          ),
-          _SwitchTile(
-            icon: Icons.text_fields_outlined,
-            title: 'Größere Schrift',
-            value: largeText,
-            onChanged: (value) =>
-                ref.read(largeTextProvider.notifier).setValue(value),
-          ),
-          _SettingsTile(
+          SettingsNavRow(
             icon: Icons.lock_outline_rounded,
             title: 'Datenschutz',
-            onTap: () => context.go(AppRoutes.profileSettingsPrivacyPath),
+            onTap: () => context.push(AppRoutes.profileSettingsPrivacyPath),
           ),
-          _SettingsTile(
+          SettingsNavRow(
+            icon: Icons.accessibility_new_rounded,
+            title: 'Barrierefreiheit',
+            onTap: () =>
+                context.push(AppRoutes.profileSettingsAccessibilityPath),
+          ),
+          SettingsNavRow(
+            icon: Icons.help_outline_rounded,
+            title: 'Hilfe & FAQ',
+            onTap: () => context.push(AppRoutes.profileSettingsHelpPath),
+          ),
+          SettingsNavRow(
             icon: Icons.info_outline_rounded,
             title: 'Über Spurfunk',
-            onTap: () => context.go(AppRoutes.profileSettingsAboutPath),
+            onTap: () => context.push(AppRoutes.profileSettingsAboutPath),
           ),
-          _SwitchTile(
-            icon: Icons.subtitles_outlined,
-            title: 'Untertitel standardmäßig aktiv',
-            value: true,
-            onChanged: (_) {},
+          const SizedBox(height: 16),
+          const SettingsSectionTitle(title: 'Demo & Entwicklung'),
+          SettingsSwitchRow(
+            icon: Icons.sensors,
+            title: 'Tatort läuft gerade (Demo)',
+            subtitle:
+                'Simuliert den Live-Modus auf Home und im Live-Bereich für 24 Stunden',
+            value: forceLiveDemo,
+            onChanged: (value) async {
+              await ref.read(forceLiveDemoProvider.notifier).setValue(value);
+              ref.invalidate(homeNotifierProvider);
+              ref.invalidate(liveNotifierProvider);
+            },
           ),
-          _SwitchTile(
-            icon: Icons.volume_up_outlined,
-            title: 'Sound-Effekte',
-            value: true,
-            onChanged: (_) {},
-          ),
-          const SizedBox(height: 14),
-          Text('Daten & Speicher', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 10),
-          _ActionTile(
+          const SizedBox(height: 16),
+          const SettingsSectionTitle(title: 'Daten & Speicher'),
+          SettingsNavRow(
             icon: Icons.download_outlined,
             title: 'Cache leeren',
-            subtitle: '12.4 MB belegt',
-            onTap: () {},
+            subtitle: '12,4 MB belegt (Prototyp)',
+            onTap: () => _confirmCacheClear(context, ref),
           ),
-          _ActionTile(
+          SettingsNavRow(
             icon: Icons.delete_outline_rounded,
             title: 'Alle lokalen Daten löschen',
             subtitle: 'Einstellungen, Profil und Verlauf',
-            onTap: () {},
+            onTap: () => _confirmClearAll(context, ref),
           ),
-          const SizedBox(height: 14),
-          Text('Info', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 10),
-          _InfoRow(label: 'App-Version', value: '1.0.0 (Build 42)'),
-          const SizedBox(height: 6),
-          _InfoRow(label: 'Umgebung', value: 'Prototyp (lokal)'),
-          const SizedBox(height: 6),
-          _InfoRow(label: 'Datenhaltung', value: 'Nur lokal · SharedPreferences'),
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
           FilledButton.icon(
-            onPressed: () async {
-              await ref.read(onboardingCompletedProvider.notifier).reset();
-              if (context.mounted) context.go(AppRoutes.onboardingPath);
-            },
-            icon: const Icon(Icons.restart_alt_rounded),
-            label: const Text('Onboarding zurücksetzen'),
+            onPressed: () => _confirmLogout(context, ref),
+            icon: const Icon(Icons.logout_rounded),
+            label: const Text('Abmelden'),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.red,
+              foregroundColor: Colors.white,
+            ),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 20),
           Text(
-            'Alle Einstellungen werden nur lokal gespeichert. '
-            'Es werden keine Daten an Server übermittelt.',
+            'App-Version 1.0.0 (Build 1)',
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
+          const SizedBox(height: 4),
+          Text(
+            'Umgebung: Prototyp (lokal)',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.textMuted,
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );
   }
-}
 
-class _SettingsTile extends StatelessWidget {
-  const _SettingsTile({required this.icon, required this.title, this.onTap});
-
-  final IconData icon;
-  final String title;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: GlassCard(
-        onTap: onTap,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
-        radius: 14,
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 23),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: Colors.white,
-              size: 24,
-            ),
-          ],
+  Future<void> _confirmLogout(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Abmelden?'),
+        content: const Text(
+          'Dein Profil wird lokal zurückgesetzt und du kehrst zum Onboarding zurück.',
         ),
-      ),
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  const _ActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: GlassCard(
-        onTap: onTap,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        radius: 14,
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 23),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 2),
-                  Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 24),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: Theme.of(context).textTheme.bodyMedium),
-          Text(value, style: Theme.of(context).textTheme.labelLarge),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Abbrechen'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Abmelden'),
+          ),
         ],
       ),
     );
+    if (confirmed == true && context.mounted) {
+      await logoutUser(ref, GoRouter.of(context));
+    }
   }
-}
 
-class _SwitchTile extends StatelessWidget {
-  const _SwitchTile({
-    required this.icon,
-    required this.title,
-    required this.value,
-    required this.onChanged,
-  });
+  Future<void> _confirmCacheClear(BuildContext context, WidgetRef ref) async {
+    await clearCache(ref);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cache geleert.')),
+      );
+    }
+  }
 
-  final IconData icon;
-  final String title;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: GlassCard(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        radius: 14,
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 23),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            Switch.adaptive(value: value, onChanged: onChanged),
-          ],
+  Future<void> _confirmClearAll(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Alle Daten löschen?'),
+        content: const Text(
+          'Diese Aktion entfernt alle lokal gespeicherten Daten unwiderruflich.',
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Abbrechen'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Löschen'),
+          ),
+        ],
       ),
     );
+    if (confirmed == true && context.mounted) {
+      await clearAllLocalData(ref, GoRouter.of(context));
+    }
   }
 }

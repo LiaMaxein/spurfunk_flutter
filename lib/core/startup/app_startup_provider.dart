@@ -9,7 +9,14 @@ final appBootstrapProvider = FutureProvider<void>((ref) async {
   ref.read(selectedAvatarIdProvider);
   ref.read(usernameProvider);
   ref.read(anonymousModeProvider);
+  ref.read(profileGenderProvider);
   ref.read(notificationsEnabledProvider);
-  ref.read(darkModeEnabledProvider);
+  ref.read(themeModeSettingProvider);
+  ref.read(accentColorProvider);
+  ref.read(fontSizeLevelProvider);
+  ref.read(chatDensityProvider);
+  ref.read(reducedMotionProvider);
+  ref.read(highContrastProvider);
+  ref.read(largeTextProvider);
   await Future<void>.delayed(const Duration(seconds: 5));
 });

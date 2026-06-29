@@ -2,41 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
+import 'spurfunk_theme_extension.dart';
 
 abstract final class AppTheme {
-  static TextTheme _buildTextTheme(TextTheme base) {
+  static TextTheme _buildTextTheme(
+    TextTheme base, {
+    required bool highContrast,
+  }) {
+    final primary = highContrast ? Colors.white : AppColors.textPrimary;
+    final secondary = highContrast ? Colors.white70 : AppColors.textSecondary;
+
     return base.copyWith(
       headlineLarge: GoogleFonts.bebasNeue(
         fontSize: 34,
         fontWeight: FontWeight.w400,
-        color: AppColors.textPrimary,
+        color: primary,
         letterSpacing: 1.2,
       ),
       headlineMedium: GoogleFonts.bebasNeue(
         fontSize: 28,
         fontWeight: FontWeight.w400,
-        color: AppColors.textPrimary,
+        color: primary,
         letterSpacing: 1,
       ),
       titleLarge: GoogleFonts.inter(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: primary,
       ),
       titleMedium: GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
+        color: primary,
       ),
       bodyLarge: GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: AppColors.textSecondary,
+        color: secondary,
       ),
       bodyMedium: GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: AppColors.textSecondary,
+        color: secondary,
       ),
       labelLarge: GoogleFonts.bebasNeue(
         fontSize: 16,
@@ -47,43 +54,74 @@ abstract final class AppTheme {
     );
   }
 
-  static ThemeData get dark {
+  static ThemeData build({
+    required Brightness brightness,
+    required Color accent,
+    required bool highContrast,
+    required double chatDensityPadding,
+    required bool largeTouchTargets,
+  }) {
+    final isDark = brightness == Brightness.dark;
+    final scaffold = highContrast
+        ? Colors.black
+        : (isDark ? AppColors.black : const Color(0xFFF4F4F4));
+    final surface = highContrast
+        ? const Color(0xFF111111)
+        : (isDark ? AppColors.surface : Colors.white);
+    final divider = highContrast ? Colors.white24 : AppColors.divider;
+
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.red,
-      brightness: Brightness.dark,
-      surface: AppColors.surface,
-      primary: AppColors.red,
+      seedColor: accent,
+      brightness: brightness,
+      surface: surface,
+      primary: accent,
     );
 
-    final textTheme = _buildTextTheme(ThemeData.dark().textTheme);
+    final textTheme = _buildTextTheme(
+      isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme,
+      highContrast: highContrast,
+    );
+
+    final chatPadding = chatDensityPadding;
+    final minButtonHeight = largeTouchTargets ? 56.0 : 48.0;
 
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.black,
+      brightness: brightness,
+      scaffoldBackgroundColor: scaffold,
       colorScheme: colorScheme,
       textTheme: textTheme,
+      extensions: [
+        SpurfunkThemeExtension(
+          accent: accent,
+          highContrast: highContrast,
+          chatDensityPadding: chatPadding,
+          largeTouchTargets: largeTouchTargets,
+        ),
+      ],
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.textPrimary,
+        foregroundColor: isDark || highContrast
+            ? AppColors.textPrimary
+            : Colors.black87,
         centerTitle: false,
         elevation: 0,
         titleTextStyle: GoogleFonts.bebasNeue(
           fontSize: 22,
-          color: AppColors.textPrimary,
+          color: isDark || highContrast ? AppColors.textPrimary : Colors.black87,
           letterSpacing: 1,
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: surface,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.red,
+          backgroundColor: accent,
           foregroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(48),
+          minimumSize: Size.fromHeight(minButtonHeight),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -93,37 +131,52 @@ abstract final class AppTheme {
           ),
         ),
       ),
-      dividerTheme: const DividerThemeData(color: AppColors.divider),
+      dividerTheme: DividerThemeData(color: divider),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: isDark ? AppColors.surface : Colors.white,
         hintStyle: GoogleFonts.inter(color: AppColors.textMuted),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.divider),
+          borderSide: BorderSide(color: divider),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.divider),
+          borderSide: BorderSide(color: divider),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.red, width: 1.5),
+          borderSide: BorderSide(color: accent, width: 1.5),
         ),
       ),
     );
   }
 
-  static ThemeData get light {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.red,
-      brightness: Brightness.light,
-    );
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: colorScheme,
-      textTheme: _buildTextTheme(ThemeData.light().textTheme),
-    );
-  }
+  static ThemeData dark({
+    Color accent = AppColors.red,
+    bool highContrast = false,
+    double chatDensityPadding = 14,
+    bool largeTouchTargets = false,
+  }) =>
+      build(
+        brightness: Brightness.dark,
+        accent: accent,
+        highContrast: highContrast,
+        chatDensityPadding: chatDensityPadding,
+        largeTouchTargets: largeTouchTargets,
+      );
+
+  static ThemeData light({
+    Color accent = AppColors.red,
+    bool highContrast = false,
+    double chatDensityPadding = 14,
+    bool largeTouchTargets = false,
+  }) =>
+      build(
+        brightness: Brightness.light,
+        accent: accent,
+        highContrast: highContrast,
+        chatDensityPadding: chatDensityPadding,
+        largeTouchTargets: largeTouchTargets,
+      );
 }

@@ -45,6 +45,23 @@ Episode get mockCurrentEpisode {
   );
 }
 
+/// Demo episode that stays "live" for 24 hours – used for UI testing.
+Episode buildDemoLiveEpisode() {
+  final now = DateTime.now();
+  return Episode(
+    id: 'ep-live-demo',
+    title: 'Borowski und das Haupt der Medusa',
+    sender: 'Das Erste',
+    startsAt: now.subtract(const Duration(minutes: 20)),
+    endsAt: now.add(const Duration(hours: 24)),
+    description:
+        'Ein mysteriöser Fund führt Borowski und Sahin in die Welt antiker Mythen.',
+    location: 'Kiel',
+    investigatorIds: liveCaseInvestigatorIds,
+    imageAssetPath: AppAssets.liveCaseKielNoirHero,
+  );
+}
+
 final mockPastEpisodes = [
   Episode(
     id: 'ep-past-3',

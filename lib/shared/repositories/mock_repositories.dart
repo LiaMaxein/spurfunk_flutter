@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/persistence/shared_preferences_provider.dart';
 import '../models/models.dart';
 import '../mock_data/mock_data.dart';
 import '../repositories/repositories.dart';
@@ -72,14 +70,20 @@ class MockAuthRepository implements AuthRepository {
 }
 
 class MockEpisodeRepository implements EpisodeRepository {
+  MockEpisodeRepository({this.forceLiveDemo = false});
+
+  final bool forceLiveDemo;
+
   @override
   Future<Episode?> getCurrentEpisode() async {
+    if (forceLiveDemo) return buildDemoLiveEpisode();
     final ep = mockCurrentEpisode;
     return ep.isLiveAt(DateTime.now()) ? ep : null;
   }
 
   @override
   Future<Episode?> getNextEpisode() async {
+    if (forceLiveDemo) return null;
     final ep = mockCurrentEpisode;
     if (ep.isLiveAt(DateTime.now())) return null;
     return ep;
@@ -294,31 +298,4 @@ class MockCommunityStatsRepository implements CommunityStatsRepository {
   }
 }
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return MockAuthRepository(ref.watch(sharedPreferencesProvider));
-});
-
-final episodeRepositoryProvider = Provider<EpisodeRepository>((ref) {
-  return MockEpisodeRepository();
-});
-
-final voteRepositoryProvider = Provider<VoteRepository>((ref) {
-  final repo = MockVoteRepository(ref.watch(sharedPreferencesProvider));
-  ref.onDispose(repo.dispose);
-  return repo;
-});
-
-final chatRepositoryProvider = Provider<ChatRepository>((ref) {
-  final repo = MockChatRepository();
-  ref.onDispose(repo.dispose);
-  return repo;
-});
-
-final newsRepositoryProvider = Provider<NewsRepository>((ref) {
-  return MockNewsRepository();
-});
-
-final communityStatsRepositoryProvider =
-    Provider<CommunityStatsRepository>((ref) {
-  return MockCommunityStatsRepository();
-});
+// Repository providers moved to repository_providers.dart.

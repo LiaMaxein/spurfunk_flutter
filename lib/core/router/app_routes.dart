@@ -46,6 +46,11 @@ abstract final class AppRoutes {
   static const liveCasePath = '/live/case';
 
   static const profileSettingsPath = '/profile/settings';
+  static const profileSettingsNotificationsPath = '/profile/settings/notifications';
+  static const profileSettingsDesignPath = '/profile/settings/design';
+  static const profileSettingsAccessibilityPath = '/profile/settings/accessibility';
+  static const profileSettingsHelpPath = '/profile/settings/help';
+  static const profileSettingsProfilePath = '/profile/settings/profile';
   static const profileStatsPath = '/profile/stats';
   static const profileActivityPath = '/profile/activity';
   static const profileBadgesPath = '/profile/badges';

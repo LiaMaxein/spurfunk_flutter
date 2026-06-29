@@ -14,7 +14,12 @@ import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/profile/presentation/profile_subscreens.dart';
 import '../../features/settings/presentation/about_app_screen.dart';
+import '../../features/settings/presentation/accessibility_settings_screen.dart';
+import '../../features/settings/presentation/design_settings_screen.dart';
+import '../../features/settings/presentation/help_settings_screen.dart';
+import '../../features/settings/presentation/notifications_settings_screen.dart';
 import '../../features/settings/presentation/privacy_screen.dart';
+import '../../features/settings/presentation/profile_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/statistics/presentation/statistics_screen.dart';
 import '../../features/voting/presentation/voting_screen.dart';
@@ -123,6 +128,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: 'settings',
                 builder: (context, state) => const SettingsScreen(),
                 routes: [
+                  GoRoute(
+                    path: 'notifications',
+                    builder: (context, state) =>
+                        const NotificationsSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'design',
+                    builder: (context, state) => const DesignSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'accessibility',
+                    builder: (context, state) =>
+                        const AccessibilitySettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'help',
+                    builder: (context, state) => const HelpSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'profile',
+                    builder: (context, state) => const ProfileSettingsScreen(),
+                  ),
                   GoRoute(
                     path: 'about',
                     builder: (context, state) => const AboutAppScreen(),
