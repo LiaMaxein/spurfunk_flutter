@@ -12,6 +12,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+
     return Material(
       color: AppColors.black,
       child: Stack(
@@ -21,12 +23,12 @@ class SplashScreen extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            height: MediaQuery.sizeOf(context).height * 0.42,
+            height: screenHeight * 0.50,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 Image.asset(
-                  AppAssets.splashNoirCouple,
+                  AppAssets.splashCityYouth,
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
                 ),
@@ -37,10 +39,11 @@ class SplashScreen extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         AppColors.black,
-                        AppColors.black.withValues(alpha: 0.85),
+                        AppColors.black.withValues(alpha: 0.9),
+                        AppColors.black.withValues(alpha: 0.35),
                         Colors.transparent,
                       ],
-                      stops: const [0, 0.35, 0.7],
+                      stops: const [0, 0.28, 0.55, 0.85],
                     ),
                   ),
                 ),
@@ -50,12 +53,12 @@ class SplashScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 48),
+                SizedBox(height: screenHeight * 0.11),
                 const SpurfunkLogo(
                   variant: SpurfunkLogoVariant.withClaim,
-                  height: 132,
+                  height: 168,
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 36),
                 Text(
                   'Gemeinsam schauen.\nGemeinsam rätseln.',
                   textAlign: TextAlign.center,

@@ -6,6 +6,8 @@ import '../../../core/layout/app_shell.dart';
 import '../../../core/widgets/app_components.dart';
 import '../application/community_stats_notifier.dart';
 import 'widgets/community_hero_header.dart';
+import 'widgets/community_memory_tab.dart';
+import 'widgets/community_quiz_tab.dart';
 import 'widgets/community_stats_filters.dart';
 import 'widgets/community_sub_tab_bar.dart';
 import 'widgets/episode_stats_card.dart';
@@ -26,8 +28,15 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final tabParam = GoRouterState.of(context).uri.queryParameters['tab'];
-    if (tabParam == 'stats' && _tab != 0) {
-      setState(() => _tab = 0);
+    final nextTab = switch (tabParam) {
+      'quiz' => 1,
+      'memory' => 2,
+      'leaderboard' || 'rangliste' => 3,
+      'stats' || null || '' => 0,
+      _ => _tab,
+    };
+    if (nextTab != _tab) {
+      setState(() => _tab = nextTab);
     }
   }
 
@@ -51,6 +60,10 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                 setState(() => _filtersExpanded = !_filtersExpanded);
               },
             )
+          else if (_tab == 1)
+            const CommunityQuizTab()
+          else if (_tab == 2)
+            const CommunityMemoryTab()
           else
             _ComingSoonTab(tab: _tab),
         ],

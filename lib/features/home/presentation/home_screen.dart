@@ -104,8 +104,8 @@ class HomeScreen extends ConsumerWidget {
                 _QuickLink(
                   icon: Icons.quiz_outlined,
                   label: 'Quiz',
-                  subtitle: 'Bald verfügbar',
-                  onTap: () => context.go(AppRoutes.community.path),
+                  subtitle: 'Jetzt spielen',
+                  onTap: () => context.go('${AppRoutes.community.path}?tab=quiz'),
                 ),
                 _QuickLink(
                   icon: Icons.bar_chart_outlined,

@@ -84,10 +84,7 @@ enum AppChatDensity {
 
 enum NotificationPreference {
   liveStart('notify_live_start', 'Live-Beginn'),
-  news('notify_news', 'Neue News'),
-  mentions('notify_mentions', 'Erwähnungen im Chat'),
-  replies('notify_replies', 'Antworten'),
-  communityHighlights('notify_community_highlights', 'Community-Highlights'),
+  news('notify_news', 'Polizeifunk-News'),
   newsletter('notify_newsletter', 'Newsletter'),
   weeklySummary('notify_weekly_summary', 'Wochenzusammenfassung');
 

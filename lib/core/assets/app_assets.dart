@@ -6,6 +6,7 @@ abstract final class AppAssets {
 
   // Photos (Noir hero imagery)
   static const splashNoirCouple = '$_photos/splash_noir_couple.png';
+  static const splashCityYouth = '$_photos/splash_city_youth.png';
   static const communityNoirHero = '$_photos/community_noir_hero.png';
   static const homeLiveHero = '$_photos/home_live_hero.png';
   static const factsPageHero = homeLiveHero;

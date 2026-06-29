@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/community/presentation/community_screen.dart';
 import '../../features/community/presentation/episode_stats_detail_screen.dart';
+import '../../features/community/presentation/memory_play_screen.dart';
+import '../../features/community/presentation/quiz_play_screen.dart';
+import '../../features/community/data/memory_mock_data.dart';
+import '../../shared/models/gamification_models.dart';
 import '../../features/facts/presentation/facts_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/live_episode/presentation/investigator_detail_screen.dart';
@@ -80,6 +84,34 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => EpisodeStatsDetailScreen(
                   episodeId: state.pathParameters['episodeId']!,
                 ),
+              ),
+              GoRoute(
+                path: 'quiz/play',
+                builder: (context, state) {
+                  final category = _quizCategoryFromName(
+                    state.uri.queryParameters['category'],
+                  );
+                  final session = state.uri.queryParameters['session'] ?? '0';
+                  return QuizPlayScreen(
+                    key: ValueKey('quiz-$session-${category?.name ?? 'all'}'),
+                    category: category,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'memory/play',
+                builder: (context, state) {
+                  final id = state.uri.queryParameters['id'] ?? 'easy';
+                  final session = state.uri.queryParameters['session'] ?? '0';
+                  final difficulty = memoryDifficulties.firstWhere(
+                    (item) => item.id == id,
+                    orElse: () => memoryDifficulties.first,
+                  );
+                  return MemoryPlayScreen(
+                    key: ValueKey('memory-$session-${difficulty.id}'),
+                    difficulty: difficulty,
+                  );
+                },
               ),
             ],
           ),
@@ -175,3 +207,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+QuizCategory? _quizCategoryFromName(String? name) {
+  if (name == null || name.isEmpty) return null;
+  for (final category in QuizCategory.values) {
+    if (category.name == name) return category;
+  }
+  return null;
+}

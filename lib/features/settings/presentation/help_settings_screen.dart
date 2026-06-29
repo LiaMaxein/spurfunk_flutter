@@ -24,8 +24,9 @@ class HelpSettingsScreen extends StatelessWidget {
           'oder gehe zu Einstellungen → Profil & Identität.',
     ),
     (
-      'Wann kommen Quiz und Memory?',
-      'Quiz, Memory und Rangliste sind für Version 2.0 geplant.',
+      'Wo finde ich Quiz und Memory?',
+      'Im Community-Bereich unter den Tabs „Quiz“ und „Memory“. '
+          'Die Rangliste folgt in einer späteren Ausbaustufe.',
     ),
   ];
 
