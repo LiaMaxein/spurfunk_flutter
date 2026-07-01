@@ -73,6 +73,43 @@ void main() {
       expect(cardTapped, isTrue);
       expect(find.text('Schließen'), findsNothing);
     });
+
+    testWidgets('selected state keeps stable card size without overflow', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(430, 900));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      Widget card({required bool selected}) {
+        return MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 130,
+                height: 160,
+                child: AvatarCaseCard(
+                  avatar: laborfund,
+                  selected: selected,
+                  onTap: () {},
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(card(selected: false));
+      await tester.pumpAndSettle();
+      final unselectedSize = tester.getSize(find.byType(AvatarCaseCard));
+
+      await tester.pumpWidget(card(selected: true));
+      await tester.pumpAndSettle();
+      final selectedSize = tester.getSize(find.byType(AvatarCaseCard));
+
+      expect(tester.takeException(), isNull);
+      expect(selectedSize.width, unselectedSize.width);
+      expect(selectedSize.height, unselectedSize.height);
+    });
   });
 
   group('ProfileSettingsScreen', () {

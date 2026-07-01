@@ -66,27 +66,31 @@ Future<void> showProfileAvatarPicker({
                       Expanded(
                         child: GridView.builder(
                           controller: scrollController,
+                          clipBehavior: Clip.none,
                           itemCount: avatarPresets.length,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
+                            mainAxisSpacing: 14,
                             childAspectRatio: AvatarCaseCard.gridAspectRatio,
                           ),
                           itemBuilder: (context, index) {
                             final avatar = avatarPresets[index];
-                            return AvatarCaseCard(
-                              avatar: avatar,
-                              selected: avatar.id == selectedId,
-                              onTap: () async {
-                                await ref
-                                    .read(selectedAvatarIdProvider.notifier)
-                                    .select(avatar.id);
-                                if (context.mounted) {
-                                  Navigator.of(context).pop();
-                                }
-                              },
+                            return Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: AvatarCaseCard(
+                                avatar: avatar,
+                                selected: avatar.id == selectedId,
+                                onTap: () async {
+                                  await ref
+                                      .read(selectedAvatarIdProvider.notifier)
+                                      .select(avatar.id);
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                              ),
                             );
                           },
                         ),

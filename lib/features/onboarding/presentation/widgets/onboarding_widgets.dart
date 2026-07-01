@@ -197,7 +197,7 @@ class AvatarCaseCard extends StatefulWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  static const gridAspectRatio = 0.85;
+  static const gridAspectRatio = 0.80;
 
   @override
   State<AvatarCaseCard> createState() => _AvatarCaseCardState();
@@ -221,7 +221,7 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
       onTap: widget.onTap,
       onLongPress: _showDetails,
       child: AnimatedScale(
-        scale: selected ? 1.035 : (_pressed ? 0.97 : 1),
+        scale: _pressed ? 0.97 : 1,
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOutCubic,
         child: AnimatedContainer(
@@ -233,17 +233,15 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
             ),
             borderRadius: BorderRadius.circular(22),
             border: Border.all(
-              color: selected
-                  ? AppColors.redSoft
-                  : Colors.white.withValues(alpha: 0.06),
-              width: selected ? 2 : 1,
+              color: selected ? AppColors.redSoft : AppColors.divider,
+              width: 2,
             ),
             boxShadow: selected
                 ? [
                     BoxShadow(
-                      color: AppColors.red.withValues(alpha: 0.28),
-                      blurRadius: 28,
-                      offset: const Offset(0, 14),
+                      color: AppColors.red.withValues(alpha: 0.22),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
                     ),
                   ]
                 : kEmptyBoxShadow,
@@ -264,8 +262,8 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
                       ),
                     ),
                     Positioned(
-                      top: -4,
-                      right: -4,
+                      top: 0,
+                      right: 0,
                       child: Semantics(
                         label: 'Beschreibung für ${widget.avatar.name}',
                         button: true,

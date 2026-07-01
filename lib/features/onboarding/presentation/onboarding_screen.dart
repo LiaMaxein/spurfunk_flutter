@@ -166,21 +166,25 @@ class _AvatarStep extends ConsumerWidget {
           Expanded(
             child: GridView.builder(
               padding: EdgeInsets.zero,
+              clipBehavior: Clip.none,
               itemCount: avatarPresets.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+                mainAxisSpacing: 14,
                 childAspectRatio: AvatarCaseCard.gridAspectRatio,
               ),
               itemBuilder: (context, index) {
                 final avatar = avatarPresets[index];
-                return AvatarCaseCard(
-                  avatar: avatar,
-                  selected: avatar.id == selectedId,
-                  onTap: () => ref
-                      .read(selectedAvatarIdProvider.notifier)
-                      .select(avatar.id),
+                return Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: AvatarCaseCard(
+                    avatar: avatar,
+                    selected: avatar.id == selectedId,
+                    onTap: () => ref
+                        .read(selectedAvatarIdProvider.notifier)
+                        .select(avatar.id),
+                  ),
                 );
               },
             ),
