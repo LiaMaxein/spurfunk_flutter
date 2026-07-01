@@ -190,14 +190,16 @@ class PopularTeam {
   const PopularTeam({
     required this.rank,
     required this.name,
-    required this.portraitAssetPath,
+    required this.imageAssetPath,
     required this.favoriteCount,
+    required this.teamId,
   });
 
   final int rank;
   final String name;
-  final String portraitAssetPath;
+  final String imageAssetPath;
   final int favoriteCount;
+  final String teamId;
 }
 
 class PopularEpisode {

@@ -40,6 +40,7 @@ class HomeNotifier extends AsyncNotifier<HomeUiState> {
     final next = await episodes.getNextEpisode();
     final news = await newsRepo.getLatestNews();
     final past = await episodes.getPastEpisodes();
+    final upcoming = await episodes.getUpcomingEpisodes();
 
     VoteAggregate? lastAgg;
     if (past.isNotEmpty) {
@@ -62,7 +63,7 @@ class HomeNotifier extends AsyncNotifier<HomeUiState> {
     return HomeUiState(
       currentEpisode: current,
       nextEpisode: next ?? current,
-      upcomingEpisodes: past.take(3).toList(),
+      upcomingEpisodes: upcoming,
       news: news,
       lastVoteAggregate: lastAgg,
       liveVoteAggregate: liveAgg,

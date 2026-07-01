@@ -91,6 +91,10 @@ class MockEpisodeRepository implements EpisodeRepository {
 
   @override
   Future<List<Episode>> getPastEpisodes() async => mockPastEpisodes;
+
+  @override
+  Future<List<Episode>> getUpcomingEpisodes({int limit = 3}) async =>
+      buildMockUpcomingEpisodes(limit: limit);
 }
 
 class MockVoteRepository implements VoteRepository {

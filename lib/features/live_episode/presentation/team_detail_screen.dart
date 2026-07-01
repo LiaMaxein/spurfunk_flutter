@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/assets/app_assets.dart';
 import '../../../core/layout/app_shell.dart';
 import '../../../core/persistence/shared_preferences_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_components.dart';
 import '../../../core/widgets/investigator_portrait.dart';
+import '../../../core/widgets/spurfunk_branding_widgets.dart';
 import '../../../shared/models/models.dart';
 import '../../facts/data/facts_mock_data.dart';
 import '../../facts/data/facts_models.dart';
@@ -58,6 +60,10 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     }
 
     final leadInvestigator = investigatorById(team.leadInvestigatorId);
+    final city = cityByTeamId(team.id);
+    final cityImage =
+        city?.imageAssetPath ?? AppAssets.heroForLocation(team.city);
+    final teamStyle = teamCityStyle[team.id];
     final episodeCount = team.members
         .map((member) => investigatorById(member.investigatorId).episodeCount)
         .fold<int>(
@@ -73,9 +79,14 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InvestigatorPortrait(
-                assetPath: team.thumbnailAssetPath,
-                size: 88,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  cityImage,
+                  width: 88,
+                  height: 88,
+                  fit: BoxFit.cover,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -155,6 +166,29 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
               ],
             ),
           ),
+          if (teamStyle != null) ...[
+            const SizedBox(height: 16),
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'STIL',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    teamStyle,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           AppCard(
             child: Column(
@@ -198,11 +232,12 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
-        Expanded(
-          child: Text(
-            'TEAM-DETAIL',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+        const Expanded(
+          child: Center(
+            child: SpurfunkLogo(
+              variant: SpurfunkLogoVariant.horizontal,
+              height: 52,
+            ),
           ),
         ),
         const SizedBox(width: 48),

@@ -64,8 +64,8 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             Text(
               'POLIZEIFUNK – NEWS',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: AppColors.textPrimary,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontSize: 22,
               ),
             ),
             const SizedBox(height: 10),
@@ -90,10 +90,10 @@ class HomeScreen extends ConsumerWidget {
               childAspectRatio: 1.35,
               children: [
                 _QuickLink(
-                  icon: Icons.forum_outlined,
-                  label: 'Community',
-                  subtitle: 'Jetzt diskutieren',
-                  onTap: () => context.go(AppRoutes.community.path),
+                  icon: Icons.location_city_outlined,
+                  label: 'Städte',
+                  subtitle: 'Aktive & ehemalige Standorte',
+                  onTap: () => context.go('${AppRoutes.facts.path}?tab=cities'),
                 ),
                 _QuickLink(
                   icon: Icons.folder_outlined,
@@ -795,14 +795,28 @@ class _QuickLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: AppColors.red, size: 28),
-          const SizedBox(height: 10),
-          Text(label, style: Theme.of(context).textTheme.titleMedium),
-          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+          Icon(icon, color: AppColors.red, size: 26),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.titleMedium,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 12,
+              height: 1.25,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );
@@ -816,13 +830,23 @@ class _UpcomingEpisodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageAsset =
+        episode.imageAssetPath ?? AppAssets.heroForLocation(episode.location);
+
+    final broadcastDate = DateFormat(
+      'EEEE, d. MMMM yyyy',
+      'de_DE',
+    ).format(episode.startsAt);
+    final broadcastTime =
+        '${DateFormat.Hm().format(episode.startsAt)} Uhr · ${episode.sender}';
+
     return AppCard(
       child: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.asset(
-              AppAssets.homeLiveHero,
+              imageAsset,
               width: 72,
               height: 72,
               fit: BoxFit.cover,
@@ -841,26 +865,18 @@ class _UpcomingEpisodeCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  DateFormat('dd.MM.yyyy').format(episode.startsAt),
+                  broadcastDate,
                   style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Text(
+                  broadcastTime,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 12,
+                    color: AppColors.textMuted,
+                  ),
                 ),
               ],
             ),
-          ),
-          Column(
-            children: [
-              const Icon(Icons.bookmark_border, color: AppColors.textPrimary),
-              const SizedBox(height: 2),
-              Text(
-                'MERKEN',
-                style: GoogleFonts.inter(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.red,
-                  letterSpacing: 0.4,
-                ),
-              ),
-            ],
           ),
         ],
       ),

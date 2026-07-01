@@ -23,7 +23,7 @@ const profileTotalXp = 12450;
 
 const profileTodayXpTotal = 280;
 
-const profileBadgesUnlocked = 24;
+const profileBadgesUnlocked = 26;
 const profileBadgesTotal = 40;
 
 const profileActivityMonthLabel = 'MAI 2025';
@@ -203,6 +203,22 @@ const profileUnlockedBadges = [
     icon: Icons.chat_bubble_outline,
     isUnlocked: true,
     accentColor: Color(0xFF9C27B0),
+  ),
+  ProfileBadge(
+    id: 'quiz_king',
+    name: 'Quiz-König',
+    subtitle: '20 Quiz perfekt gemeistert',
+    icon: Icons.quiz_outlined,
+    isUnlocked: true,
+    accentColor: Color(0xFFFFC107),
+  ),
+  ProfileBadge(
+    id: 'memory_brain',
+    name: 'Memory-Brain',
+    subtitle: '10 Memory-Spiele gewonnen',
+    icon: Icons.psychology_alt_outlined,
+    isUnlocked: true,
+    accentColor: Color(0xFF7E57C2),
   ),
 ];
 

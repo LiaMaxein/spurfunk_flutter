@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/layout/app_shell.dart';
 import '../../../core/widgets/app_components.dart';
+import '../../../shared/models/models.dart';
 import '../application/community_stats_notifier.dart';
+import '../../home/application/home_notifier.dart';
 import 'widgets/community_hero_header.dart';
 import 'widgets/community_memory_tab.dart';
 import 'widgets/community_quiz_tab.dart';
@@ -84,6 +86,7 @@ class _StatsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(communityStatsProvider);
+    final home = ref.watch(homeNotifierProvider).value;
 
     if (stats.isLoading) {
       return const LoadingSkeleton(height: 240);
@@ -99,6 +102,7 @@ class _StatsTab extends ConsumerWidget {
 
     final featured = stats.episodes.first;
     final others = stats.episodes.skip(1).toList();
+    final showLiveBadge = _isFeaturedEpisodeLive(featured, home);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,13 +115,13 @@ class _StatsTab extends ConsumerWidget {
         EpisodeStatsCard(
           item: featured,
           featured: true,
-          showLiveBadge: true,
+          showLiveBadge: showLiveBadge,
           showThumbnail: false,
           onTap: () => openEpisodeStatsDetail(context, featured.episode.id),
         ),
         if (others.isNotEmpty) ...[
           const SizedBox(height: 20),
-          const CommunitySectionHeading(title: 'WEITERE FOLGEN'),
+          const CommunitySectionHeading(title: 'FRÜHERE ABSTIMMUNGEN'),
           const SizedBox(height: 10),
           for (final item in others) ...[
             EpisodeStatsCard(
@@ -134,6 +138,17 @@ class _StatsTab extends ConsumerWidget {
       ],
     );
   }
+}
+
+bool _isFeaturedEpisodeLive(PastEpisodeStats featured, HomeUiState? home) {
+  final current = home?.currentEpisode;
+  if (current == null) return false;
+
+  final now = DateTime.now();
+  if (!current.isVotingOpenAt(now)) return false;
+
+  final statsEpisodeId = communityStatsEpisodeIdFor(current.id);
+  return statsEpisodeId == featured.episode.id;
 }
 
 class _ComingSoonTab extends StatelessWidget {

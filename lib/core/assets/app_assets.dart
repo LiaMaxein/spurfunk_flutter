@@ -106,10 +106,10 @@ abstract final class AppAssets {
   static const portraitEstherBaumann = '$_photos/portrait_esther_baumann.png';
   static const portraitPiaHeinrich = '$_photos/portrait_pia_heinrich.png';
 
-  // Branding (SVG)
-  static const logoNameIcon = '$_branding/spurfunk_logo_name_icon.svg';
-  static const logoNameClaim = '$_branding/spurfunk_logo_name_clain.svg';
-  static const appIconSvg = '$_branding/spurfunk_app_icon.svg';
+  // Branding (SVG, transparent background)
+  static const logoNameIcon = '$_branding/spurfunk_logo_name_icon_transparent.svg';
+  static const logoNameClaim = '$_branding/spurfunk_logo_name_clain_transparent.svg';
+  static const appIconSvg = '$_branding/spurfunk_app_icon_transparent.svg';
 
 
   // UX persona portraits (Lastenheft, fictional archetypes)

@@ -267,6 +267,103 @@ InvestigatorTeamSummary? teamById(String id) {
   return null;
 }
 
+TatortCity? cityByTeamId(String teamId) {
+  for (final city in factsTatortCities) {
+    if (city.teamId == teamId) return city;
+  }
+  return null;
+}
+
+InvestigatorTeamSummary? teamByInvestigatorId(String investigatorId) {
+  for (final team in factsInvestigatorTeams) {
+    if (team.leadInvestigatorId == investigatorId) return team;
+    for (final member in team.members) {
+      if (member.investigatorId == investigatorId) return team;
+    }
+  }
+  return null;
+}
+
+/// Stilistische Merkmale der Tatort-Teams (angelehnt an Wikipedia/Reihencharakter).
+const teamCityStyle = {
+  'team_kiel':
+      'Seit 2003 in Kiel angesiedelt. Der Stil gilt als nordisch-melancholisch '
+      'und gesellschaftlich beobachtend: ruhige Bildsprache, Küsten- und '
+      'Hafenatmosphäre, Fälle mit moralischer Tiefe. Markenzeichen sind '
+      'Borowskis nachdenklicher Ton und Schleswig-Holstein als prägendes Milieu.',
+  'team_koeln':
+      'Das Kölner Team (seit 1997) gilt als eines der bekanntesten Duos der '
+      'Reihe – oft als „deutsches Buddy-Cop-Paar" beschrieben. Typisch sind '
+      'Kölner Lokalkolorit, Alltagsnähe, trockener Humor und eine warme, '
+      'bodenständige Chemie zwischen Ballauf und Schenk.',
+  'team_muenster':
+      'In Münster (seit 2002) verbindet der Tatort Krimi mit Wortwitz: '
+      'Kommissar und Rechtsmediziner als eingespieltes Paar. Der Stil ist '
+      'westfälisch-lakonisch, dialogstark und oft ironisch – weniger Action, '
+      'mehr Charakterzeichnung und „Münsteraner Schnauze".',
+  'team_stuttgart':
+      'Das Stuttgarter Team (seit 2008) steht für schwäbische Zurückhaltung '
+      'und gesellschaftliche Schärfe. Die Fälle wirken modern und kontrastreich, '
+      'häufig mit persönlichen Konflikten der Ermittler:innen und einem eher '
+      'düsteren, realistischen Stadtporträt.',
+  'team_hamburg':
+      'Hamburg liefert seit den 1980er-Jahren wiederholt Tatort-Folgen. Der '
+      'Stil ist hanseatisch-nüchtern: Hafenmetropole, soziale Schichten, '
+      'dichte Atmosphäre. Markenzeichen sind ein eher ernster, realistischer '
+      'Ton ohne große Verspieltheit.',
+  'team_berlin':
+      'Der Berliner Tatort (RBB) steht für Großstadt-Krimi mit politischen '
+      'und gesellschaftlichen Unterströmungen. Typisch sind schnelle Schnitte, '
+      'multikulturelles Berlin als Kulisse und ein eher harter, aktueller Stil.',
+  'team_hannover':
+      'Hannover (seit 2014) erzählt norddeutsch-sachlich und zurückhaltend. '
+      'Weniger Spektakel, dafür präzise Ermittlungsarbeit und alltagsnahe '
+      'Fälle in der niedersächsischen Landeshauptstadt.',
+  'team_dortmund':
+      'Dortmund (seit 2012) setzt auf Ruhrpott-Authentizität: Arbeiterstadt, '
+      'soziale Nähe, klare Sprache. Der Stil wirkt roh, direkt und nah an den '
+      'Menschen im Revier.',
+  'team_dresden':
+      'Dresden (seit 2016) nutzt die Elbmetropole mit historischen Räumen und '
+      'kontrastreicher Stadtlandschaft. Erzählt wird eher besonnen und düster '
+      'als laut oder komödiantisch.',
+  'team_frankfurt':
+      'Frankfurt (seit 2019) steht für urbanen, jungen Krimi in der '
+      'Finanzmetropole. Internationaler Flair, Hochhaus-Noir und ein eher '
+      'dynamisches, experimentelles Erzähltempo sind prägend.',
+  'team_freiburg':
+      'Freiburg (seit 2020) bringt Südbaden ins Spiel: Natur, Licht, mildere '
+      'Grundstimmung. Der Stil wirkt nahbar und weniger zynisch als viele '
+      'andere Standorte.',
+  'team_muenchen':
+      'München (BR) verbindet bayerisches Milieu mit städtischem Flair. Oft '
+      'bildstark und gesellschaftlich geschärft – traditionell, aber selten '
+      'wirklich leicht.',
+  'team_nuernberg':
+      'Nürnberg (seit 2015) erzählt fränkisch-kompakt in überschaubaren '
+      'Milieus. Bodenständig, warmherzig, mit viel regionalem Lokalkolorit.',
+  'team_wien':
+      'Der Wiener Tatort (ORF, seit 1972) ist der älteste außerhalb Deutschlands. '
+      'Markenzeichen: Wiener Schmäh, Charme, Ambivalenz und feine '
+      'gesellschaftliche Zeichnung.',
+  'team_zuerich':
+      'Zürich (SRF) steht für schweizerische Präzision: saubere Bildsprache, '
+      'analytische Fälle, internationale Kühle – eher intellektuell als laut.',
+  'team_bremen':
+      'Bremen (Radio Bremen, seit 2021) verbindet Hafenstadt mit zeitgemäßem '
+      'Erzählstil. Frisch, direkt und nah an aktuellen gesellschaftlichen '
+      'Debatten.',
+  'team_saarbruecken':
+      'Saarbrücken (SR) nutzt Grenzland-Atmosphäre und Nähe zu Frankreich. '
+      'Intim, manchmal düster, mit kleinstädtischer Spannung.',
+  'team_ludwigshafen':
+      'Ludwigshafen (SWR) zeigt Alltagskrimi im Rhein-Neckar-Raum – sachlich, '
+      'industriell geprägt und nah am Leben der Region.',
+  'team_wiesbaden':
+      'Wiesbaden (HR) verbindet Kurstadt-Eleganz mit verborgenen Konflikten. '
+      'Bürgerliche Fassaden, eleganter Ton, selten heiter.',
+};
+
 const factsTimelineMilestones = [
   TimelineMilestone(
     period: '1970',

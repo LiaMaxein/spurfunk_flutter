@@ -8,20 +8,23 @@ const communityOnlineMembers = 1248;
 final mockPopularTeams = [
   const PopularTeam(
     rank: 1,
-    name: 'Team Borowski',
-    portraitAssetPath: AppAssets.portraitKlausBorowski,
+    name: 'Team Kiel',
+    imageAssetPath: AppAssets.liveCaseKielNoirHero,
     favoriteCount: 3842,
+    teamId: 'team_kiel',
   ),
   const PopularTeam(
     rank: 2,
-    name: 'Team Ballauf & Schenk',
-    portraitAssetPath: AppAssets.portraitFrankThiel,
+    name: 'Team Köln',
+    imageAssetPath: AppAssets.cityKoeln,
     favoriteCount: 2910,
+    teamId: 'team_koeln',
   ),
   const PopularTeam(
     rank: 3,
-    name: 'Team Thiel & Borowski',
-    portraitAssetPath: AppAssets.portraitMilaSahin,
+    name: 'Team Stuttgart',
+    imageAssetPath: AppAssets.cityStuttgart,
     favoriteCount: 2156,
+    teamId: 'team_stuttgart',
   ),
 ];

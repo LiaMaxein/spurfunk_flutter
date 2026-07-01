@@ -110,7 +110,7 @@ class LiveNonLivePanel extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tatort: ${lastEpisodeStats!.episode.title}',
+                              _formatEpisodeTitle(lastEpisodeStats!.episode.title),
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             const SizedBox(height: 4),
@@ -160,4 +160,12 @@ class LiveNonLivePanel extends StatelessWidget {
       ),
     );
   }
+}
+
+String _formatEpisodeTitle(String title) {
+  final trimmed = title.trim();
+  if (trimmed.toLowerCase().startsWith('tatort:')) {
+    return trimmed;
+  }
+  return 'Tatort: $trimmed';
 }

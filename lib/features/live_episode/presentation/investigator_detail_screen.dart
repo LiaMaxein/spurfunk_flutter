@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/investigator_portrait.dart';
 import '../../../core/widgets/app_components.dart';
 import '../../../shared/models/models.dart';
+import '../../facts/data/facts_mock_data.dart';
 import '../data/live_case_mock_data.dart';
 
 class InvestigatorDetailScreen extends ConsumerStatefulWidget {
@@ -45,6 +46,7 @@ class _InvestigatorDetailScreenState
   @override
   Widget build(BuildContext context) {
     final investigator = investigatorById(widget.investigatorId);
+    final team = teamByInvestigatorId(widget.investigatorId);
 
     return AppScaffold(
       header: Row(
@@ -161,7 +163,11 @@ class _InvestigatorDetailScreenState
                 const SizedBox(height: 16),
                 PrimaryButton(
                   label: 'Mehr über das Team',
-                  onPressed: () => context.go(AppRoutes.facts.path),
+                  onPressed: team == null
+                      ? () => context.go(AppRoutes.facts.path)
+                      : () => context.pushReplacement(
+                          '/live/team-detail/${team.id}',
+                        ),
                 ),
               ],
             ),

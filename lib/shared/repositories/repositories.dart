@@ -11,6 +11,7 @@ abstract class EpisodeRepository {
   Future<Episode?> getCurrentEpisode();
   Future<Episode?> getNextEpisode();
   Future<List<Episode>> getPastEpisodes();
+  Future<List<Episode>> getUpcomingEpisodes({int limit = 3});
 }
 
 abstract class VoteRepository {

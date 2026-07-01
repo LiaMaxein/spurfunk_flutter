@@ -21,9 +21,9 @@ void main() {
     });
 
     test('badges include unlocked and locked', () {
-      expect(profileUnlockedBadges.length, 6);
+      expect(profileUnlockedBadges.length, 8);
       expect(profileLockedBadges.length, 5);
-      expect(badgesForFilter(ProfileBadgeFilter.all).length, 11);
+      expect(badgesForFilter(ProfileBadgeFilter.all).length, 13);
     });
 
     test('today activities sum to expected xp', () {
@@ -62,7 +62,7 @@ void main() {
       expect(find.text('Mitwisser der Extraklasse'), findsOneWidget);
       expect(find.text('Serientäter'), findsOneWidget);
       expect(find.text('Tatort-Experte'), findsOneWidget);
-      expect(find.text('24 / 40 Badges'), findsOneWidget);
+      expect(find.text('26 / 40 Badges'), findsOneWidget);
     });
 
     testWidgets('statistics teaser navigates to stats screen', (tester) async {

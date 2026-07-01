@@ -15,6 +15,8 @@ class EpisodeStatsCard extends StatelessWidget {
     this.featured = false,
     this.showLiveBadge = false,
     this.showThumbnail = true,
+    this.thumbnailWidth = 88,
+    this.thumbnailHeight = 88,
   });
 
   final PastEpisodeStats item;
@@ -22,6 +24,8 @@ class EpisodeStatsCard extends StatelessWidget {
   final bool featured;
   final bool showLiveBadge;
   final bool showThumbnail;
+  final double thumbnailWidth;
+  final double thumbnailHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +49,8 @@ class EpisodeStatsCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
                     episode.imageAssetPath!,
-                    width: 72,
-                    height: 54,
+                    width: thumbnailWidth,
+                    height: thumbnailHeight,
                     fit: BoxFit.cover,
                   ),
                 ),

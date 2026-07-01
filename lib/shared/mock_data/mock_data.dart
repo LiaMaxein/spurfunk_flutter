@@ -62,6 +62,124 @@ Episode buildDemoLiveEpisode() {
   );
 }
 
+class _UpcomingEpisodeTemplate {
+  const _UpcomingEpisodeTemplate({
+    required this.title,
+    required this.location,
+    required this.description,
+    required this.imageAssetPath,
+    required this.investigatorIds,
+  });
+
+  final String title;
+  final String location;
+  final String description;
+  final String imageAssetPath;
+  final List<String> investigatorIds;
+}
+
+const _upcomingEpisodeTemplates = [
+  _UpcomingEpisodeTemplate(
+    title: 'Tatort: Rebellen',
+    location: 'Hamburg',
+    description: 'Ein Fall voller Spannung in Hamburg.',
+    imageAssetPath: AppAssets.episodeRebellenHamburg,
+    investigatorIds: ['thorsten_falke', 'julia_grosz'],
+  ),
+  _UpcomingEpisodeTemplate(
+    title: 'Tatort: Im Auftrag der Königin',
+    location: 'Köln',
+    description: 'Ballauf und Schenk ermitteln am Rhein.',
+    imageAssetPath: AppAssets.episodeKoeln,
+    investigatorIds: ['max_ballauf', 'freddy_schenk'],
+  ),
+  _UpcomingEpisodeTemplate(
+    title: 'Tatort: Der scheinende Berg',
+    location: 'Stuttgart',
+    description: 'Lannert und Bootz stoßen auf ein rätselhaftes Verbrechen.',
+    imageAssetPath: AppAssets.episodeStuttgart,
+    investigatorIds: ['thorsten_lannert', 'sebastian_bootz'],
+  ),
+];
+
+Episode _episodeFromTemplate(
+  _UpcomingEpisodeTemplate template, {
+  required String id,
+  required DateTime startsAt,
+}) {
+  return Episode(
+    id: id,
+    title: template.title,
+    sender: 'Das Erste',
+    startsAt: startsAt,
+    endsAt: startsAt.add(const Duration(minutes: 90)),
+    description: template.description,
+    location: template.location,
+    investigatorIds: template.investigatorIds,
+    imageAssetPath: template.imageAssetPath,
+  );
+}
+
+Episode _episodeFromExisting(
+  Episode episode, {
+  required String id,
+  required DateTime startsAt,
+}) {
+  return Episode(
+    id: id,
+    title: episode.title,
+    sender: episode.sender,
+    startsAt: startsAt,
+    endsAt: startsAt.add(const Duration(minutes: 90)),
+    description: episode.description,
+    location: episode.location,
+    investigatorIds: episode.investigatorIds,
+    imageAssetPath: episode.imageAssetPath,
+  );
+}
+
+/// Next [limit] scheduled Tatort broadcasts (Sundays, 20:15 Uhr).
+List<Episode> buildMockUpcomingEpisodes({int limit = 3}) {
+  final now = DateTime.now();
+  final featured = mockCurrentEpisode;
+  final isLive = featured.isLiveAt(now);
+
+  final firstSlot = isLive
+      ? DateTime(
+          featured.startsAt.year,
+          featured.startsAt.month,
+          featured.startsAt.day,
+          20,
+          15,
+        ).add(const Duration(days: 7))
+      : featured.startsAt;
+
+  if (isLive) {
+    return List.generate(
+      limit,
+      (index) => _episodeFromTemplate(
+        _upcomingEpisodeTemplates[index],
+        id: 'ep-upcoming-$index',
+        startsAt: firstSlot.add(Duration(days: 7 * index)),
+      ),
+    );
+  }
+
+  return [
+    _episodeFromExisting(
+      featured,
+      id: 'ep-upcoming-0',
+      startsAt: firstSlot,
+    ),
+    for (var index = 1; index < limit; index++)
+      _episodeFromTemplate(
+        _upcomingEpisodeTemplates[index - 1],
+        id: 'ep-upcoming-$index',
+        startsAt: firstSlot.add(Duration(days: 7 * index)),
+      ),
+  ];
+}
+
 final mockPastEpisodes = [
   Episode(
     id: 'ep-past-3',

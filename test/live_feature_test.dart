@@ -140,6 +140,9 @@ class _FakeEpisodeRepository implements EpisodeRepository {
   @override
   Future<List<Episode>> getPastEpisodes() async =>
       past.isEmpty ? [_pastEpisode()] : past;
+
+  @override
+  Future<List<Episode>> getUpcomingEpisodes({int limit = 3}) async => const [];
 }
 
 class _FakeVoteRepository implements VoteRepository {
