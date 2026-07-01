@@ -111,6 +111,20 @@ abstract final class AppAssets {
   static const logoNameClaim = '$_branding/spurfunk_logo_name_clain.svg';
   static const appIconSvg = '$_branding/spurfunk_app_icon.svg';
 
+
+  // UX persona portraits (Lastenheft, fictional archetypes)
+  static const personaClaudia = '$_photos/personas/persona_claudia.png';
+  static const personaLukas = '$_photos/personas/persona_lukas.png';
+  static const personaAnna = '$_photos/personas/persona_anna.png';
+  static const personaFritz = '$_photos/personas/persona_fritz.png';
+
+  static const personaPortraits = [
+    personaClaudia,
+    personaLukas,
+    personaAnna,
+    personaFritz,
+  ];
+
   static const avatarLaterne = '$_branding/avatar_01_laterne.svg';
   static const avatarFrauProfil = '$_branding/avatar_02_frau_profil.svg';
   static const avatarFingerabdruck = '$_branding/avatar_03_fingerabdruck.svg';

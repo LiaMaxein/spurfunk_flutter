@@ -21,10 +21,9 @@ const memoryDifficulties = [
   MemoryDifficulty(
     id: 'hard',
     label: 'Schwer',
-    columns: 7,
-    rows: 7,
+    columns: 6,
+    rows: 6,
     xpMultiplier: 2.4,
-    blankSlotIndex: 24,
   ),
 ];
 
@@ -47,5 +46,6 @@ int calculateMemoryScore({
 
 int calculateMemoryXp(int score) => max(15, score ~/ 3);
 
-double memoryEmojiSizeForCell(double cellSize) =>
-    (cellSize * 0.68).clamp(22.0, 40.0);
+/// Inset around motif image inside a memory cell.
+double memoryImageInsetForCell(double cellSize) =>
+    (cellSize * 0.08).clamp(3.0, 8.0);

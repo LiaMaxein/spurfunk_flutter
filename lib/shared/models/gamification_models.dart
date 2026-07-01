@@ -1,3 +1,5 @@
+export '../../features/community/data/memory_motifs.dart' show MemoryMotif;
+
 enum QuizCategory {
   folgen('Folgen'),
   teams('Teams & Ermittler'),
@@ -49,50 +51,6 @@ class QuizSessionResult {
       totalQuestions == 0 ? 0 : correctCount / totalQuestions;
 }
 
-enum MemoryMotif {
-  fingerprint('Fingerabdruck', '👆'),
-  tatort('Tatort', '🏙️'),
-  ermittler('Ermittler:in', '👮'),
-  marke('Polizeimarke', '🪪'),
-  spuren('Spurensicherung', '🔍'),
-  beweis('Beweismittel', '🧪'),
-  team('Team', '👥'),
-  akte('Akte', '📁'),
-  kamera('Überwachung', '📹'),
-  dna('DNA-Spur', '🧬'),
-  handschuh('Handschuh', '🧤'),
-  messer('Tatwaffe', '🔪'),
-  uhr('Zeugen-Uhr', '⌚'),
-  telefon('Forensik-Call', '📞'),
-  schluessel('Schlüssel', '🔑'),
-  foto('Beweisfoto', '📸'),
-  auto('Einsatzfahrzeug', '🚓'),
-  kaffee('Ermittler-Kaffee', '☕'),
-  regen('Nachtregen', '🌧️'),
-  lampe('Beweislicht', '🔦'),
-  karte('Stadtplan', '🗺️'),
-  notiz('Vernehmung', '📝'),
-  siegel('Beweissiegel', '🔒'),
-  mikro('Verhör', '🎙️'),
-  tasche('Asservat', '💼'),
-  blitz('Blitzlicht', '⚡'),
-  rauch('Nebel', '🌫️'),
-  hand('Handschriften', '✍️'),
-  ziel('Zielscheibe', '🎯'),
-  maske('Verkleidung', '🎭'),
-  glas('Labor-Glas', '🔬'),
-  buch('Fallakte', '📚'),
-  stern('Top-Ermittler', '⭐'),
-  warnung('Spoiler-Warnung', '⚠️'),
-  puzzle('Rätsel', '🧩'),
-  funke('Spur-Funke', '✨');
-
-  const MemoryMotif(this.label, this.emoji);
-
-  final String label;
-  final String emoji;
-}
-
 class MemoryDifficulty {
   const MemoryDifficulty({
     required this.id,
@@ -108,7 +66,7 @@ class MemoryDifficulty {
   final int columns;
   final int rows;
   final double xpMultiplier;
-  /// Leeres Feld bei ungerader Rastergröße (z. B. 5×5, 7×7).
+  /// Leeres Feld bei ungerader Rastergröße (z. B. 5×5).
   final int? blankSlotIndex;
 
   int get totalSlots => columns * rows;

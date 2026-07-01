@@ -26,7 +26,9 @@ void main() {
     expect(memoryDifficulties.length, 3);
     expect(memoryDifficulties[0].gridLabel, '4×4');
     expect(memoryDifficulties[1].gridLabel, '5×5');
-    expect(memoryDifficulties[2].gridLabel, '7×7');
+    expect(memoryDifficulties[2].gridLabel, '6×6');
+    expect(memoryDifficulties[2].pairCount, 18);
+    expect(memoryDifficulties[2].blankSlotIndex, isNull);
   });
 
   test('selectable quiz categories have 15 questions each', () {
@@ -42,6 +44,15 @@ void main() {
     final session = buildQuizSession(category: QuizCategory.teams);
     expect(session.length, quizStandardQuestionCount);
     expect(session.every((q) => q.category == QuizCategory.teams), isTrue);
+  });
+
+  test('memory motif pool has 50 noir image pairs', () {
+    expect(MemoryMotif.values.length, 50);
+    for (final motif in MemoryMotif.values) {
+      expect(motif.assetPath, startsWith('assets/photos/memory/'));
+      expect(motif.assetPath, endsWith('.png'));
+      expect(motif.label, isNotEmpty);
+    }
   });
 
   test('motifsForDifficulty returns enough unique motifs', () {

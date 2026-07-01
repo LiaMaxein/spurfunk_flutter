@@ -66,6 +66,8 @@ flutter:
     - assets/mockups/
     - assets/branding/
     - assets/photos/
+    - assets/photos/memory/
+    - assets/photos/personas/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

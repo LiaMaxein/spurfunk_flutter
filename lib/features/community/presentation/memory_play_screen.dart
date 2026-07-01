@@ -212,14 +212,14 @@ class _MemoryPlayScreenState extends State<MemoryPlayScreen> {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final spacing = switch (difficulty.columns) {
-                  >= 7 => 4.0,
+                  >= 6 => 4.0,
                   >= 5 => 5.0,
                   _ => 6.0,
                 };
                 final cellWidth =
                     (constraints.maxWidth - spacing * (difficulty.columns - 1)) /
                     difficulty.columns;
-                final emojiSize = memoryEmojiSizeForCell(cellWidth);
+                final imageInset = memoryImageInsetForCell(cellWidth);
                 final gridHeight =
                     cellWidth * difficulty.rows +
                     spacing * (difficulty.rows - 1);
@@ -242,7 +242,7 @@ class _MemoryPlayScreenState extends State<MemoryPlayScreen> {
                         final card = _cards[index];
                         return _MemoryTile(
                           card: card,
-                          emojiSize: emojiSize,
+                          imageInset: imageInset,
                           onTap: () => _onCardTap(index),
                         );
                       },
@@ -382,7 +382,7 @@ class _MemoryCard {
   _MemoryCard({required this.motif, required this.pairId}) : isBlank = false;
 
   _MemoryCard.blank()
-      : motif = MemoryMotif.spuren,
+      : motif = MemoryMotif.fingerabdruck,
         pairId = -1,
         isBlank = true;
 
@@ -396,12 +396,12 @@ class _MemoryCard {
 class _MemoryTile extends StatelessWidget {
   const _MemoryTile({
     required this.card,
-    required this.emojiSize,
+    required this.imageInset,
     required this.onTap,
   });
 
   final _MemoryCard card;
-  final double emojiSize;
+  final double imageInset;
   final VoidCallback onTap;
 
   @override
@@ -411,32 +411,53 @@ class _MemoryTile extends StatelessWidget {
     }
 
     final faceUp = card.isFaceUp || card.isMatched;
+    final motif = card.motif;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: faceUp ? AppColors.surfaceHigh : AppColors.surface,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: card.isMatched
-                  ? AppColors.green.withValues(alpha: 0.6)
-                  : faceUp
-                  ? AppColors.red.withValues(alpha: 0.5)
-                  : AppColors.divider,
+    return Semantics(
+      label: faceUp ? motif.label : 'Verdeckte Memory-Karte',
+      button: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(10),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              color: faceUp ? AppColors.surfaceHigh : AppColors.surface,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: card.isMatched
+                    ? AppColors.green.withValues(alpha: 0.6)
+                    : faceUp
+                    ? AppColors.red.withValues(alpha: 0.5)
+                    : AppColors.divider,
+              ),
             ),
-          ),
-          child: Center(
+            clipBehavior: Clip.antiAlias,
             child: faceUp
-                ? Text(card.motif.emoji, style: TextStyle(fontSize: emojiSize))
-                : Icon(
-                    Icons.fingerprint,
-                    color: AppColors.textMuted.withValues(alpha: 0.5),
-                    size: emojiSize * 0.85,
+                ? Padding(
+                    padding: EdgeInsets.all(imageInset),
+                    child: SizedBox.expand(
+                      child: Image.asset(
+                        motif.assetPath,
+                        fit: BoxFit.cover,
+                        semanticLabel: motif.label,
+                        gaplessPlayback: true,
+                        errorBuilder: (_, _, _) => Icon(
+                          Icons.image_not_supported_outlined,
+                          color: AppColors.textMuted,
+                          size: 24 + imageInset,
+                        ),
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Icon(
+                      Icons.fingerprint,
+                      color: AppColors.textMuted.withValues(alpha: 0.5),
+                      size: 20 + imageInset,
+                    ),
                   ),
           ),
         ),
