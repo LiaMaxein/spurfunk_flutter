@@ -7,6 +7,7 @@ import '../../../../core/widgets/cinematic_widgets.dart';
 import '../../../../core/widgets/spurfunk_branding_widgets.dart';
 import '../../../../shared/mock_data/mock_data.dart';
 import '../../application/onboarding_state.dart';
+import 'avatar_detail_sheet.dart';
 
 class OnboardingScaffold extends StatelessWidget {
   const OnboardingScaffold({required this.child, super.key});
@@ -196,12 +197,18 @@ class AvatarCaseCard extends StatefulWidget {
   final bool selected;
   final VoidCallback onTap;
 
+  static const gridAspectRatio = 0.85;
+
   @override
   State<AvatarCaseCard> createState() => _AvatarCaseCardState();
 }
 
 class _AvatarCaseCardState extends State<AvatarCaseCard> {
   bool _pressed = false;
+
+  void _showDetails() {
+    showAvatarDetailSheet(context, widget.avatar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +219,7 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
       onTapCancel: () => setState(() => _pressed = false),
       onTapUp: (_) => setState(() => _pressed = false),
       onTap: widget.onTap,
+      onLongPress: _showDetails,
       child: AnimatedScale(
         scale: selected ? 1.035 : (_pressed ? 0.97 : 1),
         duration: const Duration(milliseconds: 180),
@@ -256,8 +264,31 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
                       ),
                     ),
                     Positioned(
+                      top: -4,
+                      right: -4,
+                      child: Semantics(
+                        label: 'Beschreibung für ${widget.avatar.name}',
+                        button: true,
+                        child: Tooltip(
+                          message: 'Mehr erfahren',
+                          child: GestureDetector(
+                            onTap: _showDetails,
+                            behavior: HitTestBehavior.opaque,
+                            child: const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Icon(
+                                Icons.info_outline_rounded,
+                                color: AppColors.textMuted,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
                       top: 0,
-                      right: 0,
+                      left: 0,
                       child: AnimatedOpacity(
                         opacity: selected ? 1 : 0,
                         duration: const Duration(milliseconds: 180),
@@ -276,17 +307,6 @@ class _AvatarCaseCardState extends State<AvatarCaseCard> {
                 widget.avatar.name,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontSize: 13,
-                    ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                widget.avatar.description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: 10,
-                      height: 1.25,
                     ),
                 textAlign: TextAlign.center,
                 maxLines: 2,

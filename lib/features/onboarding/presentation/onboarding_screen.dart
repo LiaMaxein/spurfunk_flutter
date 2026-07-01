@@ -171,7 +171,7 @@ class _AvatarStep extends ConsumerWidget {
                 crossAxisCount: 3,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                childAspectRatio: 0.68,
+                childAspectRatio: AvatarCaseCard.gridAspectRatio,
               ),
               itemBuilder: (context, index) {
                 final avatar = avatarPresets[index];

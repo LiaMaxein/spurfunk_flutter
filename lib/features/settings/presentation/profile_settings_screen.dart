@@ -70,6 +70,13 @@ class _ProfileSettingsScreenState extends ConsumerState<ProfileSettingsScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
+                        avatar.description,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
                         'Tippe auf das Bild, um die Identität zu wechseln.',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
@@ -93,14 +100,17 @@ class _ProfileSettingsScreenState extends ConsumerState<ProfileSettingsScreen> {
           const SizedBox(height: 12),
           AppCard(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: SwitchListTile.adaptive(
-              contentPadding: EdgeInsets.zero,
-              value: anonymous,
-              onChanged: (value) => ref
-                  .read(anonymousModeProvider.notifier)
-                  .setEnabled(value: value),
-              title: const Text('Anonym teilnehmen'),
-              subtitle: const Text('Zeigt dich als Mitwisser.'),
+            child: Material(
+              color: Colors.transparent,
+              child: SwitchListTile.adaptive(
+                contentPadding: EdgeInsets.zero,
+                value: anonymous,
+                onChanged: (value) => ref
+                    .read(anonymousModeProvider.notifier)
+                    .setEnabled(value: value),
+                title: const Text('Anonym teilnehmen'),
+                subtitle: const Text('Zeigt dich als Mitwisser.'),
+              ),
             ),
           ),
           const SizedBox(height: 16),
