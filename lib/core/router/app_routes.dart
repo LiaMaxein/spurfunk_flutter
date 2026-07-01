@@ -41,10 +41,6 @@ abstract final class AppRoutes {
     icon: Icons.person_outline,
   );
 
-  static const votingPath = '/voting';
-  static const statisticsPath = '/statistics';
-  static const liveCasePath = '/live/case';
-
   static const profileSettingsPath = '/profile/settings';
   static const profileSettingsNotificationsPath = '/profile/settings/notifications';
   static const profileSettingsDesignPath = '/profile/settings/design';

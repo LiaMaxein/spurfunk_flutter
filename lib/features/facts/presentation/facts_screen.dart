@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/navigation/spurfunk_navigation.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import 'widgets/facts_cities_tab.dart';
@@ -62,13 +63,7 @@ class _FactsScreenState extends ConsumerState<FactsScreen> {
     );
   }
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.home.path);
-    }
-  }
+  void _handleBack(BuildContext context) => spurfunkGoBack(context);
 
   @override
   Widget build(BuildContext context) {

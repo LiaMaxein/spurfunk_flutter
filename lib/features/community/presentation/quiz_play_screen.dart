@@ -87,10 +87,17 @@ class _QuizPlayScreenState extends State<QuizPlayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      body: SafeArea(
-        child: _result != null ? _buildResult(context) : _buildQuestion(context),
+    return PopScope(
+      canPop: _result != null,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _confirmExit(context);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.black,
+        body: SafeArea(
+          child: _result != null ? _buildResult(context) : _buildQuestion(context),
+        ),
       ),
     );
   }
@@ -106,10 +113,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen> {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => _confirmExit(context),
-                icon: const Icon(Icons.close_rounded),
-              ),
+              const SizedBox(width: 48),
               Expanded(
                 child: Text(
                   'QUIZ',
@@ -211,10 +215,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen> {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => context.go(_communityQuizPath),
-                icon: const Icon(Icons.close_rounded),
-              ),
+              const SizedBox(width: 48),
               Expanded(
                 child: Text(
                   'ERGEBNIS',

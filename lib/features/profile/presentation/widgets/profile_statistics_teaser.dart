@@ -89,10 +89,7 @@ class ProfileDetailHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          ),
+          const SizedBox(width: 48),
           Expanded(
             child: Text(
               title,

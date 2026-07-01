@@ -6,69 +6,6 @@ import '../models/models.dart';
 import '../mock_data/mock_data.dart';
 import '../repositories/repositories.dart';
 
-class MockAuthRepository implements AuthRepository {
-  MockAuthRepository(this._prefs);
-
-  final SharedPreferences _prefs;
-  static const _profileKey = 'mock_profile_json';
-
-  @override
-  Future<UserProfile> createLocalProfile(CreateProfileInput input) async {
-    final profile = UserProfile(
-      id: 'local-user',
-      alias: input.alias,
-      avatarId: input.avatarId,
-      isAnonymous: input.isAnonymous,
-      region: input.region,
-      ageCohort: input.ageCohort,
-      gender: input.gender,
-      xp: 1620,
-      level: 12,
-      createdAt: DateTime.now(),
-    );
-    await _save(profile);
-    return profile;
-  }
-
-  @override
-  Future<UserProfile?> getCurrentProfile() async {
-    final alias = _prefs.getString('username');
-    final avatarId = _prefs.getString('avatar_id') ?? 'laterne';
-    final anonymous = _prefs.getBool('anonymous_mode') ?? true;
-    if (!(_prefs.getBool('onboarding_completed') ?? false)) return null;
-    return UserProfile(
-      id: 'local-user',
-      alias: alias,
-      avatarId: avatarId,
-      isAnonymous: anonymous,
-      region: 'Deutschland',
-      ageCohort: '30-39',
-      xp: 1620,
-      level: 12,
-      createdAt: DateTime.now(),
-    );
-  }
-
-  @override
-  Future<void> updateProfile(UserProfile profile) async {
-    await _save(profile);
-  }
-
-  @override
-  Future<void> logout() async {
-    await _prefs.remove(_profileKey);
-    await _prefs.setBool('onboarding_completed', false);
-  }
-
-  Future<void> _save(UserProfile profile) async {
-    await _prefs.setString('avatar_id', profile.avatarId);
-    if (profile.alias != null) {
-      await _prefs.setString('username', profile.alias!);
-    }
-    await _prefs.setBool('anonymous_mode', profile.isAnonymous);
-  }
-}
-
 class MockEpisodeRepository implements EpisodeRepository {
   MockEpisodeRepository({this.forceLiveDemo = false});
 

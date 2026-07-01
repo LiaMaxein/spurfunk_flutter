@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../navigation/spurfunk_navigation.dart';
 import '../theme/app_colors.dart';
 import 'spurfunk_branding_widgets.dart';
 
@@ -253,6 +254,29 @@ class _LiveBadgeState extends State<LiveBadge>
             letterSpacing: 1,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SpurfunkBackButton extends StatelessWidget {
+  const SpurfunkBackButton({
+    super.key,
+    this.onPressed,
+  });
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onPressed ?? () => spurfunkGoBack(context),
+      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+      color: AppColors.textPrimary,
+      tooltip: 'Zurück',
+      style: IconButton.styleFrom(
+        minimumSize: const Size(44, 44),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
   }

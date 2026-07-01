@@ -8,11 +8,6 @@ import 'repositories.dart';
 
 /// Central repository wiring. Switches to remote implementations once
 /// [AppConfig.useMockRepositories] is false and Supabase is configured.
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  _ensureMockMode();
-  return MockAuthRepository(ref.watch(sharedPreferencesProvider));
-});
-
 final episodeRepositoryProvider = Provider<EpisodeRepository>((ref) {
   _ensureMockMode();
   final forceLive = ref.watch(forceLiveDemoProvider);

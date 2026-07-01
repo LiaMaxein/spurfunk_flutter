@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../navigation/spurfunk_navigation.dart';
 import '../router/app_routes.dart';
 import '../theme/app_colors.dart';
+import '../widgets/app_components.dart';
 import 'responsive_breakpoints.dart';
 
 class AppShell extends StatelessWidget {
@@ -36,7 +38,29 @@ class AppShell extends StatelessWidget {
                   ),
               ],
             ),
-          Expanded(child: child),
+          Expanded(
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                child,
+                if (_showBackButton(context))
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: SafeArea(
+                      bottom: false,
+                      right: false,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: SpurfunkBackButton(
+                          onPressed: () => spurfunkGoBack(context),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: useRail ? null : _SpurfunkTabBar(selectedIndex: selectedIndex),
@@ -54,6 +78,11 @@ class AppShell extends StatelessWidget {
 
   void _goToIndex(BuildContext context, int index) {
     context.go(AppRoutes.navigationRoutes[index].path);
+  }
+
+  bool _showBackButton(BuildContext context) {
+    final location = GoRouterState.of(context).uri.toString();
+    return !isSpurfunkMainTabRoute(location);
   }
 }
 

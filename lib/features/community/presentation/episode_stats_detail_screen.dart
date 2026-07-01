@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/layout/app_shell.dart';
@@ -44,10 +43,7 @@ class _EpisodeStatsDetailScreenState
       return AppScaffold(
         header: Row(
           children: [
-            IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            ),
+            const SizedBox(width: 48),
             Expanded(
               child: Text(
                 'ABSTIMMUNG',
@@ -73,10 +69,7 @@ class _EpisodeStatsDetailScreenState
     return AppScaffold(
       header: Row(
         children: [
-          IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          ),
+          const SizedBox(width: 48),
           Expanded(
             child: Text(
               'ABSTIMMUNG',

@@ -154,10 +154,17 @@ class _MemoryPlayScreenState extends State<MemoryPlayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      body: SafeArea(
-        child: _result != null ? _buildResult(context) : _buildGame(context),
+    return PopScope(
+      canPop: _result != null,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _confirmExit(context);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.black,
+        body: SafeArea(
+          child: _result != null ? _buildResult(context) : _buildGame(context),
+        ),
       ),
     );
   }
@@ -172,10 +179,7 @@ class _MemoryPlayScreenState extends State<MemoryPlayScreen> {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => _confirmExit(context),
-                icon: const Icon(Icons.close_rounded),
-              ),
+              const SizedBox(width: 48),
               Expanded(
                 child: Text(
                   'MEMORY · ${difficulty.label.toUpperCase()}',
@@ -266,10 +270,7 @@ class _MemoryPlayScreenState extends State<MemoryPlayScreen> {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => context.go(_communityMemoryPath),
-                icon: const Icon(Icons.close_rounded),
-              ),
+              const SizedBox(width: 48),
               Expanded(
                 child: Text(
                   'ERGEBNIS',

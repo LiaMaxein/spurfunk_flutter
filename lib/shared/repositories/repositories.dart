@@ -1,12 +1,5 @@
 import '../models/models.dart';
 
-abstract class AuthRepository {
-  Future<UserProfile> createLocalProfile(CreateProfileInput input);
-  Future<UserProfile?> getCurrentProfile();
-  Future<void> updateProfile(UserProfile profile);
-  Future<void> logout();
-}
-
 abstract class EpisodeRepository {
   Future<Episode?> getCurrentEpisode();
   Future<Episode?> getNextEpisode();

@@ -226,13 +226,10 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-        ),
-        const Expanded(
+        SizedBox(width: 48),
+        Expanded(
           child: Center(
             child: SpurfunkLogo(
               variant: SpurfunkLogoVariant.horizontal,
@@ -240,7 +237,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             ),
           ),
         ),
-        const SizedBox(width: 48),
+        SizedBox(width: 48),
       ],
     );
   }

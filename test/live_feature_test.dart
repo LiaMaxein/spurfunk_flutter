@@ -125,11 +125,10 @@ class _TestApp extends StatelessWidget {
 }
 
 class _FakeEpisodeRepository implements EpisodeRepository {
-  _FakeEpisodeRepository({this.current, this.next, this.past = const []});
+  _FakeEpisodeRepository({this.current, this.next});
 
   final Episode? current;
   final Episode? next;
-  final List<Episode> past;
 
   @override
   Future<Episode?> getCurrentEpisode() async => current;
@@ -138,8 +137,7 @@ class _FakeEpisodeRepository implements EpisodeRepository {
   Future<Episode?> getNextEpisode() async => next;
 
   @override
-  Future<List<Episode>> getPastEpisodes() async =>
-      past.isEmpty ? [_pastEpisode()] : past;
+  Future<List<Episode>> getPastEpisodes() async => [_pastEpisode()];
 
   @override
   Future<List<Episode>> getUpcomingEpisodes({int limit = 3}) async => const [];

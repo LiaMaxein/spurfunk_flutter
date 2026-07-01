@@ -39,62 +39,6 @@ extension VoteValueUi on VoteValue {
   };
 }
 
-class VoteOptionButton extends StatelessWidget {
-  const VoteOptionButton({
-    required this.value,
-    required this.selected,
-    required this.onTap,
-    super.key,
-    this.enabled = true,
-  });
-
-  final VoteValue value;
-  final bool selected;
-  final VoidCallback onTap;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: '${value.label} bewerten',
-      button: true,
-      child: GestureDetector(
-        onTap: enabled ? onTap : null,
-        child: Opacity(
-          opacity: enabled ? 1 : 0.4,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: selected
-                      ? value.color.withValues(alpha: 0.2)
-                      : AppColors.surface,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: selected ? value.color : AppColors.divider,
-                    width: selected ? 2 : 1,
-                  ),
-                ),
-                child: Text(value.emoji, style: const TextStyle(fontSize: 28)),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value.label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 11,
-                  color: selected ? value.color : AppColors.textMuted,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class VoteSegmentBar extends StatelessWidget {
   const VoteSegmentBar({required this.aggregate, super.key});
 
@@ -184,51 +128,6 @@ class StatBar extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class AvatarCard extends StatelessWidget {
-  const AvatarCard({
-    required this.selected,
-    required this.onTap,
-    required this.child,
-    super.key,
-  });
-
-  final bool selected;
-  final VoidCallback onTap;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? AppColors.red : AppColors.divider,
-            width: selected ? 2.5 : 1,
-          ),
-        ),
-        child: Stack(
-          children: [
-            child,
-            if (selected)
-              const Positioned(
-                top: 6,
-                right: 6,
-                child: Icon(
-                  Icons.check_circle,
-                  color: AppColors.red,
-                  size: 22,
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }

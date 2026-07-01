@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/spurfunk_theme_extension.dart';
 import '../../../../core/widgets/app_components.dart';
-import '../../../../core/widgets/cinematic_widgets.dart';
 
 class SettingsNavRow extends StatelessWidget {
   const SettingsNavRow({
@@ -182,16 +181,32 @@ class SettingsScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.black,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ScreenTopBar(title: title),
-              const SizedBox(height: 16),
-              child,
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 8, 16, 0),
+              child: Row(
+                children: [
+                  const SizedBox(width: 48),
+                  Expanded(
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ),
+                  const SizedBox(width: 48),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                child: child,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -29,24 +29,6 @@ class UserProfile {
       isAnonymous || alias == null || alias!.isEmpty ? 'Mitwisser' : alias!;
 }
 
-class Avatar {
-  const Avatar({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.assetPath,
-    required this.icon,
-    required this.colors,
-  });
-
-  final String id;
-  final String name;
-  final String description;
-  final String assetPath;
-  final int icon;
-  final List<int> colors;
-}
-
 class Episode {
   const Episode({
     required this.id,
@@ -260,22 +242,4 @@ class Investigator {
       popularEpisodes: popularEpisodes,
     );
   }
-}
-
-class CreateProfileInput {
-  const CreateProfileInput({
-    this.alias,
-    required this.avatarId,
-    required this.isAnonymous,
-    this.region = 'Deutschland',
-    this.ageCohort = '30-39',
-    this.gender,
-  });
-
-  final String? alias;
-  final String avatarId;
-  final bool isAnonymous;
-  final String region;
-  final String ageCohort;
-  final String? gender;
 }

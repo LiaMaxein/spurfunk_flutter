@@ -7,7 +7,6 @@ import 'package:spurfunk_flutter/features/facts/data/facts_mock_data.dart';
 import 'package:spurfunk_flutter/features/facts/presentation/widgets/facts_city_map.dart';
 import 'package:spurfunk_flutter/features/facts/presentation/widgets/facts_main_tab_bar.dart';
 import 'package:spurfunk_flutter/features/live_episode/data/live_case_mock_data.dart';
-import 'package:spurfunk_flutter/features/live_episode/data/live_case_mock_data.dart';
 import 'package:spurfunk_flutter/features/live_episode/presentation/team_detail_screen.dart';
 
 void main() {

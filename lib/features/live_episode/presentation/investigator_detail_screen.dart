@@ -51,10 +51,7 @@ class _InvestigatorDetailScreenState
     return AppScaffold(
       header: Row(
         children: [
-          IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          ),
+          const SizedBox(width: 48),
           Expanded(
             child: Text(
               'TEAM-DETAIL',
