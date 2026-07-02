@@ -32,18 +32,22 @@ class Avatar {
 
 ## Avatar-Liste
 
-- einsamer Ermittler,
-- Analytikerin,
-- Fingerabdruck,
-- verdeckter Ermittler,
-- Spurensicherung,
-- Beobachter,
-- Ermittlungsakte,
-- Fußspuren,
-- Zeugin,
-- Dienstwaffe,
-- Laborfund,
-- Tatort.
+Entspricht `assets/branding/avatar_*.svg` und `roleAvatarPresets` in `lib/shared/mock_data/mock_data.dart`:
+
+| ID | Anzeigename |
+|---|---|
+| `laterne` | Der einsame Ermittler |
+| `frau_profil` | Die Analytikerin |
+| `fingerabdruck` | Der Fingerabdruck |
+| `detektiv_hut` | Der verdeckte Ermittler |
+| `lupe` | Die Spurensicherung |
+| `mann_profil` | Der Beobachter |
+| `aktenordner` | Die Ermittlungsakte |
+| `fussabdruecke` | Die Fußspuren |
+| `frau_ruecken` | Die Zeugin |
+| `pistole` | Die Dienstwaffe |
+| `beweisbeutel` | Der Laborfund |
+| `lampe` | Der Tatort |
 
 ## Entity: Episode
 

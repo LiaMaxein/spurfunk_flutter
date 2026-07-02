@@ -84,8 +84,9 @@
 - Fakten,
 - Ermittler-Teams,
 - Geschichte,
-- Städte,
-- Hinter den Kulissen.
+- Städte.
+
+**Geplant, noch nicht umgesetzt:** Hinter den Kulissen.
 
 ### 8. Profil / Akte
 

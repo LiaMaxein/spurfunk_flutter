@@ -104,6 +104,6 @@ Szenarien:
 - Rollout stoppen bei erhöhter Fehlerrate.
 - Hotfix-Prozess.
 
-## Cursor-Testregel
+## Testregel
 
-Cursor soll bei neuen Features immer passende Tests oder mindestens Test-Szenarien mitliefern.
+Bei neuen Features sollen passende Tests oder mindestens Test-Szenarien mitgeliefert werden.

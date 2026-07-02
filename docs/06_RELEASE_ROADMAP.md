@@ -88,6 +88,25 @@ Ziel: Lokale Events, Monetarisierung und automatisierte Inhalte.
 | Leistungsmerkmale | Polizeifunk, Statistiken, Ermittlerdatenbank, Historienbereich, Push-Benachrichtigungen |
 | Begeisterungsmerkmale | Quiz, Memory, XP-System, Badges, QR-Code-Einstieg, Premium-Modell |
 
-## Cursor-Regel
+## Implementierungsregel
 
-Cursor darf MVP-Funktionen bevorzugt implementieren. Spätere Versionen dürfen vorbereitet, aber nicht als Kernabhängigkeit für MVP vorausgesetzt werden.
+MVP-Funktionen haben Vorrang bei neuen Änderungen. Spätere Versionen dürfen vorbereitet, aber nicht als Kernabhängigkeit für den Kernbetrieb vorausgesetzt werden.
+
+## Aktueller Stand (Prototyp)
+
+Der Flutter-Prototyp hat den ursprünglichen MVP-1.0-Umfang weitgehend umgesetzt und darüber hinaus erweitert:
+
+| Bereich | Status |
+|---|---|
+| Onboarding (5 Schritte) | umgesetzt |
+| Home (Live / Kein-Live) | umgesetzt |
+| Live (Chat, Voting, Aktueller Fall) | umgesetzt |
+| Community (Statistiken, Quiz, Memory) | umgesetzt |
+| Polizeifunk auf Home | umgesetzt |
+| Fakten (4 Tabs: Fakten, Teams, Geschichte, Städte) | umgesetzt |
+| Profil (XP, Badges, Aktivität, Einstellungen) | umgesetzt |
+| Rangliste | Coming-soon-Stub |
+| Hinter den Kulissen (Fakten) | geplant, nicht umgesetzt |
+| Supabase-Backend | geplant |
+| Push-Benachrichtigungen (echt) | geplant |
+| Premium / QR-Code-Lokale | geplant |

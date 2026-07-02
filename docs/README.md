@@ -1,9 +1,10 @@
-# Spurfunk – Cursor-Dokumentation
+# Spurfunk – Projektdokumentation
 
-Diese Dokumentation übersetzt das Lastenheft **„Spurfunk – Der stille Gast schaut mit.“** in kompakte Markdown-Dateien für KI-Coding-Agenten wie Cursor.
+Diese Dokumentation übersetzt das Lastenheft **„Spurfunk – Der stille Gast schaut mit.“** in kompakte Markdown-Dateien für Entwicklung und Produktkontext.
 
 ## Ziel
-Cursor soll jederzeit verstehen:
+
+Die Dokumentation beschreibt:
 
 - welchen Nutzen die App hat,
 - welche Zielgruppe angesprochen wird,
@@ -12,24 +13,15 @@ Cursor soll jederzeit verstehen:
 - welche Architektur verwendet wird,
 - welche Regeln bei Code, UI, Datenschutz und Tests gelten.
 
-## Empfohlene Nutzung in Cursor
+## Nutzung
 
-1. Lege den gesamten Ordner in dein Flutter-Projekt.
-2. Behalte `.cursor/rules/` unverändert bei, damit Cursor die Regeln automatisch berücksichtigen kann.
-3. Nutze `docs/` als fachliche Referenz für Anforderungen, Screens, Datenmodell, API und Roadmap.
-4. Frage Cursor bei jeder Umsetzung konkret nach einem Teilbereich, z. B. „Implementiere den Live-Screen gemäß docs/SCREENS.md und .cursor/rules/design.mdc“.
+1. Lies zuerst `01_APP_PURPOSE.md` und `05_FEATURES.md` für Produktkontext.
+2. Nutze `07_ARCHITECTURE.md` und `10_NAVIGATION.md` für technische Orientierung.
+3. Design-Vorgaben stehen in `11_DESIGN_SYSTEM.md`; UI-Referenzbilder liegen unter `assets/mockups/`.
 
 ## Dokumentstruktur
 
 ```text
-.cursor/rules/
-  product.mdc
-  architecture.mdc
-  design.mdc
-  flutter-coding.mdc
-  data-security.mdc
-  testing.mdc
-
 docs/
   01_APP_PURPOSE.md
   02_PRODUCT_CONTEXT.md
@@ -48,5 +40,5 @@ docs/
   15_SECURITY_COMPLIANCE.md
   16_TESTING_ACCEPTANCE.md
   17_LEGAL_BRANDING.md
-  18_CURSOR_IMPLEMENTATION_PLAN.md
+  18_IMPLEMENTATION_PLAN.md
 ```

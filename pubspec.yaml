@@ -65,7 +65,11 @@ flutter:
   assets:
     - assets/mockups/
     - assets/branding/
-    - assets/photos/
+    - assets/photos/heroes/
+    - assets/photos/profile/
+    - assets/photos/staedte/
+    - assets/photos/episoden/
+    - assets/photos/team/
     - assets/photos/memory/
     - assets/photos/personas/
 

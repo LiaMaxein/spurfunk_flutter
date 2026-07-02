@@ -1,10 +1,10 @@
-# 18 – Cursor Implementation Plan
+# 18 – Implementation Plan
 
 ## Ziel
 
-Diese Datei beschreibt eine sinnvolle Reihenfolge, in der Cursor die App implementieren soll.
+Diese Datei beschreibt die sinnvolle Reihenfolge für die App-Implementierung und den aktuellen Umsetzungsstand.
 
-## Schritt 1 – Projektgrundlage
+## Schritt 1 – Projektgrundlage ✅
 
 - Flutter-Projekt prüfen.
 - Theme anlegen.
@@ -13,9 +13,9 @@ Diese Datei beschreibt eine sinnvolle Reihenfolge, in der Cursor die App impleme
 - Riverpod einrichten.
 - Ordnerstruktur gemäß Architektur vorbereiten.
 
-## Schritt 2 – Designsystem-Komponenten
+## Schritt 2 – Designsystem-Komponenten ✅
 
-Implementieren:
+Implementiert:
 
 - AppScaffold.
 - SpurfunkHeader.
@@ -30,9 +30,9 @@ Implementieren:
 - StatBar.
 - AvatarCard.
 
-## Schritt 3 – Mock-Daten und Models
+## Schritt 3 – Mock-Daten und Models ✅
 
-Implementieren:
+Implementiert:
 
 - UserProfile.
 - Avatar.
@@ -54,24 +54,25 @@ Mock-Repositories:
 - MockFactsRepository.
 - MockGamificationRepository.
 
-## Schritt 4 – Onboarding
+## Schritt 4 – Onboarding ✅
 
-Screens:
+Screens (PageView unter `/onboarding`):
 
-1. Splash.
+1. Splash (außerhalb GoRouter).
 2. Willkommen.
 3. Identität wählen.
-4. Alias wählen.
-5. Bestätigung.
+4. Geschlecht wählen.
+5. Alias wählen.
+6. Bestätigung.
 
 Persistenz:
 
 - SharedPreferences für Onboarding abgeschlossen.
-- Avatar und Alias lokal speichern.
+- Avatar, Alias und Geschlecht lokal speichern.
 
-## Schritt 5 – Home
+## Schritt 5 – Home ✅
 
-Implementieren:
+Implementiert:
 
 - Kein-Live-Zustand.
 - Live-Zustand.
@@ -80,9 +81,9 @@ Implementieren:
 - Polizeifunk-Karten.
 - Schnellzugriffe.
 
-## Schritt 6 – Live-Bereich
+## Schritt 6 – Live-Bereich ✅
 
-Implementieren:
+Implementiert:
 
 - Live-Modus.
 - Nicht-Live-Modus.
@@ -90,31 +91,31 @@ Implementieren:
 - Emoji-Reaktionen mit Animation.
 - Aktueller-Fall-Tab.
 
-## Schritt 7 – Community
+## Schritt 7 – Community ✅
 
-Implementieren:
+Implementiert:
 
-- Tabs: Statistiken, Quiz, Memory, Rangliste.
+- Tabs: Statistiken, Quiz, Memory, Rangliste (Rangliste als Coming-soon-Stub).
 - Voting-Ergebnisdetails.
 - Filter UI.
 - Quiz-Basisversion.
 - Memory-Basisversion.
-- Rangliste mit Mock-Daten.
 
-## Schritt 8 – Fakten
+## Schritt 8 – Fakten ✅ (teilweise)
 
-Implementieren:
+Implementiert:
 
 - Fakten-Tab.
 - Ermittler-Teams.
 - Team-Detailseite.
 - Geschichte / Zeitleiste.
 - Städte.
-- Hinter den Kulissen.
 
-## Schritt 9 – Profil
+**Offen:** Hinter den Kulissen.
 
-Implementieren:
+## Schritt 9 – Profil ✅
+
+Implementiert:
 
 - Akte.
 - XP und Level.
@@ -123,9 +124,9 @@ Implementieren:
 - Badge-Sammlung.
 - Favoriten.
 
-## Schritt 10 – Einstellungen
+## Schritt 10 – Einstellungen ✅
 
-Implementieren:
+Implementiert:
 
 - Benachrichtigungen.
 - App-Design.
@@ -135,14 +136,14 @@ Implementieren:
 - Über Spurfunk.
 - Abmelden.
 
-## Schritt 11 – Backend-Vorbereitung
+## Schritt 11 – Backend-Vorbereitung ⏳
 
 - Repository Interfaces stabilisieren.
 - Supabase Client vorbereiten.
 - RLS-Konzept übertragen.
 - Realtime Channels vorbereiten.
 
-## Schritt 12 – Tests
+## Schritt 12 – Tests ⏳
 
 - Unit Tests.
 - Widget Tests.
@@ -150,22 +151,11 @@ Implementieren:
 - Mock Stream Tests.
 - Accessibility Checks.
 
-## Prompt-Vorlagen für Cursor
+## Implementierungs-Checkliste
 
-### Designsystem
+Bei neuen Features:
 
-```text
-Implementiere das Spurfunk Designsystem gemäß docs/11_DESIGN_SYSTEM.md und .cursor/rules/design.mdc. Nutze Flutter ThemeData, zentrale Konstanten und wiederverwendbare Widgets. Keine Businesslogik in UI-Komponenten.
-```
-
-### Screen
-
-```text
-Implementiere den Screen [NAME] gemäß docs/13_SCREENS.md. Nutze vorhandene Komponenten aus core/widgets, Riverpod für State und GoRouter für Navigation. Berücksichtige Loading, Empty und Error States.
-```
-
-### Feature
-
-```text
-Implementiere Feature [NAME] gemäß docs/04_REQUIREMENTS.md und docs/05_FEATURES.md. Arbeite mock-first, aber backend-ready über Repository Interfaces.
-```
+1. Designsystem prüfen: `docs/11_DESIGN_SYSTEM.md`, Mockups unter `assets/mockups/`.
+2. Screen-Spec lesen: `docs/13_SCREENS.md`.
+3. Anforderungen prüfen: `docs/04_REQUIREMENTS.md`, `docs/05_FEATURES.md`.
+4. Mock-first, backend-ready über Repository Interfaces umsetzen.

@@ -33,7 +33,7 @@ Nutzer:innen begrüßen und Nutzen erklären.
 - Roter Akzenttext.
 - Beschreibung des Mehrwerts.
 - Button „Los geht’s“.
-- Fortschritt 1/4.
+- Fortschritt 1/5.
 
 ### Navigation
 
@@ -51,13 +51,29 @@ Anonyme, persönliche Community-Identität auswählen.
 - Selected State mit rotem Rahmen und Check.
 - Scrollbare Ansicht.
 - Button „Weiter“.
-- Fortschritt 2/4.
+- Fortschritt 2/5.
 
 ### Navigation
 
-- Weiter zu Alias/Namen wählen.
+- Weiter zu Geschlecht wählen.
 
-## 4. Onboarding – Namen wählen
+## 4. Onboarding – Geschlecht wählen
+
+### Ziel
+
+Optionale demografische Angabe für gefilterte Statistiken (anonym).
+
+### Inhalt
+
+- Auswahl zwischen weiblich, männlich, divers.
+- Button „Weiter“.
+- Fortschritt 3/5.
+
+### Navigation
+
+- Weiter zu Namen wählen.
+
+## 5. Onboarding – Namen wählen
 
 ### Ziel
 
@@ -69,13 +85,13 @@ Alias wählen oder anonym bleiben.
 - Option „Anonyme Teilnahme“.
 - Datenschutzhinweis mit Schloss-Icon.
 - Button „Weiter“.
-- Fortschritt 3/4.
+- Fortschritt 4/5.
 
 ### Navigation
 
 - Weiter zu Identität bestätigen.
 
-## 5. Onboarding – Identität bestätigen
+## 6. Onboarding – Identität bestätigen
 
 ### Ziel
 
@@ -88,13 +104,13 @@ Onboarding abschließen und Erfolgsmoment schaffen.
 - Alias oder anonyme Identität.
 - Datenschutzhinweis.
 - Button „Spurfunk starten!“
-- Fortschritt 4/4.
+- Fortschritt 5/5.
 
 ### Navigation
 
 - Weiter zu Home.
 
-## 6. Home – Kein Live
+## 7. Home – Kein Live
 
 ### Ziel
 
@@ -116,7 +132,7 @@ Feed für kommende Sendung, letzte Ergebnisse und News.
 - Vertikal scrollbar.
 - Kein Live-Chat sichtbar.
 
-## 7. Home – Live
+## 8. Home – Live
 
 ### Ziel
 
@@ -134,7 +150,7 @@ Aktive Ausstrahlung prominent machen.
 
 - Klick auf Live-Banner führt zum Live-Bereich.
 
-## 8. Community
+## 9. Community
 
 ### Ziel
 
@@ -153,7 +169,7 @@ Soziales Zentrum für Statistiken, Quiz, Memory und Rangliste.
 - Memory.
 - Rangliste.
 
-## 9. Community – Statistiken / Voting-Ergebnisse
+## 10. Community – Statistiken / Voting-Ergebnisse
 
 ### Inhalt
 
@@ -165,7 +181,7 @@ Soziales Zentrum für Statistiken, Quiz, Memory und Rangliste.
 - Farbige Balkendiagramme.
 - Drei beliebteste Ermittlerteams.
 
-## 10. Community – Quiz
+## 11. Community – Quiz
 
 ### Inhalt
 
@@ -173,7 +189,7 @@ Soziales Zentrum für Statistiken, Quiz, Memory und Rangliste.
 - Kategorien: Folgen, Teams, Drehorte, Schauspieler:innen, Kriminalistik, Geschichte, Allgemeinwissen.
 - Ergebnis mit Punkten, Lösungsquote und XP.
 
-## 11. Community – Memory
+## 12. Community – Memory
 
 ### Inhalt
 
@@ -181,7 +197,7 @@ Soziales Zentrum für Statistiken, Quiz, Memory und Rangliste.
 - Schwierigkeitsstufen: 4×4, 6×6, 9×9, 12×12.
 - Ergebnis: Züge, Zeit, Punkte, Bestleistung.
 
-## 12. Community – Rangliste
+## 13. Community – Rangliste
 
 ### Inhalt
 
@@ -189,7 +205,7 @@ Soziales Zentrum für Statistiken, Quiz, Memory und Rangliste.
 - Rang, Avatar, Benutzername, Mitwisser-Level, XP, Veränderung.
 - Eigener Rang hervorgehoben.
 
-## 13. Live – Live-Modus
+## 14. Live – Live-Modus
 
 ### Ziel
 
@@ -212,7 +228,7 @@ Gemeinsames Echtzeit-Erlebnis während der Ausstrahlung.
 - Nach Sendungsende wird Chat geschlossen und archiviert.
 - Neue Nachrichten nach Ende nicht mehr möglich.
 
-## 14. Live – Nicht-Live-Modus
+## 15. Live – Nicht-Live-Modus
 
 ### Inhalt
 
@@ -222,7 +238,7 @@ Gemeinsames Echtzeit-Erlebnis während der Ausstrahlung.
 - Ergebnisse der letzten Community-Abstimmung.
 - Button zu vollständigen Statistiken.
 
-## 15. Live – Aktueller Fall
+## 16. Live – Aktueller Fall
 
 ### Inhalt
 
@@ -238,7 +254,7 @@ Gemeinsames Echtzeit-Erlebnis während der Ausstrahlung.
 
 - Ermittler:in antippen öffnet Team-Detailseite.
 
-## 16. Team-Detailseite
+## 17. Team-Detailseite
 
 ### Inhalt
 
@@ -251,7 +267,7 @@ Gemeinsames Echtzeit-Erlebnis während der Ausstrahlung.
 - durchschnittliche Community-Bewertung.
 - CTA zu Ermittler & Teams.
 
-## 17. Fakten
+## 18. Fakten
 
 ### Ziel
 
@@ -294,7 +310,7 @@ Zentrale Wissensplattform.
 - Spezialeffekte.
 - kriminalistische Fachberatung.
 
-## 18. Profil
+## 19. Profil
 
 ### Ziel
 
@@ -312,7 +328,7 @@ Persönliche Schaltzentrale.
 - persönliche Statistiken.
 - Schnellzugriff Einstellungen.
 
-## 19. Profil – Statistiken
+## 20. Profil – Statistiken
 
 ### Inhalt
 
@@ -324,7 +340,7 @@ Persönliche Schaltzentrale.
 - aktive Tage.
 - gesammelte XP.
 
-## 20. Profil – Aktivitätstracker
+## 21. Profil – Aktivitätstracker
 
 ### Inhalt
 
@@ -332,7 +348,7 @@ Persönliche Schaltzentrale.
 - chronologische Aktivitäten.
 - Tages-XP.
 
-## 21. Profil – Badge-Sammlung
+## 22. Profil – Badge-Sammlung
 
 ### Inhalt
 
@@ -341,7 +357,7 @@ Persönliche Schaltzentrale.
 - Gesperrte Badges.
 - Fortschrittsbalken.
 
-## 22. Einstellungen
+## 23. Einstellungen
 
 ### Bereiche
 
@@ -380,7 +396,9 @@ Persönliche Schaltzentrale.
 - Haptik.
 - vergrößerte Touchflächen.
 
-## 23. Tablet-Ansicht Landscape
+## 24. Tablet-Ansicht Landscape
+
+> **Status: geplant, nicht implementiert**
 
 ### Ziel
 

@@ -18,12 +18,14 @@ Die Tab-Bar zeigt fünf Symbole ohne Textlabel. Der aktive Tab ist rot hervorgeh
 
 ```mermaid
 flowchart TD
-  Splash[Splashscreen] --> Check{Onboarding abgeschlossen?}
-  Check -->|Nein| Welcome[Onboarding 1: Willkommen]
-  Welcome --> Avatar[Onboarding 2: Identität wählen]
-  Avatar --> Alias[Onboarding 3: Namen wählen]
-  Alias --> Confirm[Onboarding 4: Bestätigen]
-  Confirm --> Home[Home]
+  Splash[Splashscreen ausserhalb GoRouter] --> Check{Onboarding abgeschlossen?}
+  Check -->|Nein| Onboarding["/onboarding PageView"]
+  Onboarding --> Step1[1: Willkommen]
+  Step1 --> Step2[2: Identität wählen]
+  Step2 --> Step3[3: Geschlecht wählen]
+  Step3 --> Step4[4: Namen wählen]
+  Step4 --> Step5[5: Bestätigen]
+  Step5 --> Home[Home /]
   Check -->|Ja| Home
 ```
 
@@ -43,27 +45,29 @@ flowchart LR
 
 | Route | Screen | Beschreibung |
 |---|---|---|
-| `/` | SplashScreen | Einstieg und Initialprüfung |
-| `/onboarding/welcome` | OnboardingWelcomeScreen | Willkommen |
-| `/onboarding/avatar` | AvatarSelectionScreen | Identität wählen |
-| `/onboarding/alias` | AliasSelectionScreen | Namen wählen |
-| `/onboarding/confirm` | OnboardingConfirmScreen | Bestätigung |
-| `/home` | HomeScreen | Feed / Live-Hinweis |
-| `/live` | LiveScreen | Chat oder Nicht-Live-Ansicht |
-| `/live/case` | CurrentCaseScreen | Aktueller Fall |
+| *(vor Router)* | SplashScreen | Einstieg via `MaterialApp(home:)` |
+| `/onboarding` | OnboardingScreen | PageView mit 5 Schritten |
+| `/` | HomeScreen | Feed / Live-Hinweis |
+| `/live` | LiveEpisodeScreen | Chat oder Nicht-Live-Ansicht |
+| `/live/team/:investigatorId` | InvestigatorDetailScreen | Ermittler-Detail |
+| `/live/team-detail/:teamId` | TeamDetailScreen | Team-Detail |
 | `/community` | CommunityScreen | Tabs: Statistik, Quiz, Memory, Rangliste |
-| `/community/stats/:episodeId` | VoteStatsDetailScreen | Detailstatistik |
-| `/community/quiz` | QuizScreen | Quiz |
-| `/community/memory` | MemoryScreen | Memory |
-| `/facts` | FactsScreen | Faktenbereich |
-| `/facts/team/:teamId` | TeamDetailScreen | Ermittlerteam |
+| `/community/stats/:episodeId` | EpisodeStatsDetailScreen | Detailstatistik |
+| `/community/quiz/play` | QuizPlayScreen | Quiz (Query: category, session) |
+| `/community/memory/play` | MemoryPlayScreen | Memory (Query: id, session) |
+| `/facts` | FactsScreen | Faktenbereich (Query: tab) |
 | `/profile` | ProfileScreen | Akte |
+| `/profile/stats` | ProfileStatsScreen | Persönliche Statistiken |
+| `/profile/activity` | ProfileActivityScreen | Aktivitätstracker |
+| `/profile/badges` | ProfileBadgesScreen | Badge-Sammlung |
 | `/profile/settings` | SettingsScreen | Einstellungen |
-| `/profile/badges` | BadgesScreen | Badge-Sammlung |
-| `/notifications` | NotificationsScreen | Benachrichtigungen |
-| `/legal/privacy` | PrivacyScreen | Datenschutz |
-| `/legal/imprint` | ImprintScreen | Impressum |
-| `/help` | HelpFaqScreen | Hilfe / FAQ |
+| `/profile/settings/notifications` | NotificationsSettingsScreen | Benachrichtigungen |
+| `/profile/settings/design` | DesignSettingsScreen | App-Design |
+| `/profile/settings/accessibility` | AccessibilitySettingsScreen | Barrierefreiheit |
+| `/profile/settings/help` | HelpSettingsScreen | Hilfe / FAQ |
+| `/profile/settings/profile` | ProfileSettingsScreen | Profil-Einstellungen |
+| `/profile/settings/about` | AboutAppScreen | Über Spurfunk |
+| `/profile/settings/privacy` | PrivacyScreen | Datenschutz |
 
 ## Live-Zustandslogik
 
@@ -76,7 +80,7 @@ flowchart TD
   Countdown --> LastResults[Letzte Ergebnisse]
 ```
 
-## Navigation-Regeln für Cursor
+## Navigationsregeln
 
 - Tab-Bar bleibt auf allen Hauptscreens sichtbar.
 - Onboarding und Detailseiten dürfen Tab-Bar ausblenden, wenn Fokus nötig ist.

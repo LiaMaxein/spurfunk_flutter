@@ -37,9 +37,9 @@ Spurfunk soll das Fernseherlebnis nicht ersetzen, sondern erweitern. Die App ist
 - Kein Hosting urheberrechtlich geschützter Originalinhalte.
 - Keine App mit Klarnamen- oder Echtfoto-Fokus.
 
-## Produktprinzipien für Cursor
+## Produktprinzipien
 
-Cursor soll bei jeder Implementierung diese Prinzipien priorisieren:
+Bei jeder Implementierung gelten diese Prinzipien:
 
 1. **Second Screen zuerst:** Jede Funktion muss nebenbei nutzbar sein und darf nicht zu stark vom TV-Erlebnis ablenken.
 2. **Live-Gefühl:** Live-Bereiche müssen dynamisch, schnell und emotional wirken.

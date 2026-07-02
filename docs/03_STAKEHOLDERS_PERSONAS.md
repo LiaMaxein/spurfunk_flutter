@@ -25,7 +25,7 @@ Sitzt manchmal alleine vor dem Fernseher und wünscht sich Austausch gegen das A
 ### Ziel
 Gemeinschaft, Austausch und einfache Bedienung.
 
-### Konsequenz für Cursor
+### UX-Konsequenz
 - Große Schriftgrößen unterstützen.
 - Buttons groß und eindeutig gestalten.
 - Keine überladene Navigation.
@@ -42,7 +42,7 @@ Will Täter:innen möglichst früh erkennen und sich mit anderen über unrealist
 ### Ziel
 Austausch, Analyse, Abstimmungen, Live-Diskussion.
 
-### Konsequenz für Cursor
+### UX-Konsequenz
 - Live-Chat prominent machen.
 - Ergebnisse schnell und filterbar anzeigen.
 - Interaktionen direkt und reaktionsschnell halten.
@@ -58,7 +58,7 @@ Tratscht gerne, spielt gerne nebenbei am Smartphone und nutzt Casual-Games.
 ### Ziel
 Interaktive Inhalte, Quiz, Memory, Social Feeling.
 
-### Konsequenz für Cursor
+### UX-Konsequenz
 - Gamification visuell motivierend gestalten.
 - Quiz und Memory schnell erreichbar machen.
 - Badges, Level und Ranglisten attraktiv darstellen.
@@ -74,7 +74,7 @@ Möchte hochwertige Folgen finden und durch Chat mehr in den Sonntagskult eintau
 ### Ziel
 Orientierung, Bewertungen, Community-Kontext.
 
-### Konsequenz für Cursor
+### UX-Konsequenz
 - Episodeninformationen klar darstellen.
 - Community-Bewertungen und Fakten leicht zugänglich machen.
 - Ergebnisse nach Region und Demografie filterbar machen.

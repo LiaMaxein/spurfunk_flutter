@@ -79,6 +79,6 @@ Die App muss klar kommunizieren:
 - Nur eigenständig formulierte Zusammenfassungen.
 - Quellen rechtlich prüfen.
 
-## Cursor-Regel
+## Branding-Regel
 
-Cursor darf keine offiziellen Logos, Pressebilder oder geschützten Bezeichnungen als App-Titel erzeugen. UI-Texte müssen den inoffiziellen Status berücksichtigen.
+Es dürfen keine offiziellen Logos, Pressebilder oder geschützten Bezeichnungen als App-Titel verwendet werden. UI-Texte müssen den inoffiziellen Status berücksichtigen.

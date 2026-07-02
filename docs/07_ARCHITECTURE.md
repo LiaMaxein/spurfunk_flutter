@@ -41,53 +41,57 @@ Live-Voting und Chat werden so modelliert, dass sie später per WebSocket/Realti
 
 Minimale Datenerhebung, keine Klarnamenpflicht, keine Echtfotos.
 
-## Empfohlene Flutter-Projektstruktur
+## Empfohlene Flutter-Projektstruktur (Ist-Stand)
 
 ```text
 lib/
   main.dart
-  app.dart
+  app/
+    spurfunk_app.dart
   core/
-    constants/
+    assets/
+    config/
+    layout/
+    persistence/
+    router/
+    startup/
     theme/
-    routing/
-    widgets/
     utils/
+    widgets/
   features/
+    startup/
+      presentation/
     onboarding/
-      data/
-      domain/
+      application/
       presentation/
     home/
-      data/
-      domain/
+      application/
       presentation/
-    live/
+    live_episode/
+      application/
       data/
-      domain/
       presentation/
     community/
+      application/
       data/
-      domain/
       presentation/
     facts/
       data/
-      domain/
       presentation/
     profile/
+      application/
       data/
-      domain/
       presentation/
     settings/
-      data/
-      domain/
+      application/
       presentation/
   shared/
     models/
     repositories/
-    services/
     mock_data/
 ```
+
+Jedes Feature nutzt typischerweise `data/`, `application/` (Riverpod-Notifier) und `presentation/`. Ein separater `domain/`-Layer ist im Prototyp nicht vorhanden.
 
 ## Datenfluss
 

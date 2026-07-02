@@ -13,4 +13,4 @@ flutter run
 
 ## Dokumentation
 
-Siehe `cursor/` für Produkt-, Architektur- und Design-Vorgaben.
+Siehe `docs/` für Produkt-, Architektur- und Design-Vorgaben.

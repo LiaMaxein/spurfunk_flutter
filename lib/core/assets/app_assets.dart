@@ -3,108 +3,113 @@ abstract final class AppAssets {
   static const _mockups = 'assets/mockups';
   static const _branding = 'assets/branding';
   static const _photos = 'assets/photos';
+  static const _heroes = '$_photos/heroes';
+  static const _profilePhotos = '$_photos/profile';
+  static const _staedte = '$_photos/staedte';
+  static const _episoden = '$_photos/episoden';
+  static const _team = '$_photos/team';
 
   // Photos (Noir hero imagery)
-  static const splashNoirCouple = '$_photos/splash_noir_couple.png';
-  static const splashCityYouth = '$_photos/splash_city_youth.png';
-  static const communityNoirHero = '$_photos/community_noir_hero.png';
-  static const homeLiveHero = '$_photos/home_live_hero.png';
+  static const splashNoirCouple = '$_heroes/splash_noir_couple.png';
+  static const splashCityYouth = '$_heroes/splash_city_youth.png';
+  static const communityNoirHero = '$_heroes/community_noir_hero.png';
+  static const homeLiveHero = '$_heroes/home_live_hero.png';
   static const factsPageHero = homeLiveHero;
   static const communityHero = communityNoirHero;
-  static const liveCaseKielNoirHero = '$_photos/live_case_kiel_noir_hero.png';
+  static const liveCaseKielNoirHero = '$_heroes/live_case_kiel_noir_hero.png';
 
   static const profileHeroBackgrounds = [
-    '$_photos/profile_hero_01.png',
-    '$_photos/profile_hero_02.png',
-    '$_photos/profile_hero_03.png',
-    '$_photos/profile_hero_04.png',
-    '$_photos/profile_hero_05.png',
-    '$_photos/profile_hero_06.png',
-    '$_photos/profile_hero_07.png',
-    '$_photos/profile_hero_08.png',
-    '$_photos/profile_hero_09.png',
-    '$_photos/profile_hero_10.png',
+    '$_profilePhotos/profile_hero_01.png',
+    '$_profilePhotos/profile_hero_02.png',
+    '$_profilePhotos/profile_hero_03.png',
+    '$_profilePhotos/profile_hero_04.png',
+    '$_profilePhotos/profile_hero_05.png',
+    '$_profilePhotos/profile_hero_06.png',
+    '$_profilePhotos/profile_hero_07.png',
+    '$_profilePhotos/profile_hero_08.png',
+    '$_profilePhotos/profile_hero_09.png',
+    '$_profilePhotos/profile_hero_10.png',
   ];
-  static const episodeSchattenUeberKiel = '$_photos/episode_schatten_ueber_kiel.png';
-  static const episodeRebellenHamburg = '$_photos/episode_rebellen_hamburg.png';
-  static const episodeMedusaKiel = '$_photos/episode_medusa_kiel.png';
+  static const episodeSchattenUeberKiel = '$_episoden/episode_schatten_ueber_kiel.png';
+  static const episodeRebellenHamburg = '$_episoden/episode_rebellen_hamburg.png';
+  static const episodeMedusaKiel = '$_episoden/episode_medusa_kiel.png';
 
   // City hero imagery (active Tatort teams)
-  static const cityBerlin = '$_photos/city_berlin.png';
-  static const cityKoeln = '$_photos/city_koeln.png';
-  static const cityDortmund = '$_photos/city_dortmund.png';
-  static const cityFrankfurt = '$_photos/city_frankfurt.png';
-  static const cityDresden = '$_photos/city_dresden.png';
-  static const cityNuernberg = '$_photos/city_nuernberg.png';
-  static const cityFreiburg = '$_photos/city_freiburg.png';
-  static const cityHannover = '$_photos/city_hannover.png';
-  static const cityLudwigshafen = '$_photos/city_ludwigshafen.png';
-  static const cityWiesbaden = '$_photos/city_wiesbaden.png';
-  static const cityHamburg = '$_photos/city_hamburg.png';
-  static const cityMuenchen = '$_photos/city_muenchen.png';
-  static const cityStuttgart = '$_photos/city_stuttgart.png';
-  static const citySaarbruecken = '$_photos/city_saarbruecken.png';
+  static const cityBerlin = '$_staedte/city_berlin.png';
+  static const cityKoeln = '$_staedte/city_koeln.png';
+  static const cityDortmund = '$_staedte/city_dortmund.png';
+  static const cityFrankfurt = '$_staedte/city_frankfurt.png';
+  static const cityDresden = '$_staedte/city_dresden.png';
+  static const cityNuernberg = '$_staedte/city_nuernberg.png';
+  static const cityFreiburg = '$_staedte/city_freiburg.png';
+  static const cityHannover = '$_staedte/city_hannover.png';
+  static const cityLudwigshafen = '$_staedte/city_ludwigshafen.png';
+  static const cityWiesbaden = '$_staedte/city_wiesbaden.png';
+  static const cityHamburg = '$_staedte/city_hamburg.png';
+  static const cityMuenchen = '$_staedte/city_muenchen.png';
+  static const cityStuttgart = '$_staedte/city_stuttgart.png';
+  static const citySaarbruecken = '$_staedte/city_saarbruecken.png';
 
   // Episode imagery per team
-  static const episodeBerlin = '$_photos/episode_berlin.png';
-  static const episodeKoeln = '$_photos/episode_koeln.png';
-  static const episodeDortmund = '$_photos/episode_dortmund.png';
-  static const episodeFrankfurt = '$_photos/episode_frankfurt.png';
-  static const episodeDresden = '$_photos/episode_dresden.png';
-  static const episodeNuernberg = '$_photos/episode_nuernberg.png';
-  static const episodeFreiburg = '$_photos/episode_freiburg.png';
-  static const episodeHannover = '$_photos/episode_hannover.png';
-  static const episodeLudwigshafen = '$_photos/episode_ludwigshafen.png';
-  static const episodeWiesbaden = '$_photos/episode_wiesbaden.png';
-  static const episodeHamburg = '$_photos/episode_hamburg.png';
-  static const episodeMuenchen = '$_photos/episode_muenchen.png';
-  static const episodeStuttgart = '$_photos/episode_stuttgart.png';
-  static const episodeSaarbruecken = '$_photos/episode_saarbruecken.png';
+  static const episodeBerlin = '$_episoden/episode_berlin.png';
+  static const episodeKoeln = '$_episoden/episode_koeln.png';
+  static const episodeDortmund = '$_episoden/episode_dortmund.png';
+  static const episodeFrankfurt = '$_episoden/episode_frankfurt.png';
+  static const episodeDresden = '$_episoden/episode_dresden.png';
+  static const episodeNuernberg = '$_episoden/episode_nuernberg.png';
+  static const episodeFreiburg = '$_episoden/episode_freiburg.png';
+  static const episodeHannover = '$_episoden/episode_hannover.png';
+  static const episodeLudwigshafen = '$_episoden/episode_ludwigshafen.png';
+  static const episodeWiesbaden = '$_episoden/episode_wiesbaden.png';
+  static const episodeHamburg = '$_episoden/episode_hamburg.png';
+  static const episodeMuenchen = '$_episoden/episode_muenchen.png';
+  static const episodeStuttgart = '$_episoden/episode_stuttgart.png';
+  static const episodeSaarbruecken = '$_episoden/episode_saarbruecken.png';
 
   // Investigator portraits
-  static const portraitKlausBorowski = '$_photos/portrait_klaus_borowski.png';
-  static const portraitMilaSahin = '$_photos/portrait_mila_sahin.png';
-  static const portraitFrankThiel = '$_photos/portrait_frank_thiel.png';
-  static const portraitSarahBrandt = '$_photos/portrait_sarah_brandt.png';
+  static const portraitKlausBorowski = '$_team/portrait_klaus_borowski.png';
+  static const portraitMilaSahin = '$_team/portrait_mila_sahin.png';
+  static const portraitFrankThiel = '$_team/portrait_frank_thiel.png';
+  static const portraitSarahBrandt = '$_team/portrait_sarah_brandt.png';
   static const portraitKarlFriedrichBoerne =
-      '$_photos/portrait_karl_friedrich_boerne.png';
-  static const portraitThorstenFalke = '$_photos/portrait_thorsten_falke.png';
-  static const portraitJuliaGrosz = '$_photos/portrait_julia_grosz.png';
-  static const portraitMoritzEisner = '$_photos/portrait_moritz_eisner.png';
-  static const portraitBibiFellner = '$_photos/portrait_bibi_fellner.png';
-  static const portraitIvoBatic = '$_photos/portrait_ivo_batic.png';
-  static const portraitFranzLeitmayr = '$_photos/portrait_franz_leitmayr.png';
-  static const portraitThorstenLannert = '$_photos/portrait_thorsten_lannert.png';
-  static const portraitSebastianBootz = '$_photos/portrait_sebastian_bootz.png';
-  static const portraitLivMoormann = '$_photos/portrait_liv_moormann.png';
-  static const portraitLindaSelb = '$_photos/portrait_linda_selb.png';
+      '$_team/portrait_karl_friedrich_boerne.png';
+  static const portraitThorstenFalke = '$_team/portrait_thorsten_falke.png';
+  static const portraitJuliaGrosz = '$_team/portrait_julia_grosz.png';
+  static const portraitMoritzEisner = '$_team/portrait_moritz_eisner.png';
+  static const portraitBibiFellner = '$_team/portrait_bibi_fellner.png';
+  static const portraitIvoBatic = '$_team/portrait_ivo_batic.png';
+  static const portraitFranzLeitmayr = '$_team/portrait_franz_leitmayr.png';
+  static const portraitThorstenLannert = '$_team/portrait_thorsten_lannert.png';
+  static const portraitSebastianBootz = '$_team/portrait_sebastian_bootz.png';
+  static const portraitLivMoormann = '$_team/portrait_liv_moormann.png';
+  static const portraitLindaSelb = '$_team/portrait_linda_selb.png';
   static const portraitIsabelleGrandjean =
-      '$_photos/portrait_isabelle_grandjean.png';
-  static const portraitTessaOtt = '$_photos/portrait_tessa_ott.png';
-  static const portraitRobertKarow = '$_photos/portrait_robert_karow.png';
-  static const portraitSemirBonard = '$_photos/portrait_semir_bonard.png';
-  static const portraitMaxBallauf = '$_photos/portrait_max_ballauf.png';
-  static const portraitFreddySchenk = '$_photos/portrait_freddy_schenk.png';
-  static const portraitPeterFaber = '$_photos/portrait_peter_faber.png';
-  static const portraitRosaHerzog = '$_photos/portrait_rosa_herzog.png';
+      '$_team/portrait_isabelle_grandjean.png';
+  static const portraitTessaOtt = '$_team/portrait_tessa_ott.png';
+  static const portraitRobertKarow = '$_team/portrait_robert_karow.png';
+  static const portraitSemirBonard = '$_team/portrait_semir_bonard.png';
+  static const portraitMaxBallauf = '$_team/portrait_max_ballauf.png';
+  static const portraitFreddySchenk = '$_team/portrait_freddy_schenk.png';
+  static const portraitPeterFaber = '$_team/portrait_peter_faber.png';
+  static const portraitRosaHerzog = '$_team/portrait_rosa_herzog.png';
   static const portraitPeterMichaelSchnabel =
-      '$_photos/portrait_peter_michael_schnabel.png';
-  static const portraitLeonieWinkler = '$_photos/portrait_leonie_winkler.png';
-  static const portraitAdamAzadi = '$_photos/portrait_adam_azadi.png';
-  static const portraitAlineKulina = '$_photos/portrait_aline_kulina.png';
-  static const portraitThorstenTobler = '$_photos/portrait_thorsten_tobler.png';
-  static const portraitSebastianBerg = '$_photos/portrait_sebastian_berg.png';
+      '$_team/portrait_peter_michael_schnabel.png';
+  static const portraitLeonieWinkler = '$_team/portrait_leonie_winkler.png';
+  static const portraitAdamAzadi = '$_team/portrait_adam_azadi.png';
+  static const portraitAlineKulina = '$_team/portrait_aline_kulina.png';
+  static const portraitThorstenTobler = '$_team/portrait_thorsten_tobler.png';
+  static const portraitSebastianBerg = '$_team/portrait_sebastian_berg.png';
   static const portraitAnnegretLindholm =
-      '$_photos/portrait_annegret_lindholm.png';
-  static const portraitLenaOdenthal = '$_photos/portrait_lena_odenthal.png';
-  static const portraitFrankStern = '$_photos/portrait_frank_stern.png';
-  static const portraitFelixVoss = '$_photos/portrait_felix_voss.png';
-  static const portraitEmiliaRathgeber = '$_photos/portrait_emilia_rathgeber.png';
-  static const portraitThorstenMurot = '$_photos/portrait_thorsten_murot.png';
-  static const portraitAdamSchuerk = '$_photos/portrait_adam_schuerk.png';
-  static const portraitLeoHoelzer = '$_photos/portrait_leo_hoelzer.png';
-  static const portraitEstherBaumann = '$_photos/portrait_esther_baumann.png';
-  static const portraitPiaHeinrich = '$_photos/portrait_pia_heinrich.png';
+      '$_team/portrait_annegret_lindholm.png';
+  static const portraitLenaOdenthal = '$_team/portrait_lena_odenthal.png';
+  static const portraitFrankStern = '$_team/portrait_frank_stern.png';
+  static const portraitFelixVoss = '$_team/portrait_felix_voss.png';
+  static const portraitEmiliaRathgeber = '$_team/portrait_emilia_rathgeber.png';
+  static const portraitThorstenMurot = '$_team/portrait_thorsten_murot.png';
+  static const portraitAdamSchuerk = '$_team/portrait_adam_schuerk.png';
+  static const portraitLeoHoelzer = '$_team/portrait_leo_hoelzer.png';
+  static const portraitEstherBaumann = '$_team/portrait_esther_baumann.png';
+  static const portraitPiaHeinrich = '$_team/portrait_pia_heinrich.png';
 
   // Branding (SVG, transparent background)
   static const logoNameIcon = '$_branding/spurfunk_logo_name_icon_transparent.svg';
